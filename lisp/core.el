@@ -175,4 +175,20 @@
   (setq xclip-mode t)
   (setq xclip-method (quote wl-copy)))
 
+(defun my-ask-kill-buffer ()
+  "Ask to diff, save or kill buffer"
+  (if (and (buffer-file-name) (buffer-modified-p))
+      (cl-loop for ch = (read-event "(K)ill buffer, (D)iff buffer, (S)ave buffer, (N)othing?")
+               if (or (eq ch ?k) (eq ch ?K))
+               return t
+               if (or (eq ch ?d) (eq ch ?D))
+               do (diff-buffer-with-file)
+               if (or (eq ch ?s) (eq ch ?S))
+               return (progn (save-buffer) t)
+               if (or (eq ch ?n) (eq ch ?N))
+               return nil)
+    t))
+
+(add-to-list 'kill-buffer-query-functions #'my-ask-kill-buffer)
+
 (provide 'core)
