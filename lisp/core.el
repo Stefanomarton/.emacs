@@ -175,4 +175,24 @@
   (setq xclip-mode t)
   (setq xclip-method (quote wl-copy)))
 
+(use-package repeat
+  :straight (:type built-in)
+  :config
+  ;; Disable the built-in repeat-mode hinting
+  (setopt repeat-echo-function #'ignore)
+
+  ;; Spawn or hide a which-key popup
+  (advice-add 'repeat-post-hook :after
+              (defun repeat-help--which-key-popup ()
+                (if-let ((cmd (or this-command real-this-command))
+                         (keymap (or repeat-map
+                                     (repeat--command-property 'repeat-map))))
+                    (run-at-time
+                     0 nil
+                     (lambda ()
+                       (which-key--create-buffer-and-show
+                        nil (symbol-value keymap))))
+                  (which-key--hide-popup))))
+  (repeat-mode))
+
 (provide 'core)
