@@ -5,16 +5,18 @@
 (use-package projectile
   :defer 1
   :after vertico
-  :diminish projectile-mode
-  :custom
+  :config
   (setq projectile-track-known-projects-automatically nil)
   (setq projectile-completion-system 'consult)
-  :config
-  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
   (projectile-mode)
+
+  (use-package consult-projectile
+    :bind
+    ("C-x p p" . consult-projectile)
+    ("C-x p f" . consult-projectile-find-file))
+
   :init
   (setq projectile-indexing-method 'native)
-  ;; (setq projectile-known-projects-file "~/.config/emacs/project.el")
   )
 
 (use-package hl-todo
