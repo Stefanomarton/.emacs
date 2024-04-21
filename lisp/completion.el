@@ -62,17 +62,10 @@
   :defer 1
   :init
   (setq consult-preview-allowed-hooks '(global-font-lock-mode-check-buffers save-place-find-file-hook display-line-numbers-mode))
-  :general
-  (:states 'normal
-           "<leader>cp" '(consult-yank-from-kill-ring :no-autoload t))
-  (:states 'insert
-           "C-c p" '(consult-yank-from-kill-ring :no-autoload t)
-           "C-c l" '(consult-line :no-autoload t)
-           )
-  )
-
-(use-package consult-projectile
-  :commands (consult-projectile))
+  :bind
+  ("M-y" . consult-yank-from-kill-ring)
+  ("C-x C-b" . consult-buffer)
+  ("C-c l". consult-line))
 
 (use-package consult-dir
   :after consult)
