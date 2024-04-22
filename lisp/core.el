@@ -176,24 +176,48 @@
   (setq xclip-method (quote wl-copy)))
 
 (use-package repeat
-  :straight (:type built-in)
+  :hook (after-init . my/repeat-mode)
   :config
+  (defun my/repeat-mode ()
+    (let ((inhibit-message t)
+          (message-log-max nil))
+      (repeat-mode)))
   ;; Disable the built-in repeat-mode hinting
-  (setopt repeat-echo-function #'ignore)
+  (setq repeat-echo-function #'ignore)
 
-  ;; Spawn or hide a which-key popup
-  (advice-add 'repeat-post-hook :after
-              (defun repeat-help--which-key-popup ()
-                (if-let ((cmd (or this-command real-this-command))
-                         (keymap (or repeat-map
-                                     (repeat--command-property 'repeat-map))))
+  (use-package which-key
+    :after which-key
+    :config
+    (advice-add 'repeat-post-hook :after
+                (defun my/which-key-repeat ()
+                  (when-let ((cmd (or this-command real-this-command))
+                             (keymap (repeat--command-property 'repeat-map)))
                     (run-at-time
-                     0 nil
+                     which-key-idle-delay nil
                      (lambda ()
                        (which-key--create-buffer-and-show
-                        nil (symbol-value keymap))))
-                  (which-key--hide-popup))))
-  (repeat-mode))
+                        nil (symbol-value keymap)))))))
+
+    (defun my/which-key-repeat-mode-dispatch ()
+      (interactive)
+      (setq this-command last-command)
+      (when-let (keymap (repeat--command-property 'repeat-map))
+        (which-key--create-buffer-and-show
+         nil (symbol-value keymap))))
+
+    (defun my/which-key-repeat-mode-binding ()
+      (when repeat-mode
+        (when-let* ((rep-map-sym (or repeat-map (repeat--command-property 'repeat-map)))
+                    (keymap (and (symbolp rep-map-sym) (symbol-value rep-map-sym))))
+          (set-transient-map
+           (make-composed-keymap
+            (let ((map (make-sparse-keymap)))
+              (define-key map (kbd "C-h") #'my/which-key-repeat-mode-dispatch)
+              map)
+            keymap)))))
+
+    (advice-add 'repeat-post-hook :after #'my/which-key-repeat-mode-binding)))
+
 
 (defun my-ask-kill-buffer ()
   "Ask to diff, save or kill buffer"
