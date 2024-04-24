@@ -36,7 +36,6 @@
 
 (use-package google-this
   :commands google-this
-  :defer t
   )
 
 (use-package csv-mode
@@ -49,11 +48,9 @@
 (use-package bug-hunter
   :defer 2)
 
-(use-package explain-pause-mode
-  :defer 2
-  :config
-  (explain-pause-mode)
-  )
+;; (use-package explain-pause-mode
+;;   :init
+;;   (add-hook 'after-init-hook 'explain-pause-mode))
 
 
 (provide 'tools)
