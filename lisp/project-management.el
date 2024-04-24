@@ -3,8 +3,6 @@
 (provide 'project-management)
 
 (use-package projectile
-  :defer 1
-  :after vertico
   :config
   (setq projectile-track-known-projects-automatically nil)
   (setq projectile-completion-system 'consult)
@@ -15,8 +13,9 @@
     ("C-x p p" . consult-projectile)
     ("C-x p f" . consult-projectile-find-file))
 
-  :init
   (setq projectile-indexing-method 'native)
+  :init
+  (add-hook 'after-init-hook 'projectile-mode)
   )
 
 (use-package hl-todo
