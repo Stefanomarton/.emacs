@@ -27,9 +27,6 @@
 ;; Install use-package and ensure listed packages are installed
 (setq straight-use-package-by-default t)
 
-;; Enable packages at startup
-(setq package-enable-at-startup nil)
-
 ;; Uncommented this sometimes for debugging
 ;; (setq use-package-verbose t)
 ;; (setq debug-on-message t)
@@ -114,4 +111,4 @@
 
 ;;; init.el ends here
 (put 'dired-find-alternate-file 'disabled nil)
-(put 'downcase-region 'disabled t)
+(put 'downcase-region 'disabled nil)
