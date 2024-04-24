@@ -62,7 +62,15 @@
   (evil-define-key 'normal LaTeX-mode-map (kbd "<return>") 'evil-avy-goto-char-timer)
   (evil-define-key 'normal markdown-mode-map (kbd "<return>") 'evil-avy-goto-char-timer)
 
+  ;; Markdown-mode
+  (evil-define-key 'normal markdown-mode-map
+    (kbd "<leader>ee") 'my/export-md-to-pdf
+    (kbd "<leader>ez") 'my/open-pdf-with-zathura
+    (kbd "<leader>ep") 'open-pdf-with-pdf-tools)
 
+  ;; Jinx keymaps
+  (evil-define-key 'normal org-mode-map  (kbd "<leader>j") 'jinx-correct)
+  (evil-define-key 'normal org-mode-map  (kbd "<leader>J") 'jinx-correct-all)
 
   ;; ;; Enable message for the function list, I can't stand them
   (defun my:advice-silence-messages (orig-fun &rest args)
