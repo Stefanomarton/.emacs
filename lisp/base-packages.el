@@ -2,7 +2,6 @@
 
 ;; Recent file list
 (use-package recentf
-  :defer 0.5
   :config
   (add-hook 'emacs-startup-hook 'recentf-mode)
   (add-hook 'after-init-hook
@@ -36,14 +35,13 @@
 
 ;; Embark
 (use-package embark
-  :commands (embark-minimal-act embark-dwim embark-act)
   :config
 
   ;; Base keybindings
-  (evil-define-key 'normal 'global (kbd "<leader>SPC") 'embark-minimal-act)
-  (evil-define-key 'normal 'global (kbd "C-.") 'embark-dwim)
-  (evil-define-key 'insert 'global (kbd "C-.") 'embark-minimal-act)
-  (evil-define-key 'visual 'global (kbd "<leader>SPC") 'embark-minimal-act)
+  ;; (evil-define-key 'normal 'global (kbd "<leader>SPC") 'embark-minimal-act)
+  ;; (evil-define-key 'normal 'global (kbd "C-.") 'embark-dwim)
+  ;; (evil-define-key 'insert 'global (kbd "C-.") 'embark-minimal-act)
+  ;; (evil-define-key 'visual 'global (kbd "<leader>SPC") 'embark-minimal-act)
 
   ;; Which-key style indicator
   (defun embark-minimal-act (&optional arg)
@@ -142,8 +140,157 @@ If region is active, add its contents to the new buffer."
 
 ;; Embrace
 (use-package embrace
+  :bind
+  (:map global-map
+        ("C-," . embrace-commander))
   :config
   (add-hook 'org-mode-hook #'embrace-org-mode-hook)
-  (define-key global-map (kbd "C-,") #'embrace-commander))
+
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             (embrace-add-pair ?m "\\[\n" "\\]\n" nil t)))
+  )
+;; (define-key global-map (kbd "C-,") #'embrace-commander))
+
+
+(use-package selected
+  :init
+  (add-hook 'after-init-hook 'selected-global-mode)
+  :bind (:map selected-keymap
+              ("U" . upcase-region)
+              ("D" . downcase-region)
+              ("C" . capitalize-region)
+
+              ("u" . undo-in-region)
+
+              ("p" . surround-region-with-parethesis)
+              ("s" . surround-region-with-square-brackets)
+              ("c" . surround-region-with-curly-brackets)
+
+              ("{" . surround-region-newline-with-curly-brackets)
+
+              (";" . comment-dwim)
+
+
+              ("a" . back-to-indentation)
+              ("e" . move-end-of-line)
+
+              ("y" . kill-ring-save)
+
+              ("q" . er/mark-inside-quotes)
+              ("\(" . er/mark-outside-pairs)
+              )
+
+  (:map selected-text-mode-map
+        ("U" . upcase-region)
+        ("D" . downcase-region)
+        ("C" . capitalize-region)
+
+        ("u" . undo-in-region)
+
+        ("p" . surround-region-with-parethesis)
+        ("s" . surround-region-with-square-brackets)
+        ("c" . surround-region-with-curly-brackets)
+
+        ("{" . surround-region-newline-with-curly-brackets)
+
+        ;; Environments
+        ("ec" . (lambda () (interactive) (LaTeX-insert-environment "center")))
+        ("eb" . (lambda () (interactive) (LaTeX-insert-environment "bx")))
+        ("ee" . (lambda () (interactive) (LaTeX-insert-environment "equation*")))
+        ("eE" . (lambda () (interactive) (LaTeX-insert-environment "equation")))
+        ("eg" . (lambda () (interactive) (LaTeX-insert-environment "gather*")))
+        ("eG" . (lambda () (interactive) (LaTeX-insert-environment "gather")))
+
+        (";" . comment-dwim)
+
+        ("m" . surround-region-with-math)
+        ("M" . surround-region-newline-with-math)
+        ("<tab>" . cdlatex-tab)
+
+        ("a" . back-to-indentation)
+
+        ("y" . kill-ring-save)
+        ("J" . fix-pasted-text)
+
+        ("q" . er/mark-inside-quotes)
+        ("\(" . er/mark-outside-pairs))
+
+  :config
+
+  (setq selected-text-mode-map (make-sparse-keymap))
+
+  (defun fix-pasted-text ()
+    (interactive)
+    (join-line)
+    (fill-paragraph)
+    )
+
+  (defun surround-region--surround (opening-delimiter closing-delimiter)
+    "Surround the active region with hard-coded strings"
+    (when (region-active-p)
+      (save-excursion
+        (let ((beginning (region-beginning))
+              (end (region-end)))
+
+          (goto-char beginning)
+          (insert opening-delimiter)
+
+          (goto-char (+ end (length closing-delimiter)))
+	      (insert closing-delimiter)))))
+
+  (defun surround-region-newline--surround (opening-delimiter closing-delimiter)
+    "Surround the active region with hard-coded strings"
+    (when (region-active-p)
+      (save-excursion
+        (let ((beginning (region-beginning))
+              (end (region-end)))
+
+          (goto-char beginning)
+          (insert opening-delimiter)
+
+          (goto-char (+ end (length closing-delimiter)))
+          (insert closing-delimiter)
+
+          (goto-char beginning)
+          (newline)
+          ))))
+
+  (defun surround-region-with-parethesis ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (surround-region--surround "\(" "\)"))
+
+  (defun surround-region-with-square-brackets ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (surround-region--surround "[" "]"))
+
+  (defun surround-region-with-curly-brackets ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (surround-region--surround "{" "}"))
+
+  (defun surround-region-newline-with-curly-brackets ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (surround-region-newline--surround "{" "}"))
+
+  (defun surround-region-with-math ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (surround-region--surround "\\\(" "\\\)"))
+
+  (defun surround-region-newline-with-math ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (surround-region-newline--surround "\\[" "\\]"))
+
+  (selected-global-mode))
+
+(use-package tab-jump-out
+  :hook after-init
+  :config
+  (setq yas-fallback-behavior '(apply tab-jump-out 1)))
 
 (provide 'base-packages)
