@@ -1051,7 +1051,7 @@ point. "
    org-src-preserve-indentation t))
 
 (use-package org-download
-  :defer t
+  ;; :defer t
   :commands (org-download-clipboard)
   :init
   (setq org-download-display-inline-images 'posframe)
@@ -1085,7 +1085,7 @@ point. "
 (use-package org-roam
   :straight (:host github :repo "org-roam/org-roam"
                    :files (:defaults "extensions/*"))
-  :defer 0.5
+  ;; :defer 0.5
   :commands (org-roam-node-find org-roam-capture consult-notes)
   :init
   (setq org-roam-directory (file-truename "~/GoogleDrive/org"))
@@ -1296,7 +1296,7 @@ point. "
 
 
 (use-package citar
-  :defer t
+  ;; :defer t
   :after (org org-roam)
   :custom
   (org-cite-insert-processor 'citar)
@@ -1337,7 +1337,12 @@ point. "
   :custom
 
   (consult-notes-file-dir-sources
-   '(("course"             ?c "~/GoogleDrive/org/uni/courses/")))
+   '(("course"             ?c "~/GoogleDrive/org/uni/courses/")
+     ("obsidian" ?o "~/GoogleDrive/Obsidian/University/")
+     ("obsidian" ?o "~/GoogleDrive/Obsidian/Personal/")
+     ("obsidian" ?o "~/GoogleDrive/Obsidian/")
+     ("obsidian" ?o "~/GoogleDrive/Obsidian/Work/")
+     ))
 
   (consult-notes-org-roam-template
    (concat "${type:20} ${title:70}" (propertize "${fmtime:20}" 'face 'font-lock-comment-face)(propertize "${tags:20}" 'face 'org-tag) "${blinks:3}"))
@@ -1347,6 +1352,21 @@ point. "
              consult-notes-org-roam-find-node
              consult-notes-org-roam-find-node-relation)
   :config
+  (defun consult-notes-my-embark-function (cand)
+    "Do something with CAND"
+    (interactive "fNote: ")
+    (my-function))
+
+  (defvar-keymap consult-notes-map
+    :doc "Keymap for Embark notes actions."
+    :parent embark-file-map
+    "m" #'consult-notes-my-embark-function)
+
+  (add-to-list 'embark-keymap-alist `(,consult-notes-category . consult-notes-map))
+
+  ;; make embark-export use dired for notes
+  (setf (alist-get consult-notes-category embark-exporters-alist) #'embark-export-dired)
+
   (consult-notes-org-roam-mode)
 
   ;; Search org-roam notes for citations (depends on citar)
