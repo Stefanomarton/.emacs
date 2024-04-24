@@ -140,8 +140,10 @@
    `(org-outline-path-headerline-face ((t (:foreground ,red :weight ultra-bold ))))
    `(org-drawer ((t (:foreground ,blue))))
    `(org-date ((t (:foreground ,blue))))
-   '(yas-field-highlight-face ((t (:inherit t))))
-
+   `(yas-field-highlight-face ((t (:inherit t))))
+   `(git-gutter:modified ((t (:foreground ,blue :background ,bg))))
+   `(git-gutter:added ((t (:foreground ,green :background ,bg))))
+   `(git-gutter:deleted ((t (:foreground ,red :background ,bg))))
 
    (custom-theme-set-variables
     'pywal
