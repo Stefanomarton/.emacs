@@ -10,8 +10,6 @@
 
 ;; Startup time evaluation
 (use-package esup
-  :config
-  (setq esup-depth 0)
   :commands esup)
 
 (use-package vterm
@@ -35,23 +33,30 @@
 ;; 		   :chat-model "mistral:latest" :embedding-model "mistral:latest")))
 
 (use-package google-this
-  :commands google-this
-  )
+  :commands google-this)
 
 (use-package csv-mode
-  :commands csv-mode
-  )
+  :mode ("\\.csv\\'" . kbd-mode))
 
 (use-package pkg-info
-  :defer 2)
+  :defer t)
 
 (use-package bug-hunter
-  :defer 2)
+  :defer t)
 
-;; (use-package explain-pause-mode
-;;   :init
-;;   (add-hook 'after-init-hook 'explain-pause-mode))
+(use-package explain-pause-mode
+  :defer t)
 
+(use-package golden-ratio
+  :hook after-init
+  :config
+  (setq golden-ratio-exclude-modes '(emacs-lisp-compilation-mode)) ; Exclude modes from `golder-ratio-mode'
+  (golden-ratio-mode))
+
+(use-package winner
+  :hook after-init
+  :config
+  (winner-mode))
 
 (provide 'tools)
 
