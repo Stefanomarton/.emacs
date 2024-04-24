@@ -39,14 +39,14 @@
              (bash-mode . bash-ts-mode)
              (css-mode . css-ts-mode)
              (json-mode . json-ts-mode)
-             (js-json-mode . json-ts-mode)))
+             (js-json-mode . json-ts-mode)
+             (conf-toml-mode . toml-ts-mode)))
     (add-to-list 'major-mode-remap-alist mapping))
 
   :config
   (mp-setup-install-grammars))
 
 ;; Lua setup
-
 (use-package lua-mode
   :mode ("\\.lua?\\'" . lua-mode)
   )
