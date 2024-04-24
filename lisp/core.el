@@ -168,20 +168,21 @@
 (setq sentence-end-double-space nil)
 
 (use-package xclip
-  :defer 0.5
+  :init
+  (add-hook 'after-init-hook 'xclip-mode)
   :config
   (setq xclip-program "wl-copy")
   (setq xclip-select-enable-clipboard t)
-  (setq xclip-mode t)
   (setq xclip-method (quote wl-copy)))
 
 (use-package repeat
-  :hook (after-init . my/repeat-mode)
   :config
   (defun my/repeat-mode ()
     (let ((inhibit-message t)
           (message-log-max nil))
       (repeat-mode)))
+
+  (my/repeat-mode)
   ;; Disable the built-in repeat-mode hinting
   (setq repeat-echo-function #'ignore)
 
@@ -218,21 +219,8 @@
 
     (advice-add 'repeat-post-hook :after #'my/which-key-repeat-mode-binding)))
 
+(define-key global-map (kbd "C-a ") 'back-to-indentation)
 
-(defun my-ask-kill-buffer ()
-  "Ask to diff, save or kill buffer"
-  (if (and (buffer-file-name) (buffer-modified-p))
-      (cl-loop for ch = (read-event "(K)ill buffer, (D)iff buffer, (S)ave buffer, (N)othing?")
-               if (or (eq ch ?k) (eq ch ?K))
-               return t
-               if (or (eq ch ?d) (eq ch ?D))
-               do (diff-buffer-with-file)
-               if (or (eq ch ?s) (eq ch ?S))
-               return (progn (save-buffer) t)
-               if (or (eq ch ?n) (eq ch ?N))
-               return nil)
-    t))
-
-(add-to-list 'kill-buffer-query-functions #'my-ask-kill-buffer)
+(subword-mode)
 
 (provide 'core)
