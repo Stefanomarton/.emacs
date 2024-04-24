@@ -110,9 +110,9 @@
    `(window-divider-last-pixel ((t (:foreground ,bg))))
    `(vertical-border ((t (:foreground ,bg))))
 
-   `(show-paren-match-face ((t (:foreground ,red :background ,cyan))))
+   `(show-paren-match-face ((t (:foreground ,red :underline t))))
    `(show-paren-mismatch-face ((t (:background ,red))))
-   `(show-paren-match ((t (:foreground ,red :background ,cyan))))
+   `(show-paren-match ((t (:foreground ,red :underline t))))
    `(show-paren-mismatch ((t (:background ,red))))
 
    `(rainbow-delimiters-depth-1-face ((t (:foreground ,red-alt))))
