@@ -2,7 +2,6 @@
 
 ;; Enable vertico for the best vertical completion experience
 (use-package vertico
-  :defer 1
   :bind
   (:map vertico-map
 	    ("C-e" . embark-minimal-act)
@@ -52,14 +51,12 @@
 
 ;; i like some help while searching
 (use-package marginalia
-  :defer .1
   :after vertico
   :config
   (marginalia-mode))
 
 ;; musthave
 (use-package consult
-  :defer 1
   :init
   (setq consult-preview-allowed-hooks '(global-font-lock-mode-check-buffers save-place-find-file-hook display-line-numbers-mode))
   :bind
