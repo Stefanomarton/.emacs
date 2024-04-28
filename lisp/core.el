@@ -166,6 +166,7 @@
         (setq evil-echo-state nil))))
 
 (setq sentence-end-double-space nil)
+(setopt shift-select-mode 'permanent)
 
 (use-package xclip
   :init
