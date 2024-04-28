@@ -24,13 +24,13 @@
 	    vterm-shell "zsh"
 	    ))
 
-;; (use-package ellama
-;;   :init
-;;   (setopt ellama-language "Italian")
-;;   (require 'llm-ollama)
-;;   (setopt ellama-provider
-;; 		  (make-llm-ollama
-;; 		   :chat-model "mistral:latest" :embedding-model "mistral:latest")))
+(use-package ellama
+  :init
+  (setopt ellama-language "Italian")
+  (require 'llm-ollama)
+  (setopt ellama-provider
+		  (make-llm-ollama
+		   :chat-model "llama3" :embedding-model "llama3")))
 
 (use-package google-this
   :commands google-this)
