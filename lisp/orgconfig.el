@@ -28,6 +28,8 @@
 
   (use-package org-ref)
 
+  (setq org-agenda-files '("~/GoogleDrive/org/agenda/work.org" "~/GoogleDrive/org/agenda/personal.org"))
+
   (defun sbr-org-insert-dwim (&optional arg)
     "Insert another entry of the same type as the current
 entry. For example, if the point is on a list item, then add
