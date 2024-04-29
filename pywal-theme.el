@@ -144,6 +144,10 @@
    `(git-gutter:modified ((t (:foreground ,blue :background ,bg))))
    `(git-gutter:added ((t (:foreground ,green :background ,bg))))
    `(git-gutter:deleted ((t (:foreground ,red :background ,bg))))
+   `(jinx-misspelled ((t (:underline (:color ,red :position 2 :style line) :slant italic ))))
+   `(corfu-default ((t (:background ,bg ))))
+   `(corfu-current ((t (:background ,hl ))))
+   `(corfu-annotations ((t (:slant italic :foreground ,comment))))
 
    (custom-theme-set-variables
     'pywal
