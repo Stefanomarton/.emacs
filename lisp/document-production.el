@@ -161,8 +161,9 @@
   (setq yas-snippet-dirs '("~/.config/emacs/snippets")))
 
 (use-package warnings
+  :straight (:type built-in)
   :config
-  (add-to-list 'warning-suppress-types '(yasnippet backquote-change ox-latex)))
+  (add-to-list 'warning-suppress-types '(yasnippet backquote-change)))
 
 (use-package aas
   :hook
