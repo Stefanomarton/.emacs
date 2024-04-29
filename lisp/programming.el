@@ -36,7 +36,7 @@
              (css-mode . css-ts-mode)
              (typescript-mode . typescript-ts-mode)
              (js2-mode . js-ts-mode)
-             (bash-mode . bash-ts-mode)
+             (sh-mode . bash-ts-mode)
              (css-mode . css-ts-mode)
              (json-mode . json-ts-mode)
              (js-json-mode . json-ts-mode)
