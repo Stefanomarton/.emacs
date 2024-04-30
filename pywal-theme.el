@@ -4,7 +4,7 @@
 
 (deftheme pywal "pywal theme")
 
-(let (
+(let ((class '((class color) (min-colors 89)))
       (bg (ewal-load-color 'background 0))
       (bg1 (ewal-load-color 'background -5))
       (bg2 (ewal-load-color 'background 2 3))
@@ -41,7 +41,8 @@
   (custom-theme-set-faces
    'pywal
    ;; Set basic faces
-   `(default ((t (:family "JuliaMono" :background ,bg :foreground ,fg))))
+   `(default ((t (:family "JuliaMono" :background "black" :foreground ,fg))))
+   ;; `(default ((t (:family "JuliaMono" :background ,bg :foreground ,fg))))
    `(fringe ((t (:foreground ,fg :background ,bg))))
 
    `(hl-line ((t (:background ,hl))))
@@ -58,8 +59,8 @@
    `(font-lock-comment-delimiter-face ((t (:foreground ,red))))
    `(font-lock-constant-face ((t (:foreground ,green))))
    `(font-lock-doc-face ((t (:foreground ,yellow))))
-   `(font-lock-function-name-face ((t (:foreground ,teal))))
-   `(font-lock-keyword-face ((t (:weight bold :foreground ,magenta))))
+   `(font-lock-function-name-face ((t (:foreground ,teal :weight bold))))
+   `(font-lock-keyword-face ((t (:weight bold :foreground ,magenta :weight bold))))
    `(font-lock-negation-char-face ((t (:foreground ,orange))))
    `(font-lock-preprocessor-face ((t (:foreground ,blue :weight bold))))
    `(font-lock-reference-face ((t (:foreground ,green))))
@@ -110,18 +111,18 @@
    `(window-divider-last-pixel ((t (:foreground ,bg))))
    `(vertical-border ((t (:foreground ,bg))))
 
-   `(show-paren-match-face ((t (:foreground ,red :background ,cyan))))
-   `(show-paren-mismatch-face ((t (:background ,red))))
-   `(show-paren-match ((t (:foreground ,red :background ,cyan))))
-   `(show-paren-mismatch ((t (:background ,red))))
+   `(show-paren-match-face ((t (:foreground ,comment :background ,hl-alt :weight ultra-bold))))
+   `(show-paren-mismatch-face ((t (:background ,red :weight bold))))
+   `(show-paren-match ((t (:foreground ,comment :background ,hl-alt :weight ultra-bold))))
+   `(show-paren-mismatch ((t (:background ,red :weight bold))))
 
-   `(rainbow-delimiters-depth-1-face ((t (:foreground ,red-alt))))
-   `(rainbow-delimiters-depth-2-face ((t (:foreground ,orange-alt))))
-   `(rainbow-delimiters-depth-3-face ((t (:foreground ,coolred-alt))))
-   `(rainbow-delimiters-depth-4-face ((t (:foreground ,green-alt))))
-   `(rainbow-delimiters-depth-5-face ((t (:foreground ,teal-alt ))))
-   `(rainbow-delimiters-depth-6-face ((t (:foreground ,yellow-alt))))
-   `(rainbow-delimiters-depth-7-face ((t (:foreground ,blue-alt ))))
+   `(rainbow-delimiters-depth-1-face ((t (:foreground ,red))))
+   `(rainbow-delimiters-depth-2-face ((t (:foreground ,orange))))
+   `(rainbow-delimiters-depth-3-face ((t (:foreground ,coolred))))
+   `(rainbow-delimiters-depth-4-face ((t (:foreground ,green))))
+   `(rainbow-delimiters-depth-5-face ((t (:foreground ,teal))))
+   `(rainbow-delimiters-depth-6-face ((t (:foreground ,yellow))))
+   `(rainbow-delimiters-depth-7-face ((t (:foreground ,blue))))
    `(rainbow-delimiters-depth-8-face ((t (:foreground ,dark-alt-blue))))
    `(rainbow-delimiters-depth-9-face ((t (:foreground ,magenta-alt))))
    `(rainbow-delimiters-mismatched-face ((t (:foreground ,violet-alt ))))
@@ -140,8 +141,14 @@
    `(org-outline-path-headerline-face ((t (:foreground ,red :weight ultra-bold ))))
    `(org-drawer ((t (:foreground ,blue))))
    `(org-date ((t (:foreground ,blue))))
-   '(yas-field-highlight-face ((t (:inherit t))))
-
+   `(yas-field-highlight-face ((t (:inherit t))))
+   `(git-gutter:modified ((t (:foreground ,blue :background ,bg))))
+   `(git-gutter:added ((t (:foreground ,green :background ,bg))))
+   `(git-gutter:deleted ((t (:foreground ,red :background ,bg))))
+   `(jinx-misspelled ((t (:underline (:color ,red :position 2 :style line) :slant italic ))))
+   `(corfu-default ((t (:background ,bg ))))
+   `(corfu-current ((t (:background ,hl ))))
+   `(corfu-annotations ((t (:slant italic :foreground ,comment))))
 
    (custom-theme-set-variables
     'pywal

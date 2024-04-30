@@ -44,7 +44,6 @@
 
 ;; Disable the creation of locking symlinks in the current directory. This is a
 ;; very opinionated choice, and probably isn't a good idea for most.
-
 (setq create-lockfiles nil)
 
 ;; Disable creation of backup files
@@ -60,62 +59,63 @@
 
 ;; I care about having my history in minibuffers
 (use-package savehist
-  :after evil
+  :hook after-init
   :init
   (savehist-mode))
 
 ;; Use a consistent confirmation dialog of "y or n".
+;; Use RET to answer yes
 (setq use-short-answers t)
+(define-key y-or-n-p-map (kbd "<return>") 'y-or-n-p-insert-y)
 
 ;; Automatically revert buffers and dired listings when something on disk
 (use-package autorevert
   :config
-  (global-auto-revert-mode 1)
   (setq global-auto-revert-non-file-buffers t
-        auto-revert-verbose nil))
+        auto-revert-verbose nil)
+  :init
+  (add-hook 'after-init-hook 'global-auto-revert-mode))
 
 ;; Always prefer newer version of a file
 (setq load-prefer-newer t)
 
 ;; "Command attempted to use minibuffer while in minibuffer" gets old fast.
-
 (setq enable-recursive-minibuffers t)
 
-;; Select help windows when I pop them so that I can kill them with <q>.
+;; Disable mouse on `y-or-n-p'
+(setq use-dialog-box nil)
 
+;; Select help windows when I pop them so that I can kill them with <q>.
 (setq help-window-select t)
 
 ;; Most *NIX tools work best when files are terminated with a newline.
-
 (setq require-final-newline t)
 
 ;; Sentences should be separated by a single space. Treat two sentences as such
 ;; when filling.
-
 (setq sentence-end-double-space nil)
 
 ;; I use the tab key, but I generally prefer space characters to tabstops and
 ;; like a four-character width for indentation.
-
 (setq-default indent-tabs-mode nil
               tab-width 4)
 (setq tab-always-indent t)
 
 ;; Modern conventions state that 80 characters is the standard width.
-
 (setq fill-column 80)
 
 ;; Enable useful visual queues.
-
 (column-number-mode t)
 
 ;; Unbind <C-z> and <C-x C-z> so that I'm not accidentally calling =suspend-frame=.
-
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "C-x C-z"))
 
 ;; Unbind downcase region
 (global-unset-key (kbd "C-x C-l"))
+
+;; C-g is killing me
+(define-key minibuffer-local-map (kbd "ESC") 'keyboard-escape-quit)
 
 ;; Don't do jerky jumps when the cursor reaches the end of the window. Instead,
 ;; just scroll by one line.
@@ -165,30 +165,103 @@
     (if (daemonp)
         (setq evil-echo-state nil))))
 
+;; I like standard sentence ending
 (setq sentence-end-double-space nil)
 
+;; Make me able to continue selection without keep the finger on the shift key
+(setopt shift-select-mode 'permanent)
+
+;; Fix clipboard in TTY
 (use-package xclip
-  :defer 0.5
+  :init
+  (add-hook 'after-init-hook 'xclip-mode)
   :config
   (setq xclip-program "wl-copy")
   (setq xclip-select-enable-clipboard t)
-  (setq xclip-mode t)
   (setq xclip-method (quote wl-copy)))
 
-(defun my-ask-kill-buffer ()
-  "Ask to diff, save or kill buffer"
-  (if (and (buffer-file-name) (buffer-modified-p))
-      (cl-loop for ch = (read-event "(K)ill buffer, (D)iff buffer, (S)ave buffer, (N)othing?")
-               if (or (eq ch ?k) (eq ch ?K))
-               return t
-               if (or (eq ch ?d) (eq ch ?D))
-               do (diff-buffer-with-file)
-               if (or (eq ch ?s) (eq ch ?S))
-               return (progn (save-buffer) t)
-               if (or (eq ch ?n) (eq ch ?N))
-               return nil)
-    t))
+;; Save some key presses
+(use-package repeat
+  :config
+  (defun my/repeat-mode ()
+    (let ((inhibit-message t)
+          (message-log-max nil))
+      (repeat-mode)))
 
-(add-to-list 'kill-buffer-query-functions #'my-ask-kill-buffer)
+  (my/repeat-mode)
+
+  ;; Disable the built-in repeat-mode hinting
+  (setq repeat-echo-function #'ignore)
+
+  ;; Custom repeat-maps
+  (defvar-keymap my/undo-repeat-map
+    :repeat (:enter (undo))
+    "u" #'undo-fu-only-undo
+    "r" #'undo-fu-only-redo)
+
+  (defvar-keymap org-heading-repeat-map
+    :repeat (:enter (org-next-visible-heading org-previous-visible-heading))
+    "n" #'org-next-visible-heading
+    "p" #'org-previous-visible-heading)
+
+  ;; Use which-key to show help
+  (use-package which-key
+    :after which-key
+    :config
+    (advice-add 'repeat-post-hook :after
+                (defun my/which-key-repeat ()
+                  (when-let ((cmd (or this-command real-this-command))
+                             (keymap (repeat--command-property 'repeat-map)))
+                    (run-at-time
+                     which-key-idle-delay nil
+                     (lambda ()
+                       (which-key--create-buffer-and-show
+                        nil (symbol-value keymap)))))))
+
+    (defun my/which-key-repeat-mode-dispatch ()
+      (interactive)
+      (setq this-command last-command)
+      (when-let (keymap (repeat--command-property 'repeat-map))
+        (which-key--create-buffer-and-show
+         nil (symbol-value keymap))))
+
+    (defun my/which-key-repeat-mode-binding ()
+      (when repeat-mode
+        (when-let* ((rep-map-sym (or repeat-map (repeat--command-property 'repeat-map)))
+                    (keymap (and (symbolp rep-map-sym) (symbol-value rep-map-sym))))
+          (set-transient-map
+           (make-composed-keymap
+            (let ((map (make-sparse-keymap)))
+              (define-key map (kbd "C-h") #'my/which-key-repeat-mode-dispatch)
+              map)
+            keymap)))))
+
+    (advice-add 'repeat-post-hook :after #'my/which-key-repeat-mode-binding)))
+
+;; Rebind M-m to C-a
+(define-key global-map (kbd "C-a ") 'back-to-indentation)
+(define-key global-map (kbd "<escape> J") 'join-line)
+
+;; Stop skipping words
+(global-subword-mode)
+
+;; Ignore useless messages
+(defun filter-command-error-function (data context caller)
+  "Ignore the buffer-read-only, beginning-of-line, end-of-line, beginning-of-buffer, end-of-buffer signals; pass the rest to the default handler."
+  (when (not (memq (car data) '(buffer-read-only
+                                mark-inactive
+                                beginning-of-line
+                                end-of-line
+                                beginning-of-buffer
+                                end-of-buffer)))
+    (command-error-default-function data context caller)))
+
+(setq command-error-function #'filter-command-error-function)
+
+;; Highlight urls and make them clickable.
+(global-goto-address-mode 1)
+
+;; Overwrite selection on pasting
+(delete-selection-mode 1)
 
 (provide 'core)

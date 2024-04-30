@@ -51,6 +51,9 @@
 
 (setq inhibit-compacting-font-caches t)
 
+;; Enable packages at startup
+(setq package-enable-at-startup nil)
+
 ;; fix delay in pgtk build
 (setq-default pgtk-wait-for-event-timeout 0)
 

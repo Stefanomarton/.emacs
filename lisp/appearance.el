@@ -10,7 +10,7 @@
   (blink-cursor-mode 0)
 
   ;; Enable `prettify-symbols' globally.
-  ;; (global-prettify-symbols-mode t)
+  (global-prettify-symbols-mode t)
   (setq prettify-symbols-unprettify-at-point 'right-edge)
 
   ;; Display line number relative and absolute

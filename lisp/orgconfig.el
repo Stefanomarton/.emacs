@@ -28,6 +28,8 @@
 
   (use-package org-ref)
 
+  (setq org-agenda-files '("~/GoogleDrive/org/agenda/work.org" "~/GoogleDrive/org/agenda/personal.org"))
+
   (defun sbr-org-insert-dwim (&optional arg)
     "Insert another entry of the same type as the current
 entry. For example, if the point is on a list item, then add
@@ -89,8 +91,11 @@ point. "
     (outline-up-heading 1)
     (hide-subtree))
 
-  (evil-define-key 'normal org-mode-map (kbd "hs") 'hide-subtree-and-parent)
-  (evil-define-key 'insert org-mode-map (kbd "C-a a") 'hide-subtree-and-parent)
+  (if (featurep 'evil)
+      (progn
+        (evil-define-key 'normal org-mode-map (kbd "hs") 'hide-subtree-and-parent)
+        (evil-define-key 'insert org-mode-map (kbd "C-a a") 'hide-subtree-and-parent)
+        ))
 
   (setq org-blank-before-new-entry
         '((heading . nil)
@@ -139,7 +144,9 @@ point. "
     (org-timestamp '(16) nil)
     )
 
-  (evil-define-key 'normal org-mode-map (kbd "gt") 'my/org-time-stamp)
+  (if (featurep 'evil)
+      (progn
+        (evil-define-key 'normal org-mode-map (kbd "gt") 'my/org-time-stamp)))
 
   ;; Make org use `display-buffer' like every other Emacs citizen.
   (advice-add #'org-switch-to-buffer-other-window :override #'switch-to-buffer-other-window)
@@ -199,7 +206,11 @@ point. "
   (add-hook 'org-mode-hook
             (lambda () (add-hook 'after-save-hook 'export-org-latex-and-copy-pdf nil 'local)))
 
-  (evil-define-key 'normal org-mode-map (kbd "<leader>ee") 'export-org-latex-and-copy-pdf)
+  (if (featurep 'evil)
+      (progn
+        (evil-define-key 'normal org-mode-map (kbd "<leader>ee") 'export-org-latex-and-copy-pdf)
+        ))
+
 
   (setq org-latex-default-class "report")
   (setq org-startup-folded t)
@@ -1034,7 +1045,79 @@ point. "
                                       ("\\chapter{%s}" . "\\chapter*{%s}")
                                       ("\\section{%s}" . "\\section*{%s}")
                                       ("\\subsection{%s}" . "\\subsection*{%s}")))
-    )
+
+    (add-to-list 'org-latex-classes
+                 '("memoir"
+                   "\\documentclass[a4paper,11pt, openany]{memoir}
+                 %%% set up the recto page layout
+                 \\checkandfixthelayout
+                 \\setlength{\\evensidemargin}{\\oddsidemargin}% after \\checkandfix
+                 \\sidefootmargin{right}
+                 \\hbadness 99999
+                 \\usepackage{tabularx}
+                 \\usepackage{booktabs}
+                 \\usepackage[marginal]{footmisc} % cleaner footnotes
+                 \\usepackage[utf8]{inputenc}
+                 % \\usepackage[T1]{fontenc}
+                 \\usepackage{fixltx2e}
+                 \\usepackage{graphicx}
+                 \\usepackage{longtable}
+                 \\usepackage{float}
+                 \\usepackage{wrapfig}
+                 \\usepackage{rotating}
+                 \\usepackage{cancel}
+                 \\setlength{\\parskip}{1pt}
+                 \\usepackage{parskip}
+                 \\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
+                 \\usepackage{mhchem}
+                 \\usepackage[normalem]{ulem}
+                 \\usepackage{amsmath}
+                 \\usepackage{cleveref}
+
+                 \\usepackage{mathtools}
+                 \\DeclarePairedDelimiter\\bra{\\langle}{\\rvert}
+                 \\DeclarePairedDelimiter\\ket{\\lvert}{\\rangle}
+                 \\DeclarePairedDelimiterX\\braket[2]{\\langle}{\\rangle}{#1\\,\\delimsize\\vert\\,\\mathopen{}#2}
+                 \\usepackage{amsmath}
+                 \\usepackage{textcomp}
+                 \\usepackage{marvosym}
+                 \\usepackage{wasysym}
+                 \\usepackage{amssymb}
+                 \\usepackage{hyperref}
+                 \\hypersetup{
+                     colorlinks=true,       % false: boxed links; true: colored links
+                     linkcolor=blue,        % color of internal links
+                     citecolor=blue,        % color of links to bibliography
+                     filecolor=blue,     % color of file links
+                     urlcolor=blue
+                 }
+                 \\setsecnumdepth{subsection}
+                 \\setlength{\\parindent}{0em}
+                 \\usepackage{newpxtext}
+                 \\usepackage{newpxmath}
+                 \\usepackage{color}
+                 \\definecolor{bg}{rgb}{0.95,0.95,0.95}
+                 % Define cool colorboxes
+                 \\usepackage[most]{tcolorbox}
+                 \\newtcolorbox{bx}{
+                    enhanced,
+                    boxrule=0pt,frame hidden,
+                    borderline west={4pt}{0pt}{black},
+                    colback=black!5!white,
+                    sharp corners,
+                 }
+                 \\usepackage{enumitem}
+                 \\setlist{noitemsep}
+                 \\tolerance=1000
+                 [NO-DEFAULT-PACKAGES]
+                 [PACKAGES]
+                 [EXTRA]
+                 \\linespread{1.1}
+                 \\hypersetup{pdfborder=0 0 0}"
+                   ("\\chapter{%s}" . "\\chapter*{%s}")
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
   (use-package ox-hugo
     :after ox)
@@ -1051,7 +1134,7 @@ point. "
    org-src-preserve-indentation t))
 
 (use-package org-download
-  :defer t
+  ;; :defer t
   :commands (org-download-clipboard)
   :init
   (setq org-download-display-inline-images 'posframe)
@@ -1085,20 +1168,20 @@ point. "
 (use-package org-roam
   :straight (:host github :repo "org-roam/org-roam"
                    :files (:defaults "extensions/*"))
-  :defer 0.5
+  ;; :defer 0.5
   :commands (org-roam-node-find org-roam-capture consult-notes)
   :init
   (setq org-roam-directory (file-truename "~/GoogleDrive/org"))
   :custom
   (org-roam-complete-everywhere t)
   :bind
-  (:map evil-normal-state-map
-        ("<leader>of" . consult-org-roam-file-find)
-        ("<leader>og" . consult-notes-search-in-all-notes)
-        ("<leader>oo" . consult-notes)
-        ("<leader>on" . consult-notes-org-roam-find-node)
-        ("<leader>ok" . org-roam-capture)
-        ("<leader>oc" . my/org-roam-node-find-courses))
+  ;; (:map evil-normal-state-map
+  ;;       ("<leader>of" . consult-org-roam-file-find)
+  ;;       ("<leader>og" . consult-notes-search-in-all-notes)
+  ;;       ("<leader>oo" . consult-notes)
+  ;;       ("<leader>on" . consult-notes-org-roam-find-node)
+  ;;       ("<leader>ok" . org-roam-capture)
+  ;;       ("<leader>oc" . my/org-roam-node-find-courses))
   :bind
   ("C-C of" . consult-org-roam-file-find)
   ("C-C og" . consult-notes-search-in-all-notes)
@@ -1296,7 +1379,7 @@ point. "
 
 
 (use-package citar
-  :defer t
+  ;; :defer t
   :after (org org-roam)
   :custom
   (org-cite-insert-processor 'citar)
@@ -1337,7 +1420,12 @@ point. "
   :custom
 
   (consult-notes-file-dir-sources
-   '(("course"             ?c "~/GoogleDrive/org/uni/courses/")))
+   '(("course"             ?c "~/GoogleDrive/org/uni/courses/")
+     ("obsidian" ?o "~/GoogleDrive/Obsidian/University/")
+     ("obsidian" ?o "~/GoogleDrive/Obsidian/Personal/")
+     ("obsidian" ?o "~/GoogleDrive/Obsidian/")
+     ("obsidian" ?o "~/GoogleDrive/Obsidian/Work/")
+     ))
 
   (consult-notes-org-roam-template
    (concat "${type:20} ${title:70}" (propertize "${fmtime:20}" 'face 'font-lock-comment-face)(propertize "${tags:20}" 'face 'org-tag) "${blinks:3}"))
@@ -1347,6 +1435,21 @@ point. "
              consult-notes-org-roam-find-node
              consult-notes-org-roam-find-node-relation)
   :config
+  (defun consult-notes-my-embark-function (cand)
+    "Do something with CAND"
+    (interactive "fNote: ")
+    (my-function))
+
+  (defvar-keymap consult-notes-map
+    :doc "Keymap for Embark notes actions."
+    :parent embark-file-map
+    "m" #'consult-notes-my-embark-function)
+
+  (add-to-list 'embark-keymap-alist `(,consult-notes-category . consult-notes-map))
+
+  ;; make embark-export use dired for notes
+  (setf (alist-get consult-notes-category embark-exporters-alist) #'embark-export-dired)
+
   (consult-notes-org-roam-mode)
 
   ;; Search org-roam notes for citations (depends on citar)
@@ -1421,9 +1524,9 @@ point. "
 
 ;; Keep a journal
 (use-package org-journal
-  :bind (:map evil-normal-state-map
-              ("<leader>oj" . org-journal-new-entry)
-              ("<leader>oJ" . org-journal-open-current-journal-file))
+  ;; :bind (:map evil-normal-state-map
+  ;;             ("<leader>oj" . org-journal-new-entry)
+  ;;             ("<leader>oJ" . org-journal-open-current-journal-file))
   :config
   (setq org-journal-dir "~/GoogleDrive/org/journal/"
         org-journal-date-format "%A, %d %B %Y"

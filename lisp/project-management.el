@@ -3,18 +3,23 @@
 (provide 'project-management)
 
 (use-package projectile
-  :defer 1
-  :after vertico
-  :diminish projectile-mode
-  :custom
+  :config
+  (projectile-mode)
   (setq projectile-track-known-projects-automatically nil)
   (setq projectile-completion-system 'consult)
-  :config
-  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
-  (projectile-mode)
+
+  (use-package consult-projectile
+    :bind
+    ("C-x p p" . consult-projectile)
+    ("C-x p f" . consult-projectile-find-file)
+    ("C-x p t" . projectile-run-vterm-other-window)
+    ("C-x p s" . consult-projectile-switch-project)
+    ("C-x p a" . projectile-add-known-project))
+
+  (setq projectile-indexing-method 'alien)
+
   :init
-  (setq projectile-indexing-method 'native)
-  ;; (setq projectile-known-projects-file "~/.config/emacs/project.el")
+  (add-hook 'after-init-hook 'projectile-mode)
   )
 
 (use-package hl-todo
@@ -65,14 +70,8 @@
   :commands magit-delta-mode
   :hook (magit-mode . magit-delta-mode))
 
-(use-package git-gutter+
-  :hook ((prog-mode text-mode-hook) . git-gutter-mode)
-  :after git-gutter
-  :config
-  (git-gutter+-mode))
-
 (use-package git-gutter
-  ;; :hook ((prog-mode markdown-mode LaTeX-mode) . git-gutter-mode)
+  :hook ((prog-mode text-mode-hook LaTeX-mode) . git-gutter-mode)
   :config
   (git-gutter-mode)
   (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
@@ -91,13 +90,13 @@
   :bind
   (("<leader>gn" . hydra-git-gutter/body)))
 
-(use-package git-gutter-fringe
-  :config
-  (fringe-mode nil)
-  (setq-default left-margin-width 1)
-  (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
-  (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
-  (define-fringe-bitmap 'git-gutter-fr:deleted [224] nil nil '(center repeated)))
+;; (use-package git-gutter-fringe
+;;   :config
+;;   (fringe-mode nil)
+;;   (setq-default left-margin-width 1)
+;;   (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+;;   (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+;;   (define-fringe-bitmap 'git-gutter-fr:deleted [224] nil nil '(center repeated)))
 
 
 ;;; project-management.el ends here

@@ -2,6 +2,6 @@
 # name: #+INCLUDE
 # condition: (and (not (texmathp)))
 # key: icl
-# binding: C-s i
+# binding: <escape> s i
 # --
 #+INCLUDE: ${1: $(yas-choose-value '("./" "../"))}

@@ -17,12 +17,9 @@
 
 (use-package markdown-mode
   :mode ("\\.md?\\'" . markdown-mode)
-  :custom
-  (setq markdown-fontify-code-blocks-natively t)
-  (setq markdown-enable-math t)
+  :mode ("README\\.md\\'" . gfm-mode)
   :config
-
-  (defun export-buffer-to-pdf ()
+  (defun my/export-md-to-pdf ()
     "Export the current Markdown buffer to PDF using Pandoc with conditional flags."
     (interactive)
     (let* ((md-file (buffer-file-name))
@@ -38,30 +35,21 @@
       (message "Exporting Markdown file to PDF")
       (start-process-shell-command "pandoc-export" nil pandoc-command)))
 
-  (defun open-pdf-with-zathura ()
+  (defun my/open-pdf-with-zathura ()
     "Open the PDF file associated with the current buffer in Zathura."
     (interactive)
     (let ((pdf-file (concat (file-name-sans-extension (buffer-file-name)) ".pdf")))
       (start-process "zathura" nil "zathura" pdf-file)))
 
-  (defun open-pdf-with-pdf-tools ()
-    "Open the PDF file associated with the current buffer in pdf-tools."
-    (interactive)
-    (let ((pdf-file (concat (file-name-sans-extension (buffer-file-name)) ".pdf")))
-      (if (file-exists-p pdf-file)
-	      (progn
-	        (pdf-tools-install)
-	        (find-file pdf-file))
-        (message "PDF file not found."))))
+  (define-key markdown-mode-map (kbd "C-c C-e") 'my/export-md-to-pdf)
+  (define-key markdown-mode-map (kbd "C-c C-v") 'my/open-pdf-with-zathura)
 
-  (evil-define-key 'normal markdown-mode-map
-    (kbd "<leader>ee") 'export-buffer-to-pdf
-    (kbd "<leader>ez") 'open-pdf-with-zathura
-    (kbd "<leader>ep") 'open-pdf-with-pdf-tools)
-
-  :mode ("README\\.md\\'" . gfm-mode)
+  ;; Math and fontify
+  (setq markdown-fontify-code-blocks-natively t)
   :init
-  (setq markdown-enable-math t))
+  (setq markdown-enable-math t
+        markdown-enable-highlighting-syntax t)
+  )
 
 (use-package tex
   :mode ("\\.tex?\\'" . LaTeX-mode)
@@ -151,7 +139,6 @@
 
 
 (use-package yasnippet
-  :defer t
   :commands (yas-minor-mode)
   :hook
   (text-mode . yas-minor-mode)
@@ -166,14 +153,17 @@
                (lambda (&rest args) nil)))
       (apply func args)))
   (advice-add 'yas-reload-all :around #'make-silent)
+  (add-hook 'org-mode '(lambda () (setq-local yas-indent-line 'fixed)))
   :config
   (yas-global-mode 1)
+  (setq yas-indent-line 'fixed)
   (setq yas-triggers-in-field t)
   (setq yas-snippet-dirs '("~/.config/emacs/snippets")))
 
 (use-package warnings
+  :straight (:type built-in)
   :config
-  (add-to-list 'warning-suppress-types '(yasnippet backquote-change ox-latex)))
+  (add-to-list 'warning-suppress-types '(yasnippet backquote-change)))
 
 (use-package aas
   :hook
@@ -228,53 +218,53 @@
 
     ;; positive apices
     ",," (lambda () (interactive)
-	       (yas-expand-snippet "^{$1} $0"))
+	       (yas-expand-snippet "^{$1}$0"))
     ",x" (lambda () (interactive)
-	       (yas-expand-snippet "^{1} $0"))
+	       (yas-expand-snippet "^{1}$0"))
     ",c" (lambda () (interactive)
-	       (yas-expand-snippet "^{2} $0"))
+	       (yas-expand-snippet "^{2}$0"))
     ",v" (lambda () (interactive)
-	       (yas-expand-snippet "^{3} $0"))
+	       (yas-expand-snippet "^{3}$0"))
     ",s" (lambda () (interactive)
-	       (yas-expand-snippet "^{4} $0"))
+	       (yas-expand-snippet "^{4}$0"))
     ",d" (lambda () (interactive)
-	       (yas-expand-snippet "^{5} $0"))
+	       (yas-expand-snippet "^{5}}$0"))
     ",f" (lambda () (interactive)
-	       (yas-expand-snippet "^{6} $0"))
+	       (yas-expand-snippet "^{6}$0"))
     ",w" (lambda () (interactive)
-	       (yas-expand-snippet "^{7} $0"))
+	       (yas-expand-snippet "^{7}$0"))
     ",e" (lambda () (interactive)
-	       (yas-expand-snippet "^{8} $0"))
+	       (yas-expand-snippet "^{8}$0"))
     ",r" (lambda () (interactive)
-	       (yas-expand-snippet "^{9} $0"))
+	       (yas-expand-snippet "^{9}$0"))
 
     ;; negative apices
     ".." (lambda () (interactive)
-	       (yas-expand-snippet "^{-$1} $0"))
+	       (yas-expand-snippet "^{-$1}$0"))
     ".x" (lambda () (interactive)
-	       (yas-expand-snippet "^{-1} $0"))
+	       (yas-expand-snippet "^{-1}$0"))
     ".c" (lambda () (interactive)
-	       (yas-expand-snippet "^{-2} $0"))
+	       (yas-expand-snippet "^{-2}$0"))
     ".v" (lambda () (interactive)
-	       (yas-expand-snippet "^{-3} $0"))
+	       (yas-expand-snippet "^{-3}$0"))
     ".s" (lambda () (interactive)
-	       (yas-expand-snippet "^{-4} $0"))
+	       (yas-expand-snippet "^{-4}$0"))
     ".d" (lambda () (interactive)
-	       (yas-expand-snippet "^{-5} $0"))
+	       (yas-expand-snippet "^{-5}$0"))
     ".f" (lambda () (interactive)
-	       (yas-expand-snippet "^{-6} $0"))
+	       (yas-expand-snippet "^{-6}$0"))
     ".w" (lambda () (interactive)
-	       (yas-expand-snippet "^{-7} $0"))
+	       (yas-expand-snippet "^{-7}$0"))
     ".e" (lambda () (interactive)
-	       (yas-expand-snippet "^{-8} $0"))
+	       (yas-expand-snippet "^{-8}$0"))
     ".r" (lambda () (interactive)
-	       (yas-expand-snippet "^{-9} $0"))
+	       (yas-expand-snippet "^{-9}$0"))
 
     ".," (lambda () (interactive)
 	       (yas-expand-snippet "^{$1}_{$0}"))
 
     "kk" (lambda () (interactive)
-	       (yas-expand-snippet "_{$1} $0"))
+	       (yas-expand-snippet "_{$1}$0"))
 
     "++" (lambda () (interactive)
 	       (yas-expand-snippet "^+ $0"))
@@ -331,13 +321,13 @@
 (use-package jinx
   :hook
   (org-mode . jinx-mode)
-  (LaTeX-mode . jinx-mode)
-  (text-mode . jinx-mode)
-  (markdown-mode . jinx-mode)
+  :bind
+  (:map org-mode-map
+        ("M-$" . jinx-correct))
+  (:map text-mode-map
+        ("M-$" . jinx-correct))
   :straight (:host github :repo "minad/jinx")
   :config
-  (evil-define-key 'normal org-mode-map  (kbd "<leader>j") 'jinx-correct)
-  (evil-define-key 'normal org-mode-map  (kbd "<leader>J") 'jinx-correct-all)
   (setq jinx-languages "it_IT, en_US"))
 
 (provide 'document-production)

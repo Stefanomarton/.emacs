@@ -36,17 +36,43 @@
              (css-mode . css-ts-mode)
              (typescript-mode . typescript-ts-mode)
              (js2-mode . js-ts-mode)
-             (bash-mode . bash-ts-mode)
+             (sh-mode . bash-ts-mode)
              (css-mode . css-ts-mode)
              (json-mode . json-ts-mode)
-             (js-json-mode . json-ts-mode)))
+             (js-json-mode . json-ts-mode)
+             (conf-toml-mode . toml-ts-mode)))
     (add-to-list 'major-mode-remap-alist mapping))
 
   :config
   (mp-setup-install-grammars))
 
-;; Lua setup
+(use-package macrursors
+  :straight (:host github
+                   :repo "corytertel/macrursors")
+  :bind
+  (:map global-map
+        ("C-c SPC" . macrursors-select)
+        ("C->" . macrursors-mark-next-instance-of)
+        ("C-<" . macrursors-mark-previous-instance-of)
+        ("C-;" . macrursors-mark-map))
+  (:map macrursors-mark-map
+        ("C-;" . macrursors-mark-all-lines-or-instances)
+        (";" . rursors-mark-all-lines-or-instances)
+        ("l" . rursors-mark-all-lists)
+        ("s" . macrursors-mark-all-symbols)
+        ("e" . macrursors-mark-all-sexps)
+        ("f" . macrursors-mark-all-defuns)
+        ("n" . macrursors-mark-all-numbers)
+        ("." . macrursors-mark-all-sentences)
+        ("r" . macrursors-mark-all-lines))
+  :init
+  (define-prefix-command 'macrursors-mark-map)
+  :config
+  (dolist (mode '(corfu-mode goggles-mode beacon-mode))
+    (add-hook 'macrursors-pre-finish-hook mode)
+    (add-hook 'macrursors-post-finish-hook mode)))
 
+;; Lua setup
 (use-package lua-mode
   :mode ("\\.lua?\\'" . lua-mode)
   )

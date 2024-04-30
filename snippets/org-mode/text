@@ -2,7 +2,7 @@
 # name: text
 # condition: (and (texmathp) 'auto)
 # key: tttext
-# binding: C-s t
+# binding: <escape> s t
 # expand-env : ((yas-wrap-around-region nil))
 # --
 \text{${1:`(if (region-active-p) (yas-selected-text) "content")`}}$0`(evil-insert-state)`
