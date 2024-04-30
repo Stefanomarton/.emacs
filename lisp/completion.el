@@ -157,7 +157,7 @@
   ;; Setup for emacs lisp-mode
   (add-hook 'emacs-lisp-mode-hook
             (lambda ()
-              (setq-local corfu-auto-prefix 1)
+              (setq-local corfu-auto-prefix 3)
               (setq-local completion-at-point-functions
                           '(cape-file
                             yasnippet-capf
