@@ -62,6 +62,9 @@
   :config
   (setq ebuku-database-path (expand-file-name "~/GoogleDrive/Projects/Linux/buku/buku.db")))
 
+(use-package sudo-edit
+  :commands sudo-edit)
+
 (provide 'tools)
 
 ;;; tools.el ends here
