@@ -60,13 +60,12 @@
     (call-interactively 'magit-status))
 
   ;; Fixing keybinding
-  (evil-define-key 'normal magit-mode-map (kbd "l") 'magit-section-backward-sibling)
-  (evil-define-key 'normal magit-mode-map (kbd "k") 'magit-section-forward-sibling)
-  (evil-define-key 'normal magit-mode-map (kbd "SPC") 'magit-section-cycle)
-  )
+  (if (featurep 'evil)
+      (progn
+        (evil-define-key 'normal magit-mode-map (kbd "l") 'magit-section-backward-sibling)
+        (evil-define-key 'normal magit-mode-map (kbd "k") 'magit-section-forward-sibling)
+        (evil-define-key 'normal magit-mode-map (kbd "SPC") 'magit-section-cycle)))
 
-(use-package magit-delta
-  :after magit
   :commands magit-delta-mode
   :hook (magit-mode . magit-delta-mode))
 
