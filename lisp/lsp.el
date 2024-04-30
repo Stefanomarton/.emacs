@@ -5,13 +5,6 @@
   (python-ts-mode . eglot-ensure)
   (LaTeX-mode . eglot-ensure)
   :config
-  (if (featurep 'evil)
-      (progn
-        (evil-define-key 'normal python-ts-mode-map (kbd "<tab>") 'evil-shift-right-line)
-        (evil-define-key 'normal python-ts-mode-map (kbd "<backtab>") 'evil-shift-left-line)
-        (evil-define-key 'visual python-ts-mode-map (kbd "<tab>") 'evil-shift-right)
-        (evil-define-key 'visual python-ts-mode-map (kbd "<backtab>") 'evil-shift-left)))
-
   (setq eglot-workspace-configuration
         '((pylsp
            (plugins

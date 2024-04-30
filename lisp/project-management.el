@@ -1,7 +1,5 @@
 ;;; project-management.el --- Project management packages -*- lexical-binding: t; -*-
 
-(provide 'project-management)
-
 (use-package projectile
   :config
   (projectile-mode)
@@ -59,13 +57,6 @@
     (setq magit-git-global-arguments (remove dotfiles-work-tree magit-git-global-arguments))
     (call-interactively 'magit-status))
 
-  ;; Fixing keybinding
-  (if (featurep 'evil)
-      (progn
-        (evil-define-key 'normal magit-mode-map (kbd "l") 'magit-section-backward-sibling)
-        (evil-define-key 'normal magit-mode-map (kbd "k") 'magit-section-forward-sibling)
-        (evil-define-key 'normal magit-mode-map (kbd "SPC") 'magit-section-cycle)))
-
   :commands magit-delta-mode
   :hook (magit-mode . magit-delta-mode))
 
@@ -97,5 +88,5 @@
 ;;   (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
 ;;   (define-fringe-bitmap 'git-gutter-fr:deleted [224] nil nil '(center repeated)))
 
-
+(provide 'project-management)
 ;;; project-management.el ends here

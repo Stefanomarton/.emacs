@@ -83,14 +83,14 @@ targets."
   (setq embark-cycle-key "SPC")
   (setq embark-quit-after-action t)
   ;; evil keybindings
-  (if (featurep 'evil)
-      (progn
-        ;; Code to execute when Evil mode is active
-        (evil-define-key 'normal 'global (kbd "<leader>SPC") 'embark-minimal-act)
-        (evil-define-key 'normal 'global (kbd "C-.") 'embark-dwim)
-        (evil-define-key 'insert 'global (kbd "C-.") 'embark-minimal-act)
-        (evil-define-key 'visual 'global (kbd "<leader>SPC") 'embark-minimal-act)
-        ))
+  ;; (if (featurep 'evil)
+  ;;     (progn
+  ;;       ;; Code to execute when Evil mode is active
+  ;;       (evil-define-key 'normal 'global (kbd "<leader>SPC") 'embark-minimal-act)
+  ;;       (evil-define-key 'normal 'global (kbd "C-.") 'embark-dwim)
+  ;;       (evil-define-key 'insert 'global (kbd "C-.") 'embark-minimal-act)
+  ;;       (evil-define-key 'visual 'global (kbd "<leader>SPC") 'embark-minimal-act)
+  ;;       ))
 
   :init
   (setq prefix-help-command #'embark-prefix-help-command))
