@@ -26,7 +26,8 @@
 
   :config
 
-  (use-package org-ref)
+  (use-package org-ref
+    :after org-mode)
 
   (setq org-agenda-files '("~/GoogleDrive/org/agenda/work.org" "~/GoogleDrive/org/agenda/personal.org"))
 
@@ -91,11 +92,11 @@ point. "
     (outline-up-heading 1)
     (hide-subtree))
 
-  (if (featurep 'evil)
-      (progn
-        (evil-define-key 'normal org-mode-map (kbd "hs") 'hide-subtree-and-parent)
-        (evil-define-key 'insert org-mode-map (kbd "C-a a") 'hide-subtree-and-parent)
-        ))
+  ;; (if (featurep 'evil)
+  ;;     (progn
+  ;;       (evil-define-key 'normal org-mode-map (kbd "hs") 'hide-subtree-and-parent)
+  ;;       (evil-define-key 'insert org-mode-map (kbd "C-a a") 'hide-subtree-and-parent)
+  ;;       ))
 
   (setq org-blank-before-new-entry
         '((heading . nil)
@@ -144,9 +145,9 @@ point. "
     (org-timestamp '(16) nil)
     )
 
-  (if (featurep 'evil)
-      (progn
-        (evil-define-key 'normal org-mode-map (kbd "gt") 'my/org-time-stamp)))
+  ;; (if (featurep 'evil)
+  ;;     (progn
+  ;;       (evil-define-key 'normal org-mode-map (kbd "gt") 'my/org-time-stamp)))
 
   ;; Make org use `display-buffer' like every other Emacs citizen.
   (advice-add #'org-switch-to-buffer-other-window :override #'switch-to-buffer-other-window)
@@ -206,10 +207,10 @@ point. "
   (add-hook 'org-mode-hook
             (lambda () (add-hook 'after-save-hook 'export-org-latex-and-copy-pdf nil 'local)))
 
-  (if (featurep 'evil)
-      (progn
-        (evil-define-key 'normal org-mode-map (kbd "<leader>ee") 'export-org-latex-and-copy-pdf)
-        ))
+  ;; (if (featurep 'evil)
+  ;;     (progn
+  ;;       (evil-define-key 'normal org-mode-map (kbd "<leader>ee") 'export-org-latex-and-copy-pdf)
+  ;;       ))
 
 
   (setq org-latex-default-class "report")
@@ -1416,6 +1417,7 @@ point. "
   (citar-embark-mode))
 
 (use-package consult-notes
+  :commands (consult-notes)
   :straight (:type git :host github :repo "mclear-tools/consult-notes")
   :custom
 
@@ -1493,6 +1495,7 @@ point. "
 
 
 (use-package org-appear
+  :after org-mode
   :straight (:type git :host github :repo "awth13/org-appear")
   :hook (org-mode . org-appear-mode)
   :config
@@ -1518,12 +1521,14 @@ point. "
 ;;   (setq org-anki-default-note-type "Basic"))
 
 (use-package org-transclusion
+  :after org-mode
   :bind (:map org-mode-map
               ("<leader>ota" . org-transclusion-add)
               ("<leader>otm" . org-transclusion-mode)))
 
 ;; Keep a journal
 (use-package org-journal
+  :defer 2
   ;; :bind (:map evil-normal-state-map
   ;;             ("<leader>oj" . org-journal-new-entry)
   ;;             ("<leader>oJ" . org-journal-open-current-journal-file))
