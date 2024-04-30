@@ -135,201 +135,201 @@
 	    (goto-char end))))
 
   ;; (global-set-key (kbd "C-c f") 'my-select-frac)
-  (evil-define-key 'normal LaTeX-mode-map (kbd "<leader>r") 'my-select-frac))
+  ;; (evil-define-key 'normal LaTeX-mode-map (kbd "<leader>r") 'my-select-frac))
 
 
-(use-package yasnippet
-  :commands (yas-minor-mode)
-  :hook
-  (text-mode . yas-minor-mode)
-  (prog-mode . yas-minor-mode)
-  (LaTeX-mode . yas-minor-mode)
-  (markdown-mode . yas-minor-mode)
-  (org-mode . yas-minor-mode)
-  (yas-minor-mode . yas-reload-all)
-  :preface
-  (defun make-silent (func &rest args)
-    (cl-letf (((symbol-function 'message)
-               (lambda (&rest args) nil)))
-      (apply func args)))
-  (advice-add 'yas-reload-all :around #'make-silent)
-  (add-hook 'org-mode '(lambda () (setq-local yas-indent-line 'fixed)))
-  :config
-  (yas-global-mode 1)
-  (setq yas-indent-line 'fixed)
-  (setq yas-triggers-in-field t)
-  (setq yas-snippet-dirs '("~/.config/emacs/snippets")))
+  (use-package yasnippet
+    :commands (yas-minor-mode)
+    :hook
+    (text-mode . yas-minor-mode)
+    (prog-mode . yas-minor-mode)
+    (LaTeX-mode . yas-minor-mode)
+    (markdown-mode . yas-minor-mode)
+    (org-mode . yas-minor-mode)
+    (yas-minor-mode . yas-reload-all)
+    :preface
+    (defun make-silent (func &rest args)
+      (cl-letf (((symbol-function 'message)
+                 (lambda (&rest args) nil)))
+        (apply func args)))
+    (advice-add 'yas-reload-all :around #'make-silent)
+    (add-hook 'org-mode '(lambda () (setq-local yas-indent-line 'fixed)))
+    :config
+    (yas-global-mode 1)
+    (setq yas-indent-line 'fixed)
+    (setq yas-triggers-in-field t)
+    (setq yas-snippet-dirs '("~/.config/emacs/snippets")))
 
-(use-package warnings
-  :straight (:type built-in)
-  :config
-  (add-to-list 'warning-suppress-types '(yasnippet backquote-change)))
+  (use-package warnings
+    :straight (:type built-in)
+    :config
+    (add-to-list 'warning-suppress-types '(yasnippet backquote-change)))
 
-(use-package aas
-  :hook
-  (org-mode . aas-activate-for-major-mode)
-  (markdown-mode . aas-activate-for-major-mode)
-  (LaTeX-mode . aas-activate-for-major-mode)
-  :config
-  (aas-set-snippets 'LaTeX-mode
-    "jf" (lambda () (interactive)
-	       (yas-expand-snippet "\\\\($1\\\\) $0"))
-    "jc" (lambda () (interactive)
-	       (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
-    "kd  " (lambda () (interactive)
+  (use-package aas
+    :hook
+    (org-mode . aas-activate-for-major-mode)
+    (markdown-mode . aas-activate-for-major-mode)
+    (LaTeX-mode . aas-activate-for-major-mode)
+    :config
+    (aas-set-snippets 'LaTeX-mode
+      "jf" (lambda () (interactive)
+	         (yas-expand-snippet "\\\\($1\\\\) $0"))
+      "jc" (lambda () (interactive)
+	         (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
+      "kd  " (lambda () (interactive)
+	           (yas-expand-snippet "\\[ \n $1 \n \\] \n \n $0")))
+    (aas-set-snippets 'org-mode
+      "jf" (lambda () (interactive)
+	         (yas-expand-snippet "\\\\( $1 \\\\) $0"))
+      "jc" (lambda () (interactive)
+	         (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
+      "kd" (lambda () (interactive)
 	         (yas-expand-snippet "\\[ \n $1 \n \\] \n \n $0")))
-  (aas-set-snippets 'org-mode
-    "jf" (lambda () (interactive)
-	       (yas-expand-snippet "\\\\( $1 \\\\) $0"))
-    "jc" (lambda () (interactive)
-	       (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
-    "kd" (lambda () (interactive)
-	       (yas-expand-snippet "\\[ \n $1 \n \\] \n \n $0")))
-  (aas-set-snippets 'markdown-mode
-    "jf" (lambda () (interactive)
-	       (yas-expand-snippet "$ $1$ $0 $"))
-    "jc" (lambda () (interactive)
-	       (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
-    "kd" (lambda () (interactive)
-	       (yas-expand-snippet "$$ \n $1 \n $$ \n \n $0"))))
+    (aas-set-snippets 'markdown-mode
+      "jf" (lambda () (interactive)
+	         (yas-expand-snippet "$ $1$ $0 $"))
+      "jc" (lambda () (interactive)
+	         (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
+      "kd" (lambda () (interactive)
+	         (yas-expand-snippet "$$ \n $1 \n $$ \n \n $0"))))
 
-(use-package laas
-  :straight (laas :type git :host github :repo "Stefanomarton/LaTeX-auto-activating-snippets")
-  :hook
-  (LaTeX-mode . laas-mode)
-  (markdown-mode . laas-mode)
-  (org-mode . laas-mode)
-  :config
-  (aas-set-snippets 'laas-mode
-    ;; set condition!
-    :cond #'texmathp ; expand only while in math
+  (use-package laas
+    :straight (laas :type git :host github :repo "Stefanomarton/LaTeX-auto-activating-snippets")
+    :hook
+    (LaTeX-mode . laas-mode)
+    (markdown-mode . laas-mode)
+    (org-mode . laas-mode)
+    :config
+    (aas-set-snippets 'laas-mode
+      ;; set condition!
+      :cond #'texmathp ; expand only while in math
 
-    ",t" (lambda () (interactive)
-	       (yas-expand-snippet "\\int"))
+      ",t" (lambda () (interactive)
+	         (yas-expand-snippet "\\int"))
 
-    ".." (lambda () (interactive)
-	       (yas-expand-snippet "_{$1}$0"))
-    "ds" (lambda () (interactive)
-	       (yas-expand-snippet "\\Delta_{$1}S $0"))
-    "dh" (lambda () (interactive)
-	       (yas-expand-snippet "\\Delta_{$1}H $0"))
-    "dg" (lambda () (interactive)
-	       (yas-expand-snippet "\\Delta_{$1}G $0"))
+      ".." (lambda () (interactive)
+	         (yas-expand-snippet "_{$1}$0"))
+      "ds" (lambda () (interactive)
+	         (yas-expand-snippet "\\Delta_{$1}S $0"))
+      "dh" (lambda () (interactive)
+	         (yas-expand-snippet "\\Delta_{$1}H $0"))
+      "dg" (lambda () (interactive)
+	         (yas-expand-snippet "\\Delta_{$1}G $0"))
 
-    ;; positive apices
-    ",," (lambda () (interactive)
-	       (yas-expand-snippet "^{$1}$0"))
-    ",x" (lambda () (interactive)
-	       (yas-expand-snippet "^{1}$0"))
-    ",c" (lambda () (interactive)
-	       (yas-expand-snippet "^{2}$0"))
-    ",v" (lambda () (interactive)
-	       (yas-expand-snippet "^{3}$0"))
-    ",s" (lambda () (interactive)
-	       (yas-expand-snippet "^{4}$0"))
-    ",d" (lambda () (interactive)
-	       (yas-expand-snippet "^{5}}$0"))
-    ",f" (lambda () (interactive)
-	       (yas-expand-snippet "^{6}$0"))
-    ",w" (lambda () (interactive)
-	       (yas-expand-snippet "^{7}$0"))
-    ",e" (lambda () (interactive)
-	       (yas-expand-snippet "^{8}$0"))
-    ",r" (lambda () (interactive)
-	       (yas-expand-snippet "^{9}$0"))
+      ;; positive apices
+      ",," (lambda () (interactive)
+	         (yas-expand-snippet "^{$1}$0"))
+      ",x" (lambda () (interactive)
+	         (yas-expand-snippet "^{1}$0"))
+      ",c" (lambda () (interactive)
+	         (yas-expand-snippet "^{2}$0"))
+      ",v" (lambda () (interactive)
+	         (yas-expand-snippet "^{3}$0"))
+      ",s" (lambda () (interactive)
+	         (yas-expand-snippet "^{4}$0"))
+      ",d" (lambda () (interactive)
+	         (yas-expand-snippet "^{5}}$0"))
+      ",f" (lambda () (interactive)
+	         (yas-expand-snippet "^{6}$0"))
+      ",w" (lambda () (interactive)
+	         (yas-expand-snippet "^{7}$0"))
+      ",e" (lambda () (interactive)
+	         (yas-expand-snippet "^{8}$0"))
+      ",r" (lambda () (interactive)
+	         (yas-expand-snippet "^{9}$0"))
 
-    ;; negative apices
-    ".." (lambda () (interactive)
-	       (yas-expand-snippet "^{-$1}$0"))
-    ".x" (lambda () (interactive)
-	       (yas-expand-snippet "^{-1}$0"))
-    ".c" (lambda () (interactive)
-	       (yas-expand-snippet "^{-2}$0"))
-    ".v" (lambda () (interactive)
-	       (yas-expand-snippet "^{-3}$0"))
-    ".s" (lambda () (interactive)
-	       (yas-expand-snippet "^{-4}$0"))
-    ".d" (lambda () (interactive)
-	       (yas-expand-snippet "^{-5}$0"))
-    ".f" (lambda () (interactive)
-	       (yas-expand-snippet "^{-6}$0"))
-    ".w" (lambda () (interactive)
-	       (yas-expand-snippet "^{-7}$0"))
-    ".e" (lambda () (interactive)
-	       (yas-expand-snippet "^{-8}$0"))
-    ".r" (lambda () (interactive)
-	       (yas-expand-snippet "^{-9}$0"))
+      ;; negative apices
+      ".." (lambda () (interactive)
+	         (yas-expand-snippet "^{-$1}$0"))
+      ".x" (lambda () (interactive)
+	         (yas-expand-snippet "^{-1}$0"))
+      ".c" (lambda () (interactive)
+	         (yas-expand-snippet "^{-2}$0"))
+      ".v" (lambda () (interactive)
+	         (yas-expand-snippet "^{-3}$0"))
+      ".s" (lambda () (interactive)
+	         (yas-expand-snippet "^{-4}$0"))
+      ".d" (lambda () (interactive)
+	         (yas-expand-snippet "^{-5}$0"))
+      ".f" (lambda () (interactive)
+	         (yas-expand-snippet "^{-6}$0"))
+      ".w" (lambda () (interactive)
+	         (yas-expand-snippet "^{-7}$0"))
+      ".e" (lambda () (interactive)
+	         (yas-expand-snippet "^{-8}$0"))
+      ".r" (lambda () (interactive)
+	         (yas-expand-snippet "^{-9}$0"))
 
-    ".," (lambda () (interactive)
-	       (yas-expand-snippet "^{$1}_{$0}"))
+      ".," (lambda () (interactive)
+	         (yas-expand-snippet "^{$1}_{$0}"))
 
-    "kk" (lambda () (interactive)
-	       (yas-expand-snippet "_{$1}$0"))
+      "kk" (lambda () (interactive)
+	         (yas-expand-snippet "_{$1}$0"))
 
-    "++" (lambda () (interactive)
-	       (yas-expand-snippet "^+ $0"))
+      "++" (lambda () (interactive)
+	         (yas-expand-snippet "^+ $0"))
 
-    "--" (lambda () (interactive)
-	       (yas-expand-snippet "^- $0"))
+      "--" (lambda () (interactive)
+	         (yas-expand-snippet "^- $0"))
 
-    ;; add accent snippets
-    :cond #'laas-object-on-left-condition
-    ".q" (lambda () (interactive) (laas-wrap-previous-object "sqrt"))
-    ".v" (lambda () (interactive) (laas-wrap-previous-object "vec"))
-    ".t" (lambda () (interactive) (laas-wrap-previous-object "text"))
-    ".b" (lambda () (interactive) (laas-wrap-previous-object "mathbf"))))
+      ;; add accent snippets
+      :cond #'laas-object-on-left-condition
+      ".q" (lambda () (interactive) (laas-wrap-previous-object "sqrt"))
+      ".v" (lambda () (interactive) (laas-wrap-previous-object "vec"))
+      ".t" (lambda () (interactive) (laas-wrap-previous-object "text"))
+      ".b" (lambda () (interactive) (laas-wrap-previous-object "mathbf"))))
 
-(use-package cdlatex
-  ;; :commands latex-mode
-  :hook (LaTeX-mode . cdlatex-mode)
-  :custom
-  (cdlatex-takeover-dollar nil)
-  (cdlatex-math-modify-prefix ?~)
-  ;; (cdlatex-math-symbol-prefix nil)
-  )
+  (use-package cdlatex
+    ;; :commands latex-mode
+    :hook (LaTeX-mode . cdlatex-mode)
+    :custom
+    (cdlatex-takeover-dollar nil)
+    (cdlatex-math-modify-prefix ?~)
+    ;; (cdlatex-math-symbol-prefix nil)
+    )
 
-(use-package latex-table-wizard
-  :commands latex-mode
-  :config
-  (defun some-useful-name (stuff-to-configure)
-    "Some useful documentation here!."
-    (dolist (entry stuff-to-configure)
-      (add-to-list 'latex-table-wizard-transient-keys
-		           (cons (intern (concat "latex-table-wizard-" (symbol-name (car entry))))
-			             (cdr entry)))))
+  (use-package latex-table-wizard
+    :commands latex-mode
+    :config
+    (defun some-useful-name (stuff-to-configure)
+      "Some useful documentation here!."
+      (dolist (entry stuff-to-configure)
+        (add-to-list 'latex-table-wizard-transient-keys
+		             (cons (intern (concat "latex-table-wizard-" (symbol-name (car entry))))
+			               (cdr entry)))))
 
-  ;; example use
-  (some-useful-name '((right . "l")
-		              (left . "h")
-		              (beginning-of-cell . "ii")
-		              (down . "j")
-		              (up . "k")
-		              (end-of-cell . "a")
-		              (beginning-of-row . "II")
-		              (end-of-row . "A")
-		              (bottom . "G")
-		              (top . "gg")
-		              (mark-cell . "m")
-		              (insert-column . "C")
-		              (insert-row .	"R")
-		              (kill-column-content ."DCC"	)
-		              (kill-row-content . "DRC"	)
-		              (delete-column . "Dc"	)
-		              (delete-row . "Dr"	)
-		              )))
+    ;; example use
+    (some-useful-name '((right . "l")
+		                (left . "h")
+		                (beginning-of-cell . "ii")
+		                (down . "j")
+		                (up . "k")
+		                (end-of-cell . "a")
+		                (beginning-of-row . "II")
+		                (end-of-row . "A")
+		                (bottom . "G")
+		                (top . "gg")
+		                (mark-cell . "m")
+		                (insert-column . "C")
+		                (insert-row .	"R")
+		                (kill-column-content ."DCC"	)
+		                (kill-row-content . "DRC"	)
+		                (delete-column . "Dc"	)
+		                (delete-row . "Dr"	)
+		                )))
 
-(use-package jinx
-  :hook
-  (org-mode . jinx-mode)
-  :bind
-  (:map org-mode-map
-        ("M-$" . jinx-correct))
-  (:map text-mode-map
-        ("M-$" . jinx-correct))
-  :straight (:host github :repo "minad/jinx")
-  :config
-  (setq jinx-languages "it_IT, en_US"))
+  (use-package jinx
+    :hook
+    (org-mode . jinx-mode)
+    :bind
+    (:map org-mode-map
+          ("M-$" . jinx-correct))
+    (:map text-mode-map
+          ("M-$" . jinx-correct))
+    :straight (:host github :repo "minad/jinx")
+    :config
+    (setq jinx-languages "it_IT, en_US"))
 
-(provide 'document-production)
+  (provide 'document-production)
 
 ;;; document-production.el ends here
