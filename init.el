@@ -1,4 +1,5 @@
 ;; init.el -*- lexical-binding: t; -*-
+
 (when (boundp 'read-process-output-max)
   ;; 1MB in bytes, default 4096 bytes
   (setq read-process-output-max 1048576))
@@ -93,8 +94,8 @@
 
 ;; (require 'bind-key)
 (load-module "core")
-(load-module "evil")
-(load-module "keybindings")
+;; (load-module "evil")
+;; (load-module "keybindings")
 (load-module "file-management")
 (load-module "completion")
 (load-module "appearance")
