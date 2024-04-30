@@ -98,11 +98,11 @@
 	    (setq TeX-master nil)))
     (message "Switched command: %s" (if TeX-master "master" "current")))
 
-  (evil-define-key 'normal LaTeX-mode-map
-    (kbd "<leader> ee") 'my-export-to-pdf
-    (kbd "C-c T") 'my-latex-toggle-command
-    (kbd "C-c E") 'my-export-to-pdf-view
-    (kbd "C-c t") 'lsp-ui-imenu)
+  ;; (evil-define-key 'normal LaTeX-mode-map
+  ;;   (kbd "<leader> ee") 'my-export-to-pdf
+  ;;   (kbd "C-c T") 'my-latex-toggle-command
+  ;;   (kbd "C-c E") 'my-export-to-pdf-view
+  ;;   (kbd "C-c t") 'lsp-ui-imenu)
 
   (defun my-select-frac ()
     "Select the \\frac command and move to the start of the nearest \\frac."
