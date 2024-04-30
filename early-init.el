@@ -36,7 +36,8 @@
             (setq file-name-handler-alist me/-file-name-handler-alist)))
 
 ;; Fill whatever space the window manager has given us.
-(setq frame-resize-pixelwise t)
+(setq frame-resize-pixelwise t
+      window-resize-pixelwise t)
 
 ;; ;; Resizing the Emacs frame can be a terribly expensive part of changing the
 ;; ;; font. By inhibiting this, we easily halve startup times with fonts that are
