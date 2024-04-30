@@ -59,10 +59,25 @@
 (use-package consult
   :init
   (setq consult-preview-allowed-hooks '(global-font-lock-mode-check-buffers save-place-find-file-hook display-line-numbers-mode))
+
+  :preface
+  (defun my/consult-outline ()
+    "Execute `consult-org-heading' if `org-mode' is active, else `consult-outline'."
+    (interactive)
+    (if (derived-mode-p 'org-mode)
+        (consult-org-heading)
+      (consult-outline)))
+
   :bind
   ("M-y" . consult-yank-from-kill-ring)
   ("C-x C-b" . consult-buffer)
-  ("C-c l". consult-line))
+  ("<escape> c l" . consult-line)
+  ("<escape> c r" . consult-recent-file)
+  ("<escape> c f" . consult-ripgrep)
+  ("<escape> c c" . consult-complex-command)
+  ("<escape> c t" . consult-todo)
+  ("<escape> c o" . my/consult-outline)
+  ("<escape> b" . consult-bookmark))
 
 (use-package consult-dir
   :after consult)
@@ -89,15 +104,15 @@
   :config
   (setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (setq corfu-auto t)                 ;; Enable auto completion
-  (setq corfu-auto-prefix 1)
+  (setq corfu-auto-prefix 3)
   (setq corfu-auto-delay 0)
   (setq corfu-bar-width 0)
-  (setq corfu-right-margin-width 1)
-  (setq corfu-left-margin-width 1)
+  (setq corfu-right-margin-width 0)
+  (setq corfu-left-margin-width 0)
   (setq corfu-min-width 10)
   (setq corfu-max-width 80)
   (setq corfu-separator nil)          ;; Orderless field separator
-  (setq corfu-quit-at-boundary 'seperator)   ;; Never quit at completion boundary
+  (setq corfu-quit-at-boundary t)   ;; Never quit at completion boundary
   (setq corfu-quit-no-match t)      ;; Never quit, even if there is no match
   (setq corfu-preview-current nil)    ;; Disable current candidate preview
   (setq corfu-preselect 'first)      ;; Preselect the prompt
