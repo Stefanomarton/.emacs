@@ -35,14 +35,11 @@
 
 ;; Embark
 (use-package embark
+  :demand t
+  :bind
+  (:map global-map
+        ("<escape> <escape>" . embark-minimal-act))
   :config
-
-  ;; Base keybindings
-  ;; (evil-define-key 'normal 'global (kbd "<leader>SPC") 'embark-minimal-act)
-  ;; (evil-define-key 'normal 'global (kbd "C-.") 'embark-dwim)
-  ;; (evil-define-key 'insert 'global (kbd "C-.") 'embark-minimal-act)
-  ;; (evil-define-key 'visual 'global (kbd "<leader>SPC") 'embark-minimal-act)
-
   ;; Which-key style indicator
   (defun embark-minimal-act (&optional arg)
     (interactive "P")
@@ -82,8 +79,18 @@ targets."
 	           (_ (key-binding prefix 'accept-default)))
 	       keymap)
 	     nil nil t))))
+
   (setq embark-cycle-key "SPC")
   (setq embark-quit-after-action t)
+  ;; evil keybindings
+  (if (featurep 'evil)
+      (progn
+        ;; Code to execute when Evil mode is active
+        (evil-define-key 'normal 'global (kbd "<leader>SPC") 'embark-minimal-act)
+        (evil-define-key 'normal 'global (kbd "C-.") 'embark-dwim)
+        (evil-define-key 'insert 'global (kbd "C-.") 'embark-minimal-act)
+        (evil-define-key 'visual 'global (kbd "<leader>SPC") 'embark-minimal-act)
+        ))
 
   :init
   (setq prefix-help-command #'embark-prefix-help-command))
@@ -146,12 +153,10 @@ If region is active, add its contents to the new buffer."
   :config
   (add-hook 'org-mode-hook #'embrace-org-mode-hook)
 
-  ;; (add-hook 'org-mode-hook
-  ;;           (lambda ()
-  ;;             (embrace-add-pair ?m "\\[\n" "\\]\n" nil t)))
-  )
-;; (define-key global-map (kbd "C-,") #'embrace-commander))
-
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (embrace-add-pair ?M "\\[\n" "\\]\n" nil t)
+              (embrace-add-pair ?m "\\\\(" "\\\\)" nil t))))
 
 (use-package selected
   :init
@@ -202,10 +207,13 @@ If region is active, add its contents to the new buffer."
         ("eg" . (lambda () (interactive) (LaTeX-insert-environment "gather*")))
         ("eG" . (lambda () (interactive) (LaTeX-insert-environment "gather")))
 
-        (";" . comment-dwim)
-
         ("m" . surround-region-with-math)
         ("M" . surround-region-newline-with-math)
+        ("w" . surround-region-with-chem)
+        ("W" . surround-region-with-math-and-chem)
+
+        (";" . comment-dwim)
+
         ("<tab>" . cdlatex-tab)
 
         ("a" . back-to-indentation)
@@ -239,23 +247,6 @@ If region is active, add its contents to the new buffer."
           (goto-char (+ end (length closing-delimiter)))
 	      (insert closing-delimiter)))))
 
-  (defun surround-region-newline--surround (opening-delimiter closing-delimiter)
-    "Surround the active region with hard-coded strings"
-    (when (region-active-p)
-      (save-excursion
-        (let ((beginning (region-beginning))
-              (end (region-end)))
-
-          (goto-char beginning)
-          (insert opening-delimiter)
-
-          (goto-char (+ end (length closing-delimiter)))
-          (insert closing-delimiter)
-
-          (goto-char beginning)
-          (newline)
-          ))))
-
   (defun surround-region-with-parethesis ()
     "Surround the active region with hard-coded strings"
     (interactive)
@@ -274,17 +265,31 @@ If region is active, add its contents to the new buffer."
   (defun surround-region-newline-with-curly-brackets ()
     "Surround the active region with hard-coded strings"
     (interactive)
-    (surround-region-newline--surround "{" "}"))
+    (yas-expand-snippet "\n{\n`(yas-selected-text)`\n}\n"))
 
   (defun surround-region-with-math ()
     "Surround the active region with hard-coded strings"
     (interactive)
     (surround-region--surround "\\\(" "\\\)"))
 
+  (defun surround-region-with-chem ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+	(yas-expand-snippet "\\ce{`(yas-selected-text)`}")
+    (previous-line)
+    (end-of-line))
+
+  (defun surround-region-with-math-and-chem ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+	(yas-expand-snippet "\\\\(\\ce{`(yas-selected-text)`}\\\\)"))
+
   (defun surround-region-newline-with-math ()
     "Surround the active region with hard-coded strings"
     (interactive)
-    (surround-region-newline--surround "\\[" "\\]"))
+    (yas-expand-snippet "\\[\n`(yas-selected-text)`\n\\]")
+    (previous-line)
+    (end-of-line))
 
   (selected-global-mode))
 
@@ -292,5 +297,13 @@ If region is active, add its contents to the new buffer."
   :hook after-init
   :config
   (setq yas-fallback-behavior '(apply tab-jump-out 1)))
+
+(use-package ctrlf
+  :init
+  (add-hook 'after-init-hook 'ctrlf-mode))
+
+(use-package wgrep
+  :commands (wgrep-change-to-wgrep-mode)
+  :config (setq wgrep-auto-save-buffer t))
 
 (provide 'base-packages)
