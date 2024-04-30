@@ -91,8 +91,11 @@ point. "
     (outline-up-heading 1)
     (hide-subtree))
 
-  (evil-define-key 'normal org-mode-map (kbd "hs") 'hide-subtree-and-parent)
-  (evil-define-key 'insert org-mode-map (kbd "C-a a") 'hide-subtree-and-parent)
+  (if (featurep 'evil)
+      (progn
+        (evil-define-key 'normal org-mode-map (kbd "hs") 'hide-subtree-and-parent)
+        (evil-define-key 'insert org-mode-map (kbd "C-a a") 'hide-subtree-and-parent)
+        ))
 
   (setq org-blank-before-new-entry
         '((heading . nil)
@@ -141,7 +144,9 @@ point. "
     (org-timestamp '(16) nil)
     )
 
-  (evil-define-key 'normal org-mode-map (kbd "gt") 'my/org-time-stamp)
+  (if (featurep 'evil)
+      (progn
+        (evil-define-key 'normal org-mode-map (kbd "gt") 'my/org-time-stamp)))
 
   ;; Make org use `display-buffer' like every other Emacs citizen.
   (advice-add #'org-switch-to-buffer-other-window :override #'switch-to-buffer-other-window)
@@ -201,7 +206,11 @@ point. "
   (add-hook 'org-mode-hook
             (lambda () (add-hook 'after-save-hook 'export-org-latex-and-copy-pdf nil 'local)))
 
-  (evil-define-key 'normal org-mode-map (kbd "<leader>ee") 'export-org-latex-and-copy-pdf)
+  (if (featurep 'evil)
+      (progn
+        (evil-define-key 'normal org-mode-map (kbd "<leader>ee") 'export-org-latex-and-copy-pdf)
+        ))
+
 
   (setq org-latex-default-class "report")
   (setq org-startup-folded t)
@@ -1036,7 +1045,79 @@ point. "
                                       ("\\chapter{%s}" . "\\chapter*{%s}")
                                       ("\\section{%s}" . "\\section*{%s}")
                                       ("\\subsection{%s}" . "\\subsection*{%s}")))
-    )
+
+    (add-to-list 'org-latex-classes
+                 '("memoir"
+                   "\\documentclass[a4paper,11pt, openany]{memoir}
+                 %%% set up the recto page layout
+                 \\checkandfixthelayout
+                 \\setlength{\\evensidemargin}{\\oddsidemargin}% after \\checkandfix
+                 \\sidefootmargin{right}
+                 \\hbadness 99999
+                 \\usepackage{tabularx}
+                 \\usepackage{booktabs}
+                 \\usepackage[marginal]{footmisc} % cleaner footnotes
+                 \\usepackage[utf8]{inputenc}
+                 % \\usepackage[T1]{fontenc}
+                 \\usepackage{fixltx2e}
+                 \\usepackage{graphicx}
+                 \\usepackage{longtable}
+                 \\usepackage{float}
+                 \\usepackage{wrapfig}
+                 \\usepackage{rotating}
+                 \\usepackage{cancel}
+                 \\setlength{\\parskip}{1pt}
+                 \\usepackage{parskip}
+                 \\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
+                 \\usepackage{mhchem}
+                 \\usepackage[normalem]{ulem}
+                 \\usepackage{amsmath}
+                 \\usepackage{cleveref}
+
+                 \\usepackage{mathtools}
+                 \\DeclarePairedDelimiter\\bra{\\langle}{\\rvert}
+                 \\DeclarePairedDelimiter\\ket{\\lvert}{\\rangle}
+                 \\DeclarePairedDelimiterX\\braket[2]{\\langle}{\\rangle}{#1\\,\\delimsize\\vert\\,\\mathopen{}#2}
+                 \\usepackage{amsmath}
+                 \\usepackage{textcomp}
+                 \\usepackage{marvosym}
+                 \\usepackage{wasysym}
+                 \\usepackage{amssymb}
+                 \\usepackage{hyperref}
+                 \\hypersetup{
+                     colorlinks=true,       % false: boxed links; true: colored links
+                     linkcolor=blue,        % color of internal links
+                     citecolor=blue,        % color of links to bibliography
+                     filecolor=blue,     % color of file links
+                     urlcolor=blue
+                 }
+                 \\setsecnumdepth{subsection}
+                 \\setlength{\\parindent}{0em}
+                 \\usepackage{newpxtext}
+                 \\usepackage{newpxmath}
+                 \\usepackage{color}
+                 \\definecolor{bg}{rgb}{0.95,0.95,0.95}
+                 % Define cool colorboxes
+                 \\usepackage[most]{tcolorbox}
+                 \\newtcolorbox{bx}{
+                    enhanced,
+                    boxrule=0pt,frame hidden,
+                    borderline west={4pt}{0pt}{black},
+                    colback=black!5!white,
+                    sharp corners,
+                 }
+                 \\usepackage{enumitem}
+                 \\setlist{noitemsep}
+                 \\tolerance=1000
+                 [NO-DEFAULT-PACKAGES]
+                 [PACKAGES]
+                 [EXTRA]
+                 \\linespread{1.1}
+                 \\hypersetup{pdfborder=0 0 0}"
+                   ("\\chapter{%s}" . "\\chapter*{%s}")
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
   (use-package ox-hugo
     :after ox)
@@ -1094,13 +1175,13 @@ point. "
   :custom
   (org-roam-complete-everywhere t)
   :bind
-  (:map evil-normal-state-map
-        ("<leader>of" . consult-org-roam-file-find)
-        ("<leader>og" . consult-notes-search-in-all-notes)
-        ("<leader>oo" . consult-notes)
-        ("<leader>on" . consult-notes-org-roam-find-node)
-        ("<leader>ok" . org-roam-capture)
-        ("<leader>oc" . my/org-roam-node-find-courses))
+  ;; (:map evil-normal-state-map
+  ;;       ("<leader>of" . consult-org-roam-file-find)
+  ;;       ("<leader>og" . consult-notes-search-in-all-notes)
+  ;;       ("<leader>oo" . consult-notes)
+  ;;       ("<leader>on" . consult-notes-org-roam-find-node)
+  ;;       ("<leader>ok" . org-roam-capture)
+  ;;       ("<leader>oc" . my/org-roam-node-find-courses))
   :bind
   ("C-C of" . consult-org-roam-file-find)
   ("C-C og" . consult-notes-search-in-all-notes)
@@ -1443,9 +1524,9 @@ point. "
 
 ;; Keep a journal
 (use-package org-journal
-  :bind (:map evil-normal-state-map
-              ("<leader>oj" . org-journal-new-entry)
-              ("<leader>oJ" . org-journal-open-current-journal-file))
+  ;; :bind (:map evil-normal-state-map
+  ;;             ("<leader>oj" . org-journal-new-entry)
+  ;;             ("<leader>oJ" . org-journal-open-current-journal-file))
   :config
   (setq org-journal-dir "~/GoogleDrive/org/journal/"
         org-journal-date-format "%A, %d %B %Y"
