@@ -102,6 +102,12 @@
   :hook
   (prog-mode . breadcrumb-local-mode))
 
-(use-package focus)
+(use-package focus
+  :commands (focus-mode))
+
+(use-package goggles
+  :hook ((prog-mode text-mode) . goggles-mode)
+  :config
+  (setq-default goggles-pulse t))
 
 (provide 'appearance)
