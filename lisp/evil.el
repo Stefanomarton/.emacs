@@ -52,10 +52,10 @@
 
   ;; Window focus
   (evil-define-key 'normal 'evil-normal-state-map
-    (kbd "C-w j") 'evil-window-left
-    (kbd "C-w /") 'evil-window-right
-    (kbd "C-w k") 'evil-window-down
-    (kbd "C-w l") 'evil-window-up)
+                   (kbd "C-w j") 'evil-window-left
+                   (kbd "C-w /") 'evil-window-right
+                   (kbd "C-w k") 'evil-window-down
+                   (kbd "C-w l") 'evil-window-up)
 
   (evil-define-key 'normal prog-mode-map (kbd "<return>") 'evil-avy-goto-char-timer)
   (evil-define-key 'normal org-mode-map (kbd "<return>") 'evil-avy-goto-char-timer)
@@ -64,9 +64,9 @@
 
   ;; Markdown-mode
   (evil-define-key 'normal markdown-mode-map
-    (kbd "<leader>ee") 'my/export-md-to-pdf
-    (kbd "<leader>ez") 'my/open-pdf-with-zathura
-    (kbd "<leader>ep") 'open-pdf-with-pdf-tools)
+                   (kbd "<leader>ee") 'my/export-md-to-pdf
+                   (kbd "<leader>ez") 'my/open-pdf-with-zathura
+                   (kbd "<leader>ep") 'open-pdf-with-pdf-tools)
 
   ;; Jinx keymaps
   (evil-define-key 'normal org-mode-map  (kbd "<leader>j") 'jinx-correct)
@@ -93,11 +93,11 @@
 	                                                                         (yas-expand-snippet "\\\\($1\\\\) $0")))
 
   (evil-define-key '(normal visual replace operator motion emacs) 'global
-    (kbd "j") 'evil-backward-char
-    (kbd "k") 'evil-next-visual-line
-    (kbd "l") 'evil-previous-visual-line
-    (kbd "/") 'evil-forward-char
-    )
+                   (kbd "j") 'evil-backward-char
+                   (kbd "k") 'evil-next-visual-line
+                   (kbd "l") 'evil-previous-visual-line
+                   (kbd "/") 'evil-forward-char
+                   )
 
   ;; (evil-define-key 'normal 'global (kbd "C-m") 'point-to-register)
   ;; (evil-define-key 'normal 'global (kbd "gm") 'jump-to-register)
@@ -169,70 +169,70 @@
   ;; (evil-define-key 'normal 'evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
 
   (evil-define-key 'normal 'global
-    (kbd ":") 'evil-ex
-    (kbd ";") 'execute-extended-command
+                   (kbd ":") 'evil-ex
+                   (kbd ";") 'execute-extended-command
 
-    (kbd "<leader>ff") 'find-file
-    (kbd "<leader>fd") 'my/find-file-google
-    (kbd "<leader>fh") 'my/find-file-home
-    (kbd "<leader>fc") 'my/find-file-config
-    (kbd "<leader>fw") 'find-file-other-window
-    (kbd "<leader>fr") 'consult-recent-file
-    (kbd "<leader>fg") 'consult-grep
+                   (kbd "<leader>ff") 'find-file
+                   (kbd "<leader>fd") 'my/find-file-google
+                   (kbd "<leader>fh") 'my/find-file-home
+                   (kbd "<leader>fc") 'my/find-file-config
+                   (kbd "<leader>fw") 'find-file-other-window
+                   (kbd "<leader>fr") 'consult-recent-file
+                   (kbd "<leader>fg") 'consult-grep
 
-    (kbd "<leader>r") 'consult-register
-    (kbd "<leader>dj") 'dirvish
-    (kbd "<leader>dD") 'dired
-    (kbd "<leader>dd") 'consult-dir
-    (kbd "<leader>bb") 'smart-for-buffer
-    (kbd "<leader>w") 'save-buffer
-    (kbd "<leader> q b") 'kill-buffer
+                   (kbd "<leader>r") 'consult-register
+                   (kbd "<leader>dj") 'dirvish
+                   (kbd "<leader>dD") 'dired
+                   (kbd "<leader>dd") 'consult-dir
+                   (kbd "<leader>bb") 'smart-for-buffer
+                   (kbd "<leader>w") 'save-buffer
+                   (kbd "<leader> q b") 'kill-buffer
 
-    (kbd "Q") 'my-kill-this-buffer
-    (kbd "<leader>gt") 'google-this
-    (kbd "<leader>pp") 'consult-projectile
-    (kbd "<leader>ps") 'consult-projectile-switch-project
+                   (kbd "Q") 'my-kill-this-buffer
+                   (kbd "<leader>gt") 'google-this
+                   (kbd "<leader>pp") 'consult-projectile
+                   (kbd "<leader>ps") 'consult-projectile-switch-project
 
-    (kbd "<leader>cc") 'calc
-    (kbd "<leader>co") 'consult-outline
-    (kbd "<leader>cf") 'consult-focus-lines
-    (kbd "<leader>cl") 'consult-line
-    (kbd "<leader>cm") 'consult-global-mark
-    (kbd "<leader>ci") 'consult-imenu
+                   (kbd "<leader>cc") 'calc
+                   (kbd "<leader>co") 'consult-outline
+                   (kbd "<leader>cf") 'consult-focus-lines
+                   (kbd "<leader>cl") 'consult-line
+                   (kbd "<leader>cm") 'consult-global-mark
+                   (kbd "<leader>ci") 'consult-imenu
 
-    (kbd "<leader>aw") 'avy-goto-word-or-subword-1
-    (kbd "<leader>al") 'avy-goto-line
-    (kbd "<leader>arm") 'avy-move-region
-    (kbd "<leader>arc") 'avy-copy-region
-    (kbd "<leader>ark") 'avy-kill-region
+                   (kbd "<leader>aw") 'avy-goto-word-or-subword-1
+                   (kbd "<leader>al") 'avy-goto-line
+                   (kbd "<leader>arm") 'avy-move-region
+                   (kbd "<leader>arc") 'avy-copy-region
+                   (kbd "<leader>ark") 'avy-kill-region
 
-    (kbd "<leader>qc") 'quick-calc
-    (kbd "<leader>t") 'smart-for-terminal-otherw
-    (kbd "<leader>T") 'smart-for-terminal
-    (kbd "<leader>gg") 'magit-status-with-removed-dotfiles-args
-    (kbd "<leader>gd") 'dotfiles-magit-status
-    (kbd "<leader>h") 'consult-todo
-    (kbd "<leader>H") 'consult-todo-dir
-    (kbd "<leader>y") 'yas-reload
-    )
+                   (kbd "<leader>qc") 'quick-calc
+                   (kbd "<leader>t") 'smart-for-terminal-otherw
+                   (kbd "<leader>T") 'smart-for-terminal
+                   (kbd "<leader>gg") 'magit-status-with-removed-dotfiles-args
+                   (kbd "<leader>gd") 'dotfiles-magit-status
+                   (kbd "<leader>h") 'consult-todo
+                   (kbd "<leader>H") 'consult-todo-dir
+                   (kbd "<leader>y") 'yas-reload
+                   )
 
   (evil-define-key 'normal emacs-lisp-mode-map
-    (kbd "<leader>ee") 'eval-buffer
-    (kbd "<leader>es") 'eval-expression
-    (kbd "<leader>er") 'eval-region
-    (kbd "<leader>ef") 'eval-defun
-    )
+                   (kbd "<leader>ee") 'eval-buffer
+                   (kbd "<leader>es") 'eval-expression
+                   (kbd "<leader>er") 'eval-region
+                   (kbd "<leader>ef") 'eval-defun
+                   )
 
   (evil-define-key '(normal visual) 'global
-    (kbd "<leader> nn") 'narrow-to-region
-    (kbd "<leader> nw") 'widen
-    (kbd "<leader> np") 'narrow-to-page
-    (kbd "<leader> nf") 'narrow-to-defun
-    (kbd "<leader> ng") 'goto-line-relative
-    (kbd "<leader> df") 'evil-goto-definition
-    (kbd "gu") 'evil-next-close-paren
-    (kbd "gd") 'evil-previous-open-paren
-    )
+                   (kbd "<leader> nn") 'narrow-to-region
+                   (kbd "<leader> nw") 'widen
+                   (kbd "<leader> np") 'narrow-to-page
+                   (kbd "<leader> nf") 'narrow-to-defun
+                   (kbd "<leader> ng") 'goto-line-relative
+                   (kbd "<leader> df") 'evil-goto-definition
+                   (kbd "gu") 'evil-next-close-paren
+                   (kbd "gd") 'evil-previous-open-paren
+                   )
 
   (evil-define-key 'insert 'global (kbd "C-<backspace>") 'evil-delete-backward-word)
   (evil-define-key 'visual 'global (kbd "<leader>gg") 'google-this-noconfirm)
@@ -248,17 +248,6 @@
 
   ;; (evil-mode 1)
   )
-
-;; ;; Undo for evil
-(use-package undo-fu
-  :after evil)
-
-;; ;; Persisten undo
-(use-package undo-fu-session
-  :after undo-fu
-  :config
-  (setq undo-fu-session-linear t)
-  (undo-fu-session-global-mode))
 
 ;; Evil integrations
 (use-package evil-collection
