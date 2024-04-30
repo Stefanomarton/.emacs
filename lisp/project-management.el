@@ -80,13 +80,13 @@
   :bind
   (("<leader>gn" . hydra-git-gutter/body)))
 
-;; (use-package git-gutter-fringe
-;;   :config
-;;   (fringe-mode nil)
-;;   (setq-default left-margin-width 1)
-;;   (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
-;;   (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
-;;   (define-fringe-bitmap 'git-gutter-fr:deleted [224] nil nil '(center repeated)))
+(use-package git-gutter-fringe
+  :config
+  (fringe-mode nil)
+  (setq-default left-margin-width 1)
+  (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:deleted [224] nil nil '(center repeated)))
 
 (provide 'project-management)
 ;;; project-management.el ends here
