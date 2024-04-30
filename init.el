@@ -92,7 +92,6 @@
   (require 'use-package))
 (require 'bind-key)
 
-;; (require 'bind-key)
 (load-module "core")
 ;; (load-module "evil")
 ;; (load-module "keybindings")
