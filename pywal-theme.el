@@ -150,6 +150,14 @@
    `(corfu-current ((t (:background ,hl ))))
    `(corfu-annotations ((t (:slant italic :foreground ,comment))))
 
+   ;; Goggles faces
+   `(goggles-added ((t (:background ,blue))))
+   `(goggles-added ((t (:background ,blue))))
+   `(goggles-removed ((t (:background ,red))))
+   `(goggles-changed ((t (:background ,green))))
+
+
+
    (custom-theme-set-variables
     'pywal
     ;; Set variables as needed
