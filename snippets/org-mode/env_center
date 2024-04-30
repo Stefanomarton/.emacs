@@ -3,7 +3,7 @@
 # key: center_environment
 # condition: (and (not (texmathp)))
 # expand-env : ((yas-wrap-around-region nil))
-# binding: C-s c
+# binding: <escape> s c
 # --
 \begin{center}
 ${1:`(if (region-active-p) (yas-selected-text) (propertize "content" 'font-lock-face '(:inherit region)))`}
