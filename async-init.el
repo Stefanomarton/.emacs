@@ -5,4 +5,3 @@
 (require 'org)
 (require 'ox)
 (require 'cl-lib)
-(require 'poly-org)
