@@ -55,9 +55,10 @@
     (interactive)
     (setq magit-git-global-arguments (remove dotfiles-git-dir magit-git-global-arguments))
     (setq magit-git-global-arguments (remove dotfiles-work-tree magit-git-global-arguments))
-    (call-interactively 'magit-status))
+    (call-interactively 'magit-status)))
 
-  :commands magit-delta-mode
+(use-package magit-delta
+  :after magit
   :hook (magit-mode . magit-delta-mode))
 
 (use-package git-gutter
