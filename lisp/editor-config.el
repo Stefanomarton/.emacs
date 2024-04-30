@@ -57,12 +57,21 @@
   (setq show-paren-delay 0.1)
   (setq show-paren-highlight-openparen t)
   (setq show-paren-when-point-inside-paren t)
+
+  ;; Highlight parenthesis when inside it
+  (define-advice show-paren-function (:around (fn) fix)
+    "Highlight enclosing parens."
+    (cond ((looking-at-p "\\s(") (funcall fn))
+          (t (save-excursion
+               (ignore-errors (backward-up-list))
+               (funcall fn)))))
   )
 
 ;; Highlight nested parentheses
 (use-package rainbow-delimiters
   :hook
   (prog-mode . rainbow-delimiters-mode)
+  (org-mode . rainbow-delimiters-mode)
   :config
   (set-face-attribute 'rainbow-delimiters-unmatched-face nil
 		              :foreground "red"
@@ -79,9 +88,9 @@
 
 (use-package avy
   :bind
-  ("C-c f" . avy-goto-char-in-line-end)
+  ("<escape> f" . avy-goto-char-in-line-end)
   ("C-c F" . avy-goto-char-in-line-beg)
-  ("C-c a" . avy-goto-char-timer)
+  ("<escape> j" . avy-goto-char-timer)
   ("C-c k" . pop-global-mark)
 
   :config
