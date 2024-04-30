@@ -1,4 +1,5 @@
 ;; init.el -*- lexical-binding: t; -*-
+(defconst emacs-start-time (current-time))
 
 (when (boundp 'read-process-output-max)
   ;; 1MB in bytes, default 4096 bytes
@@ -108,7 +109,18 @@
 (load-module "lsp")
 (load-module "document-production")
 (load-module "orgconfig")
+(load-module "server")
 
-;;; init.el ends here
+;; Show startup time in message
+(add-hook 'after-init-hook
+          `(lambda ()
+             (let ((elapsed
+                    (float-time
+                     (time-subtract (current-time) emacs-start-time))))
+               (message "Loading %s...done (%.2fs) [after-init]"
+                        ,load-file-name elapsed))) t)
+
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
+
+;;; init.el ends here
