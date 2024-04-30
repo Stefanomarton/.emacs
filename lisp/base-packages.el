@@ -306,4 +306,14 @@ If region is active, add its contents to the new buffer."
   :commands (wgrep-change-to-wgrep-mode)
   :config (setq wgrep-auto-save-buffer t))
 
+(use-package undo-fu
+  :commands (undo))
+
+;; ;; Persistent undo
+(use-package undo-fu-session
+  :after undo-fu
+  :config
+  (setq undo-fu-session-linear t)
+  (undo-fu-session-global-mode))
+
 (provide 'base-packages)
