@@ -11,7 +11,12 @@
   :config
 
   (add-to-list 'vertico-multiform-categories
-               '(jinx grid (vertico-grid-annotate . 20)))
+               '(jinx grid (vertico-grid-annotate . 20))
+               )
+
+  (setq vertico-multiform-commands
+        '((execute-extended-command posframe)
+          (consult-projectile posframe)))
 
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
@@ -41,6 +46,16 @@
   (vertico-multiform-mode)
   (vertico-mode))
 
+
+(use-package vertico-posframe
+  :config
+  ;; (setq vertico-posframe-width 120)
+  (setq vertico-posframe-border-width 3)
+  (setq vertico-posframe-parameters
+        '((left-fringe . 15)
+          (right-fringe . 20)))
+  )
+
 ;; orderless completion method
 (use-package orderless
   :config
@@ -69,15 +84,32 @@
       (consult-outline)))
 
   :bind
-  ("M-y" . consult-yank-from-kill-ring)
+  ("<escape> p" . consult-yank-from-kill-ring)
   ("C-x C-b" . consult-buffer)
   ("<escape> c l" . consult-line)
-  ("<escape> c r" . consult-recent-file)
-  ("<escape> c f" . consult-ripgrep)
+  ("<escape> R" . consult-recent-file)
+  ("<escape> g" . consult-ripgrep)
+  ("<escape> G" . magit)
   ("<escape> c c" . consult-complex-command)
-  ("<escape> c t" . consult-todo)
-  ("<escape> c o" . my/consult-outline)
-  ("<escape> b" . consult-bookmark))
+  ("<escape> t t" . consult-todo)
+  ("<escape> t k" . consult-keep-lines)
+  ("<escape> t f" . consult-focus-lines)
+  ("<escape> o o" . my/consult-outline)
+  ("<escape> b" . consult-bookmark)
+  ("<escape> r r" . consult-register)
+  ("<escape> r a" . consult-register-store)
+  ("<escape> r i" . consult-register-load)
+  ("<escape> i" . consult-imenu)
+  ("<escape> I" . consult-imenu-multi)
+  ("<escape> x f" . ido-find-file)
+  ("<escape> x b" . consult-buffer)
+  ( "M-g g" . consult-goto-line)
+  ("M-g M-g" . consult-goto-line)
+
+  :config
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+  (advice-add #'register-preview :override #'consult-register-window))
 
 (use-package consult-dir
   :after consult)
