@@ -104,7 +104,7 @@
    `(orderless-match-face-4 ((t (:foreground ,blue))))
 
    '(vertico-posframe-border ((t (:inherit hl-line))))
-   '(vertico-posframe ((t (:inherit mode-line))))
+   '(vertico-posframe ((t (:inherit default))))
 
    `(window-divider ((t (:foreground ,bg))))
    `(window-divider-first-pixel ((t (:foreground ,bg))))
