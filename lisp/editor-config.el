@@ -89,10 +89,32 @@
 (use-package avy
   :bind
   ("<escape> f" . avy-goto-char-in-line-end)
-  ("C-c F" . avy-goto-char-in-line-beg)
+  ("<escape> F" . avy-goto-char-in-line-beg)
   ("<escape> j" . avy-goto-char-timer)
   ("C-c k" . pop-global-mark)
+  :preface
 
+  (defun avy-goto-char-in-line-end (char)
+    "Jump to the currently visible CHAR in the current line."
+    (interactive (list (read-char "char: " t)))
+    (let ((current-point (point)))
+      (avy-with avy-goto-char
+        (avy-jump
+         (regexp-quote (string char))
+         :beg current-point
+         :end (line-end-position)
+         ))))
+
+  (defun avy-goto-char-in-line-beg (char)
+    "Jump to the currently visible CHAR in the current line."
+    (interactive (list (read-char "char: " t)))
+    (let ((current-point (point)))
+      (avy-with avy-goto-char
+        (avy-jump
+         (regexp-quote (string char))
+         :beg (line-beginning-position)
+         :end current-point
+         ))))
   :config
   (setq avy-timeout-seconds 0.3)
   (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)) ;; Home row only (the default).
