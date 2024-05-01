@@ -23,6 +23,8 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(setq straight-repository-branch "develop")
+
 ;; Use shallow cloning as I don't need all the package branches
 (setq straight-vc-git-default-clone-depth '(1 single-branch))
 
