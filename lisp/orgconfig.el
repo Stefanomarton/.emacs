@@ -1067,8 +1067,7 @@ point. "
                  \\usepackage{wrapfig}
                  \\usepackage{rotating}
                  \\usepackage{cancel}
-                 \\setlength{\\parskip}{1pt}
-                 \\usepackage{parskip}
+                 \\setlength{\\parskip}{5pt}
                  \\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
                  \\usepackage{mhchem}
                  \\usepackage[normalem]{ulem}
