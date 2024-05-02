@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: \lkeft[ \right]
+# condition: (and (texmathp) 'auto)
+# key: srp
+# --
+\\left[ $1 \\right] $0

@@ -5,4 +5,4 @@
 # binding: <escape> s f
 # expand-env : ((yas-wrap-around-region nil))
 # --
-\frac{`(if (region-active-p) (yas-selected-text) "content")`}{$1}$0`(evil-insert-state)`
+\frac{`(if (region-active-p) (yas-selected-text) "content")`}{$1}$0

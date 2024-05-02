@@ -5,4 +5,4 @@
 # binding: <escape> s T
 # expand-env : ((yas-wrap-around-region nil))
 # --
-\tilde{${1:`(if (region-active-p) (yas-selected-text) "content")`}}$0`(evil-insert-state)`
+\tilde{${1:`(if (region-active-p) (yas-selected-text) "content")`}}$0

@@ -5,4 +5,4 @@
 # binding: <escape> s u
 # expand-env : ((yas-wrap-around-region nil))
 # --
-\underbrace{`(if (region-active-p) (yas-selected-text) "content")`}_{$1}$0`(evil-insert-state)`
+\underbrace{`(if (region-active-p) (yas-selected-text) "content")`}_{$1}$0
