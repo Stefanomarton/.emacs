@@ -151,12 +151,17 @@ If region is active, add its contents to the new buffer."
   (:map global-map
         ("C-," . embrace-commander))
   :config
-  (add-hook 'org-mode-hook #'embrace-org-mode-hook)
-
   (add-hook 'org-mode-hook
             (lambda ()
-              (embrace-add-pair ?M "\\[\n" "\\]\n" nil t)
-              (embrace-add-pair ?m "\\\\(" "\\\\)" nil t))))
+              (embrace-add-pair ?M "\\[" "\\]" t t)
+              (embrace-add-pair ?m "\\\(" "\\\)" t nil)
+              (embrace-add-pair ?P "\\left\(" "\\right\)" t nil)
+              (embrace-add-pair ?p "\(" "\)" t nil)
+              (embrace-add-pair ?S "\\left[" "\\right]" t nil)
+              (embrace-add-pair ?s "[" "]" t nil)
+              (embrace-add-pair ?t "\\text{" "}" t nil)
+              )
+            ))
 
 (use-package selected
   :init
@@ -197,7 +202,11 @@ If region is active, add its contents to the new buffer."
         ("s" . surround-region-with-square-brackets)
         ("c" . surround-region-with-curly-brackets)
 
-        ("{" . surround-region-newline-with-curly-brackets)
+        (",c" . surround-region-with-command)
+        (",C" . surround-region-with-cancel)
+        (",t" . surround-region-with-text)
+
+        ;; ("{" . surround-region-newline-with-curly-brackets)
 
         ;; Environments
         ("ec" . (lambda () (interactive) (LaTeX-insert-environment "center")))
@@ -279,10 +288,25 @@ If region is active, add its contents to the new buffer."
     (previous-line)
     (end-of-line))
 
+  (defun surround-region-with-command (command)
+    "Surround the active region with hard-coded strings"
+    (interactive "sCommand:")
+	(yas-expand-snippet (concat "\\" command "{" "`(yas-selected-text)`}")))
+
+  (defun surround-region-with-cancel ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+	(yas-expand-snippet "\\cancel{`(yas-selected-text)`}"))
+
+  (defun surround-region-with-text ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+	(yas-expand-snippet "\\text{`(yas-selected-text)`}"))
+
   (defun surround-region-with-math-and-chem ()
     "Surround the active region with hard-coded strings"
     (interactive)
-	(yas-expand-snippet "\\\\(\\ce{`(yas-selected-text)`}\\\\)"))
+    (yas-expand-snippet "\\\\(\\ce{`(yas-selected-text)`}\\\\)"))
 
   (defun surround-region-newline-with-math ()
     "Surround the active region with hard-coded strings"
@@ -311,9 +335,12 @@ If region is active, add its contents to the new buffer."
 
 ;; ;; Persistent undo
 (use-package undo-fu-session
-  :after undo-fu
   :config
   (setq undo-fu-session-linear t)
   (undo-fu-session-global-mode))
+
+(use-package undo-tree
+  :config
+  (undo-tree-mode))
 
 (provide 'base-packages)
