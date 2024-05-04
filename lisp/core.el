@@ -223,6 +223,11 @@
     "n" #'org-next-visible-heading
     "p" #'org-previous-visible-heading)
 
+  (defvar-keymap goto-last-change-repeat-map
+    :repeat (:enter (goto-last-change goto-last-change-reverse))
+    ";" #'goto-last-change
+    ":" #'goto-last-change-reverse)
+
   ;; Use which-key to show help
   (use-package which-key
     :after which-key
