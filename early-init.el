@@ -1,3 +1,4 @@
+(defconst emacs-start-time (current-time))
 ;; More than half of the packages I use regularly produce compile warnings. It
 ;; gets to be quite annoying when the `*Warnings*' window pops up while I'm
 ;; trying to do work, so we will disable native-comp reporting.

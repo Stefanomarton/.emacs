@@ -1,6 +1,4 @@
 ;; init.el -*- lexical-binding: t; -*-
-(defconst emacs-start-time (current-time))
-
 (when (boundp 'read-process-output-max)
   ;; 1MB in bytes, default 4096 bytes
   (setq read-process-output-max 1048576))
