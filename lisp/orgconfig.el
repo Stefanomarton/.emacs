@@ -4,7 +4,10 @@
   :defer 0.5
   :bind (:map org-mode-map
               ("C-," . embrace-commander)
-              ("C-c o h" . consult-org-heading))
+              ("C-c o h" . consult-org-heading)
+              ("<escape> >" . org-promote-subtree)
+              ("<escape> <" . org-demote-subtree)
+              )
   :hook
   ;; (org-mode . org-cdlatex-mode)
   (org-mode . org-margin-mode)
