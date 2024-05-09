@@ -2,12 +2,14 @@
 
 ;; Better dired
 (use-package dirvish
-  :commands (dired-jump dirvish-dwim)
+  :bind
+  (:map global-map
+        ("C-x C-j" . dirvish-dwim))
   :config
-  (setq dirvish-default-layout '(0.8 0.2 0.5))
+  (setq dirvish-default-layout '(0 0.2 0.6))
+  (setq dirvish-use-mode-line nil)
   :init
-  (dirvish-override-dired-mode)
-  )
+  (dirvish-override-dired-mode))
 
 (use-package openwith
   :config
@@ -22,17 +24,11 @@
     (revert-buffer)
     (dired-find-alternate-file))
   (setq dired-narrow-exit-when-1-left t)
-  (setq dired-narrow-exit-action 'dired-narrow-ex-ac)
-  )
+  (setq dired-narrow-exit-action 'dired-narrow-ex-ac))
 
-;; (use-package dired
-;;   :commands dired
-;;   :straight nil
-;;   :ensure nil
-;;   :config
-;;   (put 'dired-find-alternate-file 'disabled nil)
-;;   )
+(use-package casual-dired
+  :straight (:host github :repo "kickingvegas/casual-dired")
+  :bind (:map dired-mode-map ("C-o" . 'casual-dired-tmenu)))
 
 (provide 'file-management)
-
 ;;; file-management.el ends here
