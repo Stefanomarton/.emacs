@@ -13,11 +13,7 @@
 
 
 ;; Zoxide
-(use-package zoxide
-  :bind (:map evil-normal-state-map
-              ("gz" . zoxide-find-file)
-              ))
-
+;; (use-package zoxide)
 
 ;;Which-key
 (use-package which-key
@@ -131,15 +127,14 @@ targets."
 ;;Scratchbuffer
 (use-package scratch
   :straight t
-  :preface
-  (defun my/scratch-buffer-setup ()
-    "Add contents to `scratch' buffer and name it accordingly.
-If region is active, add its contents to the new buffer."
-    (let* ((mode major-mode))
-      (rename-buffer (format "*Scratch for %s*" mode) t)))
-  :hook (scratch-create-buffer . my/scratch-buffer-setup)
+  ;;   :preface
+  ;;   (defun my/scratch-buffer-setup ()
+  ;;     "Add contents to `scratch' buffer and name it accordingly.
+  ;; If region is active, add its contents to the new buffer."
+  ;;     (let* ((mode major-mode))
+  ;;       (rename-buffer (format "*Scratch for %s*" mode) t)))
+  ;;   :hook (scratch-create-buffer . my/scratch-buffer-setup)
   :bind ("C-c s" . scratch))
-
 
 ;;Hydra
 (use-package hydra
@@ -147,10 +142,20 @@ If region is active, add its contents to the new buffer."
 
 ;; Embrace
 (use-package embrace
+  :demand t
   :bind
   (:map global-map
-        ("C-," . embrace-commander))
+        ("C-," . embrace-commander)
+        )
   :config
+  (defun embrace-with-latex-environment ()
+    (let ((block-type (completing-read
+                       "Enviroment: "
+                       '(center equation))))
+      (setq block-type (downcase block-type))
+      (cons (format "\\begin{%s}" block-type)
+            (format "\\end{%s}" block-type))))
+
   (add-hook 'org-mode-hook
             (lambda ()
               (embrace-add-pair ?M "\\[" "\\]" t t)
@@ -160,8 +165,12 @@ If region is active, add its contents to the new buffer."
               (embrace-add-pair ?S "\\left[" "\\right]" t nil)
               (embrace-add-pair ?s "[" "]" t nil)
               (embrace-add-pair ?t "\\text{" "}" t nil)
+
+              (embrace-add-pair-regexp ?e "^[ \t]*\\\\begin{.+}.*$" "^[ \t]*\\\\end{.+}.*$" 'embrace-with-latex-environment
+                                       (embrace-build-help "\\begin{}" "\\end{}") t)
               )
-            ))
+            )
+  )
 
 (use-package selected
   :init
@@ -205,6 +214,7 @@ If region is active, add its contents to the new buffer."
         (",c" . surround-region-with-command)
         (",C" . surround-region-with-cancel)
         (",t" . surround-region-with-text)
+        (",r" . surround-region-with-mathrm)
 
         ;; ("{" . surround-region-newline-with-curly-brackets)
 
@@ -307,6 +317,11 @@ If region is active, add its contents to the new buffer."
     "Surround the active region with hard-coded strings"
     (interactive)
     (yas-expand-snippet "\\\\(\\ce{`(yas-selected-text)`}\\\\)"))
+
+  (defun surround-region-with-mathrm ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (yas-expand-snippet "\\mathrm{`(yas-selected-text)`}"))
 
   (defun surround-region-newline-with-math ()
     "Surround the active region with hard-coded strings"
