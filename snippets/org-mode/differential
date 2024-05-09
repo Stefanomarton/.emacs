@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: \lkeft[ \right]
+# name: dx/dt
 # condition: (and (texmathp) 'auto)
-# key: srp
+# key: ddd
 # --
-\\left[ $1 \\right] $0
+\\frac{\\mathrm{d}$1}{\\mathrm{d}$2}$0
