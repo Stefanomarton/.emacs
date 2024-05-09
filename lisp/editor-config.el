@@ -99,22 +99,22 @@
     (interactive (list (read-char "char: " t)))
     (let ((current-point (point)))
       (avy-with avy-goto-char
-        (avy-jump
-         (regexp-quote (string char))
-         :beg current-point
-         :end (line-end-position)
-         ))))
+                (avy-jump
+                 (regexp-quote (string char))
+                 :beg current-point
+                 :end (line-end-position)
+                 ))))
 
   (defun avy-goto-char-in-line-beg (char)
     "Jump to the currently visible CHAR in the current line."
     (interactive (list (read-char "char: " t)))
     (let ((current-point (point)))
       (avy-with avy-goto-char
-        (avy-jump
-         (regexp-quote (string char))
-         :beg (line-beginning-position)
-         :end current-point
-         ))))
+                (avy-jump
+                 (regexp-quote (string char))
+                 :beg (line-beginning-position)
+                 :end current-point
+                 ))))
   :config
   (setq avy-timeout-seconds 0.3)
   (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)) ;; Home row only (the default).
@@ -154,29 +154,165 @@
 	    (alist-get ?C avy-dispatch-alist) 'avy-action-copy-whole-line
 	    (alist-get ?Y avy-dispatch-alist) 'avy-action-yank-whole-line))
 
-(use-package expreg
+(use-package expand-region
   :bind
   (:map global-map
-        ("C-<escape>" . expreg-expand)))
+        ("C-<escape>" . er/expand-region))
+  :hook
+  (org-mode . er/add-org-mode-expansions)
+  :config
+  (set-default 'er--show-expansion-message nil)
+  (add-to-list 'expand-region-exclude-text-mode-expansions 'org-mode)
+  (add-to-list 'expand-region-exclude-text-mode-expansions 'LaTeX-mode)
+  (setq expand-region-subword-enabled nil)
+  (setq expand-region-smart-cursor t)
+  (setq expand-region-show-usage-message nil
+        expand-region-fast-keys-enabled t
+        expand-region-contract-fast-key "-"
+        expand-region-reset-fast-key "r")
 
-;; (use-package expand-region
-;;   :hook
-;;   (org-mode . er/add-latex-in-org-mode-expansions)
-;;   :config
-;;   (set-default 'er--show-expansion-message nil)
-;;   (setq expand-region-subword-enabled nil)
-;;   (setq expand-region-smart-cursor t)
-;;   (setq expand-region-show-usage-message nil
-;;         expand-region-fast-keys-enabled t
-;;         expand-region-contract-fast-key "-"
-;;         expand-region-reset-fast-key "r")
+  (add-to-list 'expand-region-exclude-text-mode-expansions 'org-mode)
+  (add-to-list 'expand-region-exclude-text-mode-expansions 'LaTeX-mode)
 
-;;   ;; (evil-define-key 'normal 'global (kbd "<backspace>") 'er/expand-region)
-;;   ;; (evil-define-key 'emacs 'global (kbd "C-<backspace>") 'er/expand-region
-;;   ;; )
+  (defun er/mark-latex-text-sentence ()
+    (unless (texmathp) (er/mark-text-sentence)))
+  (defun er/mark-latex-text-paragraph ()
+    (unless (texmathp) (er/mark-text-paragraph)))
 
-;;   (define-key global-map (kbd "C-<escape>") 'er/expand-region)
+  (defun my/find-bounds-of-regexps (open close)
+    (let ((start (point))
+          (parity 0)
+          (open-close (concat "\\(?:" open "\\|" close "\\)"))
+          end)
+      (save-excursion
+        (while (and (not (= parity -1))
+                    (re-search-backward open-close nil t))
+          (if (looking-at open)
+              (setq parity (1- parity))
+            (setq parity (1+ parity))))
+        (setq end (point))
+        (goto-char start)
+        (while (and (not (= parity 0))
+                    (re-search-forward open-close nil t))
+          (if (looking-back
+               close
+               (- (point) (length (match-string-no-properties 0))))
+              (setq parity (1+ parity))
+            (setq parity (1- parity))))
+        (when (= parity 0) (cons end (point))))
+      ))
 
+  (defun er/mark-LaTeX-inside-math ()
+    "Mark text inside LaTeX math delimiters. See `er/mark-LaTeX-math'
+  for details."
+    (when (texmathp)
+      (let* ((string (car texmathp-why))
+             (pos (cdr texmathp-why))
+             (reason (assoc string texmathp-tex-commands1))
+             (type (cadr reason)))
+        (cond
+         ((eq type 'sw-toggle) ;; $ and $$
+          (goto-char pos)
+          (set-mark (1+ (point)))
+          (forward-sexp 1)
+          (backward-char 1)
+          (exchange-point-and-mark))
+         ((or (eq type 'sw-on)
+              (equal string "Org mode embedded math")) ;; \( and \[
+          (re-search-forward texmathp-onoff-regexp)
+          (backward-char 2)
+          (set-mark (+ pos 2))
+          (exchange-point-and-mark))
+         (t (error (format "Unknown reason to be in math mode: %s" type)))))))
+
+  (defun er/mark-latex-inside-pairs ()
+    (if (texmathp)
+        (cl-destructuring-bind (beg . end)
+            (my/find-bounds-of-regexps " *[{([|<]"
+                                       " *[]})|>]")
+          (when-let ((n (length (match-string-no-properties 0))))
+            (set-mark (save-excursion
+                        (goto-char beg)
+                        (forward-char n)
+                        (skip-chars-forward er--space-str)
+                        (point)))
+            (goto-char end)
+            (backward-char n)
+            (if (looking-back "\\\\right\\\\*\\|\\\\" (- (point) 7))
+                (backward-char (length (match-string-no-properties 0)))))
+          (skip-chars-backward er--space-str)
+          (exchange-point-and-mark))
+      (er/mark-inside-pairs)))
+
+  (defun er/mark-latex-outside-pairs ()
+    (if (texmathp)
+        (cl-destructuring-bind (beg . end)
+            (my/find-bounds-of-regexps " *[{([|<]"
+                                       " *[]})|>]")
+          (set-mark (save-excursion
+                      (goto-char beg)                        ;; (forward-char 1)
+                      (if (looking-back "\\\\left\\\\*\\|\\\\" (- (point) 6))
+                          (backward-char (length (match-string-no-properties 0))))
+                      (skip-chars-forward er--space-str)
+                      (point)))
+          (goto-char end)
+          (skip-chars-backward er--space-str)
+          ;; (backward-char 1)
+          (exchange-point-and-mark))
+      (er/mark-outside-pairs)))
+
+  (defun mark-frac ()
+    "Select the \\frac command and its contents."
+    (interactive)
+    (let ((current-point (point))
+          (nearest-frac-pos (save-excursion
+                              (re-search-backward "\\\\frac" nil t)
+                              (point))))
+      (when nearest-frac-pos
+        (goto-char nearest-frac-pos)
+        (let ((start (point))
+              (end (progn
+                     (forward-sexp)
+                     (forward-sexp)
+                     (forward-sexp))))
+          (set-mark start)
+          (goto-char end))
+        )))
+
+
+  (defun er/add-org-mode-expansions ()
+    (make-variable-buffer-local 'er/try-expand-list)
+    (setq er/try-expand-list '(er/mark-word
+                               er/mark-latex-inside-pairs
+                               er/mark-latex-outside-pairs
+                               er/mark-LaTeX-inside-math
+                               er/mark-comment
+                               er/mark-url
+                               er/mark-email
+                               er/mark-latex-text-sentence
+                               er/mark-latex-text-paragraph
+                               ))))
+
+
+;; Visual indicator when recording macros
+(use-package kmacro
+  :defer
+  :config
+  (defsubst my/mode-line-macro-recording ()
+    "Display macro being recorded."
+    (when (or defining-kbd-macro executing-kbd-macro)
+      (let ((sep (propertize " " 'face 'highlight ))
+            (vsep (propertize " " 'face '(:inherit variable-pitch))))
+        ;; "●"
+        (propertize (concat sep "MACRO" vsep
+                            (number-to-string kmacro-counter) vsep
+                            "▶" sep)
+                    'face 'highlight))))
+
+  (setq-default mode-line-format
+                (cl-pushnew '(:eval (my/mode-line-macro-recording))
+                            (default-value 'mode-line-format)
+                            :test 'equal)))
 
 (provide 'editor-config)
 
