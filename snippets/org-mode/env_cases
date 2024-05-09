@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: \begin{equation}
+# key: eq
+# condition: (and (not (texmathp)))
+# --
+\begin{cases}
+${1:`(if (region-active-p) (yas-selected-text) (propertize "content" 'font-lock-face '(:inherit region)))`} \\\\
+\end{cases}
