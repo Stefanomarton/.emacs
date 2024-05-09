@@ -146,6 +146,7 @@
   (markdown-mode . yas-minor-mode)
   (org-mode . yas-minor-mode)
   (yas-minor-mode . yas-reload-all)
+  (snippet-mode . disable-final-newline)
   :preface
   (defun make-silent (func &rest args)
     (cl-letf (((symbol-function 'message)
@@ -154,6 +155,9 @@
   (advice-add 'yas-reload-all :around #'make-silent)
   (add-hook 'org-mode '(lambda () (setq-local yas-indent-line 'fixed)))
   :config
+  (defun disable-final-newline ()
+    (interactive)
+    (set (make-local-variable 'require-final-newline) nil))
   (yas-global-mode 1)
   (setq yas-indent-line 'fixed)
   (setq yas-triggers-in-field t)
@@ -211,6 +215,7 @@
     "jc" (lambda () (interactive)
 	       (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
     "kd" (lambda () (interactive)
+           (setq-local yas-indent-line 'auto)
 	       (yas-expand-snippet "\\[ \n $1 \n \\]\n $0")))
   (aas-set-snippets 'markdown-mode
     "jf" (lambda () (interactive)
