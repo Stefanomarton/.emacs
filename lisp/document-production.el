@@ -164,6 +164,34 @@
   :config
   (add-to-list 'warning-suppress-types '(yasnippet backquote-change)))
 
+(use-package auto-yasnippet
+  :bind
+  (:map global-map
+        ("<escape> y c" . my-aya-create)
+        ("<escape> y e" . aya-expand)
+        ("<escape> y E" . aya-expand-from-history)
+        ("<escape> y d" . aya-delete-from-history)
+        ("<escape> y h" . aya-clear-history)
+        ("<escape> y n" . aya-next-in-history)
+        ("<escape> y p" . aya-previous-in-history)
+        ("<escape> y p" . aya-persist-snippet)
+        ("<escape> y o" . aya-open-line))
+  :config
+  (defun my-aya-create (beg end)
+    (interactive "r")
+    (let ((count 0))
+      (save-restriction
+        (narrow-to-region beg end)
+        (goto-char (point-min))
+        (while (re-search-forward "\\b\\([0-9]+\\)\\b" nil t)
+          (replace-match "~\\1")
+          (setq count (1+ count)))
+        (aya-create beg (+ count end))
+        (delete-region beg end)
+        (aya-expand count)))
+    (recenter-top-bottom)
+    ))
+
 (use-package aas
   :hook
   (org-mode . aas-activate-for-major-mode)
