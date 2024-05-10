@@ -28,7 +28,8 @@
   (setq org-fold-core-style 'text-properties)
 
   :config
-
+  ;; Make surround with latex env work nicely
+  (require 'tex-site)
   (use-package org-ref
     :after org-mode)
 
