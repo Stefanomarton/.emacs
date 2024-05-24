@@ -11,10 +11,14 @@
   :init
   (dirvish-override-dired-mode))
 
-(use-package openwith
-  :config
-  (openwith-mode 1)
-  (setq openwith-associations '(("\\.pdf\\'" "zathura" (file)))))
+;; (use-package openwith
+;;   :config
+;;   (openwith-mode 1)
+;;   (setq openwith-associations '(
+;;                                 ("\\.pdf\\'" "zathura" (file))
+;;                                 ("https'" "floorp" (file))
+;;                                 )
+;;         ))
 
 (use-package dired-narrow
   :after dirvish
