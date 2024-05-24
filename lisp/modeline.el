@@ -1,25 +1,5 @@
 ;;; modeline.el --- Minimal Modeline -*- lexical-binding: t; -*-
 
-(defface evil-visual-face
-  '((t (:foreground "#b48ead")))
-  "Face for Evil visual state")
-
-(defface evil-normal-face
-  '((t (:foreground "#81a1c1")))
-  "Face for Evil normal state")
-
-(defface evil-insert-face
-  '((t (:foreground "#ebcb8b")))
-  "Face for Evil insert state")
-
-(defface evil-operator-face
-  '((t (:foreground "#bf616a")))
-  "Face for Evil operator state")
-
-(defface evil-emacs-face
-  '((t (:foreground "#8fbcbb")))
-  "Face for Evil insert state")
-
 (defun my-mode-line--file-name ()
   "Return propertize name of ´my-mode-line-file-name´"
   (capitalize (shorten-directory default-directory 35)))
@@ -29,7 +9,6 @@
   "Mode-line file name ")
 
 (put 'my-mode-line--file-name 'risky-local-variable t)
-
 
 (defun special-buffer-p (buffer-name)
   "Check if buffer-name is the name of a special buffer."
@@ -65,27 +44,8 @@
    ;; point position
    (:propertize "   " 'face 'font-lock-keyword-face)
    (8
-    ;; (:propertize "  " 'face 'font-lock-keyword-face)
     (:propertize " %l" face font-lock-string-face)
-    ;; (:eval (propertize ":%c" 'face (if (>= (current-column) 80)
-    ;;                                   'font-lock-warning-face
-    ;;                                 'font-lock-string-face)))
     )
-   (8
-    (:propertize "   " 'face 'font-lock-keyword-face)
-    (:eval (cond
-            ((eq evil-state 'visual) (propertize "\uf111" 'face 'evil-visual-face))
-            ((eq evil-state 'normal) (propertize "\uf111" 'face 'evil-normal-face))
-            ((eq evil-state 'insert) (propertize "\uf111" 'face 'evil-insert-face))
-            ((eq evil-state 'operator) (propertize "\uf111" 'face 'evil-operator-face))
-            ((eq evil-state 'emacs) (propertize "\uf111" 'face 'evil-emacs-face))
-            (t (propertize "*" 'face 'font-lock-variable-name-face)))))
-
-   ;; shortened directory (if buffer have a corresponding file)
-   ;; my-mode-line-file-name
-
-   ;; buffer name
-   ;; (:propertize "%b" face font-lock-doc-face)
 
    ;; right aligned stuff
    (:eval
