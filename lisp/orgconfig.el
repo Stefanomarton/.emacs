@@ -7,7 +7,7 @@
               ("C-c o h" . consult-org-heading)
               ("<escape> >" . org-promote-subtree)
               ("<escape> <" . org-demote-subtree)
-              )
+              ("<escape> J" . my-fix-text-region))
   :hook
   ;; (org-mode . org-cdlatex-mode)
   (org-mode . org-margin-mode)
@@ -33,13 +33,37 @@
   (use-package org-ref
     :after org-mode)
 
-  (setq org-agenda-files '("~/GoogleDrive/org/agenda/work.org" "~/GoogleDrive/org/agenda/personal.org"))
+  ;; (setq org-agenda-files '("~/GoogleDrive/org/agenda/work.org" "~/GoogleDrive/org/agenda/personal.org"))
+
+  (defun my-fix-text-region (pos1 pos2)
+    "Replace strings within a region."
+    (interactive "*r")
+    (save-excursion
+      (save-restriction
+        (narrow-to-region pos1 pos2)
+        (join-line)
+        (fill-paragraph t t)
+        (dolist (ele (list "` a" "` e" "` o" "` u" "` i" "’"))
+          (setq elt ele)
+          (goto-char (point-min))
+          (while (search-forward elt nil t 1)
+            (replace-match
+             (char-to-string
+              (pcase ele
+                ("` a" ?à)
+                ("’" ?')
+                ("` i" ?ì)
+                ("` e" ?è)
+                ("` o" ?ò)
+                ("` u" ?ù)
+                ))))))))
 
   (defun sbr-org-insert-dwim (&optional arg)
     "Insert another entry of the same type as the current
 entry. For example, if the point is on a list item, then add
 another list item of the same type, and if the point is on a
-checkbox list item, then add an empty checkbox item. If instead
+checkbox
+ list item, then add an empty checkbox item. If instead
 the point is in a heading, then add another heading. If the point
 is in a TODO heading, then add another TODO heading (set to the
 TODO state).
@@ -892,6 +916,7 @@ point. "
   :after org
   :commands org-export-dispatch
   :config
+  (setq org-export-with-broken-links t)
   (use-package ox-latex
     :straight nil
     :ensure nil
@@ -937,7 +962,8 @@ point. "
                  \\usepackage[normalem]{ulem}
                  \\usepackage{amsmath}
                  \\usepackage{cleveref}
-
+                 \\renewcommand\\labelenumi{(\\roman{enumi})}
+                 \\renewcommand\\theenumi\\labelenumi
                  \\usepackage{mathtools}
                  \\DeclarePairedDelimiter\\bra{\\langle}{\\rvert}
                  \\DeclarePairedDelimiter\\ket{\\lvert}{\\rangle}
@@ -1010,6 +1036,8 @@ point. "
                     sharp corners,
                  }
                  \\usepackage{fixltx2e}
+                 \\renewcommand\\labelenumi{(\\roman{enumi})}
+                 \\renewcommand\\theenumi\\labelenumi
                  \\usepackage{graphicx}
                  \\usepackage{longtable}
                  \\usepackage{float}
@@ -1064,6 +1092,8 @@ point. "
                  \\usepackage{xfrac}
                  \\usepackage{tabularx}
                  \\usepackage{booktabs}
+                 \\renewcommand\\labelenumi{(\\roman{enumi})}
+                 \\renewcommand\\theenumi\\labelenumi
                  \\usepackage[marginal]{footmisc} % cleaner footnotes
                  \\usepackage[utf8]{inputenc}
                  % \\usepackage[T1]{fontenc}
@@ -1283,9 +1313,15 @@ point. "
                               "#+title: ${title}\n#+author: Stefano Marton\n#+filetags: %(hiddyn/filetags)")
            :immediate-finish t
            :unnarrowed t)
-          ("n" "inbox" plain "%?"
+          ("p" "personal" plain "%?"
            :if-new
-           (file+head "inbox/%<%Y%m%d>--${slug}__%(hiddyn/select-tag).org"
+           (file+head "personal/%<%Y%m%d>--${slug}__%(hiddyn/select-tag).org"
+                      "#+title: ${title}\n#+author: Stefano Marton\n#+filetags: %(hiddyn/filetags)\n#+CREATED: %U\n#+LAST_MODIFIED: %U")
+           :immediate-finish t
+           :unnarrowed t)
+          ("o" "progenitor" plain "%?"
+           :if-new
+           (file+head "progenitor/%<%Y%m%d>--${slug}__%(hiddyn/select-tag).org"
                       "#+title: ${title}\n#+author: Stefano Marton\n#+filetags: %(hiddyn/filetags)\n#+CREATED: %U\n#+LAST_MODIFIED: %U")
            :immediate-finish t
            :unnarrowed t)
