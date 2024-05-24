@@ -362,6 +362,9 @@
   :config
   (setq jinx-languages "it_IT, en_US"))
 
+(use-package ink
+  :straight (:type git :host github :repo "foxfriday/ink"))
+
 (provide 'document-production)
 
 ;;; document-production.el ends here
