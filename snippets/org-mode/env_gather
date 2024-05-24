@@ -1,8 +1,8 @@
 # -*- mode: snippet -*-
-# name: \begin{cases}
-# key: cases
+# name: \begin{gather}
+# key: gather
 # condition: (and (not (texmathp)))
 # --
-\begin{cases}
+\begin{gather}
 ${1:`(if (region-active-p) (yas-selected-text) (propertize "content" 'font-lock-face '(:inherit region)))`} \\\\
-\end{cases}
+\end{gather}
