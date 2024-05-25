@@ -1,2 +1,8 @@
 snippets/latex-mode/.yas-compiled-snippets.el
 *.elc
+eln-cache
+straight
+snippets/text-mode/.yas-compiled-snippets.el
+snippets/org-mode/.yas-compiled-snippets.el
+snippets/markdown-mode/.yas-compiled-snippets.el
+snippets/fundamental-mode/.yas-compiled-snippets.el
