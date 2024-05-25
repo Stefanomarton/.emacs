@@ -231,6 +231,8 @@ targets."
         ("w" . surround-region-with-chem)
         ("W" . surround-region-with-math-and-chem)
 
+        ("_" . surround-region-with-subscript)
+
         (";" . comment-dwim)
 
         ("<tab>" . cdlatex-tab)
@@ -322,6 +324,11 @@ targets."
     "Surround the active region with hard-coded strings"
     (interactive)
     (yas-expand-snippet "\\mathrm{`(yas-selected-text)`}"))
+
+  (defun surround-region-with-subscript ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (yas-expand-snippet "_{`(yas-selected-text)`}"))
 
   (defun surround-region-newline-with-math ()
     "Surround the active region with hard-coded strings"
