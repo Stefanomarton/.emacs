@@ -28,6 +28,39 @@
   (setq org-fold-core-style 'text-properties)
 
   :config
+  ;; org-table-auto-align
+  (setq org-table-auto-align-in-progress nil)
+
+  (defun org-table-auto-align (begin end length)
+    (save-match-data
+      (unless (or org-table-auto-align-in-progress
+                  (not (org-at-table-p))
+                  (and (eq this-command 'org-self-insert-command)
+                       (member (this-command-keys) '(" " "+" "|" "-"))))
+        ;; uses zero-idle timer so the buffer content is settled after
+        ;; the change, the cursor is moved, so we know what state we
+        ;; have to restore after auto align
+        (run-with-idle-timer
+         0 nil
+         (lambda ()
+           (if (looking-back "| *\\([^|]+\\)")
+               (let ((pos (string-trim-right (match-string 1))))
+                 (setq org-table-auto-align-in-progress t)
+                 (unwind-protect
+                     (progn
+                       (org-table-align)
+                       (search-forward pos nil t))
+                   (setq org-table-auto-align-in-progress nil)))))))))
+
+
+  (define-minor-mode org-table-auto-align-mode
+    "A mode for aligning Org mode tables automatically as you type."
+    :lighter "OrgTblAA"
+    (if org-table-auto-align-mode
+        (add-hook 'after-change-functions #'org-table-auto-align t t)
+      (remove-hook 'after-change-functions #'org-table-auto-align t)))
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
   ;; Make surround with latex env work nicely
   (require 'tex-site)
   (use-package org-ref
@@ -941,6 +974,7 @@ point. "
     (add-to-list 'org-latex-classes
                  '("report"
                    "\\documentclass[a4paper,11pt,titlepage]{report}
+                 \\usepackage[inkscapelatex=false]{svg}
                  \\hbadness 99999
                  \\usepackage{tabularx}
                  \\usepackage{booktabs}
@@ -1018,6 +1052,7 @@ point. "
                    "\\documentclass[11pt,a4paper]{article}
                  \\setlength{\\parindent}{0pt}
                  \\usepackage{mhchem}
+                 \\usepackage[inkscapelatex=false]{svg}
                  \\usepackage[utf8]{inputenc}
                  \\usepackage{tabularx}
                  \\usepackage{booktabs}
@@ -1088,8 +1123,10 @@ point. "
                  \\checkandfixthelayout
                  \\setlength{\\evensidemargin}{\\oddsidemargin}% after \\checkandfix
                  \\sidefootmargin{right}
+                 \\usepackage[inkscapelatex=false]{svg}
                  \\hbadness 99999
                  \\usepackage{xfrac}
+                 \\usepackage[italian]{babel}
                  \\usepackage{tabularx}
                  \\usepackage{booktabs}
                  \\renewcommand\\labelenumi{(\\roman{enumi})}
@@ -1601,41 +1638,8 @@ point. "
   :straight (:host github :repo "rougier/org-margin")
   :requires svg-lib)
 
-(use-package org-table-auto-align
-  :ensure nil
-  :straight nil
-  :config
-  (setq org-table-auto-align-in-progress nil)
-
-  (defun org-table-auto-align (begin end length)
-    (save-match-data
-      (unless (or org-table-auto-align-in-progress
-                  (not (org-at-table-p))
-                  (and (eq this-command 'org-self-insert-command)
-                       (member (this-command-keys) '(" " "+" "|" "-"))))
-        ;; uses zero-idle timer so the buffer content is settled after
-        ;; the change, the cursor is moved, so we know what state we
-        ;; have to restore after auto align
-        (run-with-idle-timer
-         0 nil
-         (lambda ()
-           (if (looking-back "| *\\([^|]+\\)")
-               (let ((pos (string-trim-right (match-string 1))))
-                 (setq org-table-auto-align-in-progress t)
-                 (unwind-protect
-                     (progn
-                       (org-table-align)
-                       (search-forward pos nil t))
-                   (setq org-table-auto-align-in-progress nil)))))))))
-
-
-  (define-minor-mode org-table-auto-align-mode
-    "A mode for aligning Org mode tables automatically as you type."
-    :lighter "OrgTblAA"
-    (if org-table-auto-align-mode
-        (add-hook 'after-change-functions #'org-table-auto-align t t)
-      (remove-hook 'after-change-functions #'org-table-auto-align t)))
-  )
+(use-package org-ipe
+  :straight (:host github :repo "Stefanomarton/org-ipe"))
 
 (provide 'orgconfig)
 
