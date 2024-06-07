@@ -57,6 +57,7 @@
   :straight auctex
   :config
   (add-to-list 'major-mode-remap-alist '(latex-mode . LaTeX-mode))
+  (advice-add #'TeX-completing-read-multiple :around #'vertico--advice)
 
   (setq TeX-save-query nil
 	    TeX-clean-confirm nil
@@ -242,11 +243,11 @@
     ".." (lambda () (interactive)
 	       (yas-expand-snippet "_{$1}$0"))
     "ds" (lambda () (interactive)
-	       (yas-expand-snippet "\\Delta_{$1}S $0"))
+	       (yas-expand-snippet "\\Delta S $0"))
     "dh" (lambda () (interactive)
-	       (yas-expand-snippet "\\Delta_{$1}H $0"))
+	       (yas-expand-snippet "\\Delta H $0"))
     "dg" (lambda () (interactive)
-	       (yas-expand-snippet "\\Delta_{$1}G $0"))
+	       (yas-expand-snippet "\\Delta G $0"))
 
     ;; positive apices
     ",," (lambda () (interactive)
@@ -361,9 +362,6 @@
   :straight (:host github :repo "minad/jinx")
   :config
   (setq jinx-languages "it_IT, en_US"))
-
-(use-package ink
-  :straight (:type git :host github :repo "foxfriday/ink"))
 
 (provide 'document-production)
 
