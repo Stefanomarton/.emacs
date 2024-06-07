@@ -48,8 +48,10 @@
    `(hl-line ((t (:background ,hl))))
    `(region ((t (:foreground ,violet :background ,hl-alt))))
 
-   `(mode-line ((t (:height 140 :foreground ,fg :background ,hl :box (:line-width 20 :color ,bg)))))
-   `(mode-line-inactive ((t (:height 140 :foreground ,comment :background ,bg :box (:line-width 20 :color ,bg)))))
+   ;; `(mode-line ((t (:height 140 :foreground ,fg :background "black" :box (:line-width 5 :color "black")))))
+   `(mode-line ((t (:height 1 :foreground ,fg :background "black"))))
+   `(mode-line-inactive ((t (:height 1 :foreground ,comment :background "black"))))
+   ;; `(mode-line-inactive ((t (:height 140 :foreground ,comment :background ,bg :box (:line-width 20 :color ,bg)))))
    ;; '(mode-line-buffer-id ((t (:box (:line-width 1 :color ,fg) :weight bold))))
 
    `(header-line ((t (:height 160 :foreground ,fg :background ,hl :box (:line-width 20 :color ,bg)))))
@@ -156,11 +158,12 @@
    `(goggles-removed ((t (:background ,red))))
    `(goggles-changed ((t (:background ,green))))
 
-
+   ;; `(solaire-default-face ((t (:background ,bg))))
+   ;; `(solaire-hl-line-face ((t (:background ,fg))))
+   ;; `(solaire-org-hide ((t (:background ,bg1))))
 
    (custom-theme-set-variables
     'pywal
-    ;; Set variables as needed
     )
 
    ))
