@@ -10,7 +10,10 @@
 :ANKI_DECK: ${2:Deck}${4:::${5:SubDeck}}
 :END:
 `(org-insert-heading)``(org-demote-subtree)` $6
-`(org-insert-subheading 1)`Front
+:PROPERTIES:
+:ANKI_NOTE_TYPE: Personal
+:END:
+`(org-insert-subheading 1)` Front
 $7
 `(org-insert-heading)`Back
 $0

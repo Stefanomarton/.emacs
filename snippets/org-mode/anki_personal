@@ -9,7 +9,7 @@
 :PROPERTIES:
 :ANKI_NOTE_TYPE: Personal
 :END:
-`(org-insert-subheading 1)`Front
+`(org-insert-subheading 1)` Front
 $1
 `(org-insert-heading)`Back
 $0
