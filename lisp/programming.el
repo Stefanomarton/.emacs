@@ -119,6 +119,12 @@ file corresponding to the current buffer file, then recompile the file."
   :mode "\\.yuck\\'"
   )
 
+(use-package gnuplot-mode
+  :straight (:host github
+                   :repo "emacs-gnuplot/gnuplot")
+  :mode "\\.plt\\'"
+  )
+
 (provide 'programming)
 
 ;;; programming.el ends here
