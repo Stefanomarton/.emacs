@@ -1201,7 +1201,7 @@ point. "
   :after org
   :straight (:type built-in)
   :config
-  (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) (python . t) (latex . t)))
+  (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) (python . t) (latex . t)(gnuplot . t)))
   (setq org-src-fontify-natively t)
   (setq-default
    org-src-tab-acts-natively t
