@@ -100,7 +100,8 @@
 
 (use-package breadcrumb
   :hook
-  (prog-mode . breadcrumb-local-mode))
+  (prog-mode . breadcrumb-local-mode)
+  (conf-unix-mode . breadcrumb-local-mode))
 
 (use-package focus
   :commands (focus-mode))
