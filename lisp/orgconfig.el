@@ -228,7 +228,7 @@ point. "
 
   (setq org-export-preserve-breaks nil) ;; preserve newline in exports
 
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)) ;; fix dimension of latex fragments
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.5)) ;; fix dimension of latex fragments
 
   (add-to-list 'org-file-apps '("\\.pdf" . "zathura %s")) ;; open pdf files with zathura
 
@@ -1588,16 +1588,37 @@ point. "
 
 (use-package anki-editor
   :commands (anki-editor-push-notes anki-editor-insert-note)
-  :bind (:map org-mode-map
-              ("<leader>op" . anki-editor-push-notes)
-              ("<leader>oa" . anki-editor-insert-note))
   :config
   (setq anki-editor-create-decks t))
 
-;; (use-package org-anki
-;;   :config
-;;   (setq org-anki-default-match "EXCLUDE=\"\"")
-;;   (setq org-anki-default-note-type "Basic"))
+(use-package org-anki
+  :bind
+  (:map org-mode-map
+        ("<escape>s" . my/org-anki-sync-all)
+        ("<escape>S" . org-anki-sync-entry)
+        ("<escape>d" . org-anki-delete-entry)
+        ("<escape>D" . org-anki-delete-all)
+        ("<escape>b" . org-anki-browse-entry)
+        ("<escape>S" . org-anki-sync-entry))
+
+  :config
+  (defun my/org-anki-sync-all ()
+    "set `org-use-property-inheritance' before `org-anki-sync-all'"
+    (setq-local org-use-property-inheritance t)
+    (org-anki-sync-all))
+
+  ;; Match all level >1, inherit tag from parent level
+  (setq org-anki-default-match "LEVEL>1&+ANKI")
+
+  ;; Set `org-anki-model-fields' to use my custom note type
+  (setq org-anki-model-fields
+        '(("Personal" "Front" "Back")
+          ("Basic" "Front" "Back")
+          ("Basic (and reversed card)" "Front" "Back")
+          ("Basic (optional reversed card)" "Front" "Back")
+          ("NameDescr" "Name" "Descr")
+          ("Cloze" "Text" "Extra")))
+  (setq org-anki-default-note-type "Personal"))
 
 (use-package org-transclusion
   :after org-mode
