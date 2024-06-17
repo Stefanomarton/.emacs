@@ -66,7 +66,7 @@
   (use-package org-ref
     :after org-mode)
 
-  ;; (setq org-agenda-files '("~/GoogleDrive/org/agenda/work.org" "~/GoogleDrive/org/agenda/personal.org"))
+  (setq org-agenda-files '("~/GoogleDrive/org/agenda/work.org"))
 
   (defun my-fix-text-region (pos1 pos2)
     "Replace strings within a region."
@@ -1594,17 +1594,18 @@ point. "
 (use-package org-anki
   :bind
   (:map org-mode-map
-        ("<escape>s" . my/org-anki-sync-all)
-        ("<escape>S" . org-anki-sync-entry)
-        ("<escape>d" . org-anki-delete-entry)
-        ("<escape>D" . org-anki-delete-all)
-        ("<escape>b" . org-anki-browse-entry)
-        ("<escape>S" . org-anki-sync-entry))
+        ("<escape>as" . my/org-anki-sync-all)
+        ("<escape>aS" . org-anki-sync-entry)
+        ("<escape>ad" . org-anki-delete-entry)
+        ("<escape>aD" . org-anki-delete-all)
+        ("<escape>ab" . org-anki-browse-entry)
+        ("<escape>aS" . org-anki-sync-entry))
 
   :config
   (defun my/org-anki-sync-all ()
+    (interactive)
     "set `org-use-property-inheritance' before `org-anki-sync-all'"
-    (setq-local org-use-property-inheritance t)
+    ;; (setq-local org-use-property-inheritance t)
     (org-anki-sync-all))
 
   ;; Match all level >1, inherit tag from parent level
