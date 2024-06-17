@@ -310,6 +310,8 @@
         (set-visited-file-name new-name)
         (set-buffer-modified-p nil)))))
 
+(define-key global-map (kbd "<escape>u") 'rename-file-and-buffer)
+
 ;;;###autoload
 (defun move-buffer-file (dir)
   "Moves both current buffer and file it's visiting to DIR."
@@ -326,6 +328,10 @@
              (delete-file filename)
              (set-visited-file-name newname)
              (set-buffer-modified-p nil) t))))
+
+(define-key global-map (kbd "<escape>m") 'move-buffer-file)
+
+(define-key global-map (kbd "<escape>k") 'kill-buffer-and-window)
 
 (use-package compile
   :defer t
