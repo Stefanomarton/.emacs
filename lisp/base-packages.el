@@ -350,10 +350,6 @@ targets."
   :config
   (setq yas-fallback-behavior '(apply tab-jump-out 1)))
 
-(use-package ctrlf
-  :init
-  (add-hook 'after-init-hook 'ctrlf-mode))
-
 (use-package wgrep
   :commands (wgrep-change-to-wgrep-mode)
   :config (setq wgrep-auto-save-buffer t))
