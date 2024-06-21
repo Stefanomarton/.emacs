@@ -303,7 +303,7 @@ targets."
 
   (defun surround-region-with-command (command)
     "Surround the active region with hard-coded strings"
-    (interactive "sCommand:")
+    (interactive "sCommand: ")
 	(yas-expand-snippet (concat "\\" command "{" "`(yas-selected-text)`}")))
 
   (defun surround-region-with-cancel ()
