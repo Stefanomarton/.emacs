@@ -139,12 +139,10 @@ point. "
         (org-table-copy-down (prefix-numeric-value arg))
       (sbr-org-insert-dwim arg)))
 
-  (setq org-link-abbrev-alist
-        '(("image-dir" . "file:~/GoogleDrive/org/uni/attachments/")))
+  (setq org-directory "~/GoogleDrive/org/")
 
-  ;; (setq org-link-abbrev-alist
-  ;;       `(
-  ;;         ("image-dir" . ,(format "file:%s%%s" (file-name-as-directory org-directory)))))
+  (setq org-link-abbrev-alist
+        `(("image-dir" . ,(format "file:%s%s" org-directory ".attachments/"))))
 
   (bind-keys :map org-mode-map ("<S-return>" . sbr-org-insert-dwim))
 
@@ -1605,7 +1603,7 @@ point. "
   (defun my/org-anki-sync-all ()
     (interactive)
     "set `org-use-property-inheritance' before `org-anki-sync-all'"
-    ;; (setq-local org-use-property-inheritance t)
+    (setq-local org-use-property-inheritance t)
     (org-anki-sync-all))
 
   ;; Match all level >1, inherit tag from parent level
@@ -1619,7 +1617,72 @@ point. "
           ("Basic (optional reversed card)" "Front" "Back")
           ("NameDescr" "Name" "Descr")
           ("Cloze" "Text" "Extra")))
-  (setq org-anki-default-note-type "Personal"))
+  (setq org-anki-default-note-type "Personal")
+
+  (defun goto-or-create-qa-heading ()
+    "Go to the 'Questions & Answers' heading, or create it if it doesn't exist, prompting for deck name if needed."
+    (interactive)
+    (save-restriction
+      (widen)
+      (condition-case err
+          (let ((heading "Questions & Answers")
+                (heading-found nil))
+            (save-excursion
+              (goto-char (point-min))
+              (while (and (not heading-found) (re-search-forward org-heading-regexp nil t))
+                (when (string-equal (org-get-heading t t t t) heading)
+                  (setq heading-found t)
+                  (goto-char (match-beginning 0)))))
+            (if heading-found
+                (goto-char (match-beginning 0))
+              (let ((deck (read-string "Enter the Anki deck name: ")))
+                (goto-char (point-max))
+                (unless (bolp) (insert "\n"))
+                (insert "* " heading "\n")
+                (insert ":PROPERTIES:\n")
+                (insert ":ANKI_DECK: " deck "\n")
+                (insert ":END:\n"))))
+        (error (message "An error occurred: %s" err)))))
+
+  (defun my/org-set-current-heading-to-previous-level ()
+    (interactive)
+    "Set the current heading to the same level as the previous heading."
+    (save-excursion
+      (org-previous-visible-heading 1)
+      (let* ((current-level (org-current-level))
+             (previous-level (save-excursion
+                               (org-previous-visible-heading 1)
+                               (org-current-level))))
+        (when previous-level
+          (let ((difference (- current-level previous-level)))
+            (cond
+
+             ((> difference 0)
+              (dotimes ( _ difference) (org-do-promote)))
+
+             ((< difference 0)
+              (dotimes ( _ ( - difference)) (org-do-demote)))))))))
+
+  (defun my/check-previous-heading-level ()
+    "Check if previous heading level is 1, demote to 2"
+    (interactive)
+    (save-excursion
+      (org-previous-visible-heading 1)
+      (cond
+       ((= (org-current-level) 1)
+        (org-do-demote)))))
+
+  (defun my/create-org-anki-flashcard (question)
+    (interactive "sQuestion: ")
+    (save-excursion
+      (org-copy-subtree 1 nil nil t)
+      (goto-or-create-qa-heading)
+      (org-end-of-subtree)
+      (newline)
+      (yank)
+      (org-edit-headline question)
+      (my/org-set-current-heading-to-previous-level)
+      (my/check-previous-heading-level))))
 
 (use-package org-transclusion
   :after org-mode
