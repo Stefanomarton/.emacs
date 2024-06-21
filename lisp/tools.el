@@ -10,7 +10,7 @@
 
 (use-package fix-word
   :bind
-  (([remap upcase-word] . fix-word-Upcase))
+  (([remap upcase-word] . fix-word-upcase))
   (([remap downcase-word] . fix-word-downcase))
   (([remap capitalize-word] . fix-word-capitalize))
   )
