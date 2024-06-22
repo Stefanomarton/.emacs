@@ -361,7 +361,7 @@
         ("M-$" . jinx-correct))
   :straight (:host github :repo "minad/jinx")
   :config
-  (setq jinx-languages "it_IT, en_US"))
+  (add-hook 'jinx-mode-hook '(lambda () (setq jinx-languages "it en_US"))))
 
 (provide 'document-production)
 
