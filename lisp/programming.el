@@ -97,7 +97,22 @@ file corresponding to the current buffer file, then recompile the file."
                  (display-buffer-in-direction)
                  (direction . down)
                  (window-width . 0.1)
-                 (window-height . 0.2))))
+                 (window-height . 0.2)))
+
+  (use-package lisp-extra-font-lock
+    :config
+    (lisp-extra-font-lock-mode))
+
+  (use-package eros
+    :config
+    (eros-mode))
+
+  (use-package lispy
+    :config
+    (lispy-mode)
+    ))
+
+
 
 ;; Highlight kmonad files
 (use-package kbd-mode
