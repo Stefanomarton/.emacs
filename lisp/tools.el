@@ -96,8 +96,18 @@
   )
 
 (use-package zoxide
-  :bind (:map global-map)
-  ("<escape>z" . zoxide-find-file))
+  :bind (:map global-map
+              ("<escape>z" . zoxide-find-file)))
+
+(use-package visual-regexp
+  :bind (:map global-map
+              ([remap isearch-forward] . vr/isearch-forward)
+              ([remap isearch-backward] . vr/isearch-backward)
+              ("C-M-s" . vr/replace)
+              )
+  :config
+  (setq vr/auto-show-help nil)
+  (use-package visual-regexp-steroids))
 
 (provide 'tools)
 
