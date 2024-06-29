@@ -1,7 +1,7 @@
 ;;; orgconfig.el --- org-mode configuration -*- lexical-binding: t; -*-
 
 (use-package org
-  :defer 0.5
+  :straight (:type built-in)
   :bind (:map org-mode-map
               ("C-," . embrace-commander)
               ("C-c o h" . consult-org-heading)
@@ -28,39 +28,6 @@
   (setq org-fold-core-style 'text-properties)
 
   :config
-  ;; org-table-auto-align
-  (setq org-table-auto-align-in-progress nil)
-
-  (defun org-table-auto-align (begin end length)
-    (save-match-data
-      (unless (or org-table-auto-align-in-progress
-                  (not (org-at-table-p))
-                  (and (eq this-command 'org-self-insert-command)
-                       (member (this-command-keys) '(" " "+" "|" "-"))))
-        ;; uses zero-idle timer so the buffer content is settled after
-        ;; the change, the cursor is moved, so we know what state we
-        ;; have to restore after auto align
-        (run-with-idle-timer
-         0 nil
-         (lambda ()
-           (if (looking-back "| *\\([^|]+\\)")
-               (let ((pos (string-trim-right (match-string 1))))
-                 (setq org-table-auto-align-in-progress t)
-                 (unwind-protect
-                     (progn
-                       (org-table-align)
-                       (search-forward pos nil t))
-                   (setq org-table-auto-align-in-progress nil)))))))))
-
-
-  (define-minor-mode org-table-auto-align-mode
-    "A mode for aligning Org mode tables automatically as you type."
-    :lighter "OrgTblAA"
-    (if org-table-auto-align-mode
-        (add-hook 'after-change-functions #'org-table-auto-align t t)
-      (remove-hook 'after-change-functions #'org-table-auto-align t)))
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
   ;; Make surround with latex env work nicely
   (require 'tex-site)
   (use-package org-ref
@@ -74,8 +41,12 @@
     (save-excursion
       (save-restriction
         (narrow-to-region pos1 pos2)
-        (join-line)
+        (save-excursion
+          (goto-char pos1)
+          (while (and (< (point) pos2) (not (eobp)))
+            (join-line 1)))
         (fill-paragraph t t)
+        (vr/replace "- ([A-z]+)" "\\1" pos1 pos2)
         (dolist (ele (list "` a" "` e" "` o" "` u" "` i" "’"))
           (setq elt ele)
           (goto-char (point-min))
@@ -1195,6 +1166,11 @@ point. "
     :after ox)
   )
 
+(use-package org-table-auto-align
+  :hook
+  (org-mode . org-table-auto-align-mode)
+  :straight (:host github :repo "Stefanomarton/org-table-auto-align-mode"))
+
 (use-package org-src
   :after org
   :straight (:type built-in)
@@ -1216,7 +1192,8 @@ point. "
   (defun custom/org-download-dir ()
     "Download files in ./attachments/$filename/"
     (setq-local org-download-image-dir (concat
-    			                        "./attachments/"
+                                        org-directory
+    			                        ".attachments/"
     			                        (file-name-sans-extension (buffer-name))
     			                        "/")
                 )                                                                    ; Store downloads in ./resources/%filename/
@@ -1246,14 +1223,6 @@ point. "
   (setq org-roam-directory (file-truename "~/GoogleDrive/org"))
   :custom
   (org-roam-complete-everywhere t)
-  :bind
-  ;; (:map evil-normal-state-map
-  ;;       ("<leader>of" . consult-org-roam-file-find)
-  ;;       ("<leader>og" . consult-notes-search-in-all-notes)
-  ;;       ("<leader>oo" . consult-notes)
-  ;;       ("<leader>on" . consult-notes-org-roam-find-node)
-  ;;       ("<leader>ok" . org-roam-capture)
-  ;;       ("<leader>oc" . my/org-roam-node-find-courses))
   :bind
   ("C-C of" . consult-org-roam-file-find)
   ("C-C og" . consult-notes-search-in-all-notes)
@@ -1621,151 +1590,13 @@ point. "
           ("Cloze" "Text" "Extra")))
   (setq org-anki-default-note-type "Personal")
 
-  (defvar oaff-cursor-position nil
-    "The saved cursor position and buffer name.")
-
-  (defun oaff-save-cursor-position ()
-    "Save the current cursor position and buffer name."
-    (setq oaff-cursor-position (cons (buffer-name) (point))))
-
-  (defun oaff-goto-cursor-position ()
-    "Go to the saved cursor position in the saved buffer."
-    (if oaff-cursor-position
-        (let ((buffer (car oaff-cursor-position))
-              (position (cdr oaff-cursor-position)))
-          (if (get-buffer buffer)
-              (progn
-                (switch-to-buffer buffer)
-                (goto-char position))
-            (message "Buffer %s does not exist" buffer)))
-      (message "No cursor position has been saved.")))
-
-  (defun oaff-clear-cursor-position ()
-    "Clear the saved cursor position."
-    (setq oaff-cursor-position nil)
-    (message "Saved cursor position cleared."))
-
-
-  (defun oaff-goto-or-create-heading ()
-    "Go to the 'Questions & Answers' heading, or create it if it doesn't exist, prompting for deck name if needed."
-    (interactive)
-    (save-restriction
-      (widen)
-      (condition-case err
-          (let ((heading "Questions & Answers")
-                (heading-found nil))
-            (save-excursion
-              (goto-char (point-min))
-              (while (and (not heading-found) (re-search-forward org-heading-regexp nil t))
-                (when (string-equal (org-get-heading t t t t) heading)
-                  (setq heading-found t)
-                  (goto-char (match-beginning 0)))))
-            (if heading-found
-                (goto-char (match-beginning 0))
-              (let ((deck (read-string "Enter the Anki deck name: ")))
-                (goto-char (point-max))
-                (unless (bolp) (insert "\n"))
-                (insert "* " heading " :ANKI:" "\n")
-                (insert ":PROPERTIES:\n")
-                (insert ":ANKI_DECK: " deck "\n")
-                (insert ":END:\n")
-                )
-              ))
-        (error (message "An error occurred: %s" err)))))
-
-  (defun oaff-set-current-heading-to-previous-level ()
-    (interactive)
-    "Set the current heading to the same level as the previous heading."
-    (save-excursion
-      (org-previous-visible-heading 1)
-      (let* ((current-level (org-current-level))
-             (previous-level (save-excursion
-                               (org-previous-visible-heading 1)
-                               (org-current-level))))
-        (when previous-level
-          (let ((difference (- current-level previous-level)))
-            (cond
-
-             ((> difference 0)
-              (dotimes ( _ difference) (org-do-promote)))
-
-             ((< difference 0)
-              (dotimes ( _ ( - difference)) (org-do-demote)))))))))
-
-  (defun oaff-check-previous-heading-level ()
-    "Check if previous heading level is 1, demote to 2"
-    (save-excursion
-      (org-previous-visible-heading 1)
-      (cond
-       ((= (org-current-level) 1)
-        (org-do-demote)))))
-
-
-  (defun oaff-open-temp-buffer ()
-    "Open the current heading as a flashcard editing buffer"
-    (let ((original-buffer (current-buffer))
-          (copied-content (current-kill 0))
-          (temp-buffer-name "*Temporary Buffer*"))
-
-      ;; Create and display the temporary buffer at the bottom
-      (split-window-below)
-      (other-window 1)
-      (with-current-buffer (get-buffer-create temp-buffer-name)
-        (switch-to-buffer temp-buffer-name)
-        (erase-buffer)
-        (org-mode)
-
-        ;; set modeline-format after org-mode is loaded, so that isn't overwritten
-        (setq-local header-line-format "FLASHCARDS | `C-c C-c' to finish editing")
-
-        (insert copied-content)
-        (org-previous-visible-heading 1)
-        (org-edit-headline (read-string "[Question?] "))
-        (next-line)
-        (local-set-key (kbd "C-c C-c") 'oaff-close-temp-buffer)
-
-        ;; Store the original buffer as a buffer-local variable
-        (setq-local my-original-buffer original-buffer))))
-
-  (defun oaff-close-temp-buffer ()
-    "Close the flashcard buffer and yank the content to the Q&A heading"
-    (interactive)
-
-    ;; Copy whole buffer
-    (save-excursion
-      (goto-char (point-min))   ;; Move point to the beginning of the buffer
-      (push-mark (point-max))   ;; Mark the end of the buffer
-      (kill-ring-save (point) (mark))) ;; Copy the region to the kill ring
-
-    ;; Kill buffer and close window
-    (kill-buffer)
-    (delete-window)
-
-    ;; Restore default keybinding
-    (local-set-key (kbd "C-c C-c") 'org-ctrl-c-ctrl-c)
-
-    ;; Goto to end q&a heading and insert the content in the appropriate position
-    (oaff-goto-or-create-heading)
-    (org-end-of-subtree)
-    (newline)
-    (yank)
-
-    ;; Check the level of the heading inserted
-    (oaff-set-current-heading-to-previous-level)
-    (oaff-check-previous-heading-level)
-
-    ;; Go back to original position
-    (oaff-goto-cursor-position)
-    )
-
-  (defun oaff-create-flashcard ()
-    "Create a flashcard from the current heading under the Q&A heading"
-    (interactive)
-    (oaff-clear-cursor-position)
-    (oaff-save-cursor-position)
-    (org-copy-subtree 1 nil nil t)
-    (oaff-open-temp-buffer)
-    ))
+  (use-package org-anki-fast-flashcards
+    :ensure nil
+    :straight (:host github :repo "Stefanomarton/org-anki-fast-flashcards")
+    :bind
+    (:map org-mode-map
+          ("<escape>af" . oaff-create-flashcard)))
+  )
 
 (use-package org-transclusion
   :after org-mode
