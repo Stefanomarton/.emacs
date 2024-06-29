@@ -321,36 +321,6 @@
   ;; (cdlatex-math-symbol-prefix nil)
   )
 
-(use-package latex-table-wizard
-  :commands latex-mode
-  :config
-  (defun some-useful-name (stuff-to-configure)
-    "Some useful documentation here!."
-    (dolist (entry stuff-to-configure)
-      (add-to-list 'latex-table-wizard-transient-keys
-		           (cons (intern (concat "latex-table-wizard-" (symbol-name (car entry))))
-			             (cdr entry)))))
-
-  ;; example use
-  (some-useful-name '((right . "l")
-		              (left . "h")
-		              (beginning-of-cell . "ii")
-		              (down . "j")
-		              (up . "k")
-		              (end-of-cell . "a")
-		              (beginning-of-row . "II")
-		              (end-of-row . "A")
-		              (bottom . "G")
-		              (top . "gg")
-		              (mark-cell . "m")
-		              (insert-column . "C")
-		              (insert-row .	"R")
-		              (kill-column-content ."DCC"	)
-		              (kill-row-content . "DRC"	)
-		              (delete-column . "Dc"	)
-		              (delete-row . "Dr"	)
-		              )))
-
 (use-package jinx
   :hook
   (org-mode . jinx-mode)
@@ -360,8 +330,10 @@
   (:map text-mode-map
         ("M-$" . jinx-correct))
   :straight (:host github :repo "minad/jinx")
-  :config
-  (add-hook 'jinx-mode-hook '(lambda () (setq jinx-languages "it en_US"))))
+  :init
+  ;; must load it before starting jinx-mode
+  (setq jinx-languages "it en_US"))
+
 
 (provide 'document-production)
 
