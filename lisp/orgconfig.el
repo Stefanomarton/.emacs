@@ -1,7 +1,7 @@
 ;;; orgconfig.el --- org-mode configuration -*- lexical-binding: t; -*-
 
 (use-package org
-  :straight (:type built-in)
+  :straight nil
   :bind (:map org-mode-map
               ("C-," . embrace-commander)
               ("C-c o h" . consult-org-heading)
@@ -28,6 +28,10 @@
   (setq org-fold-core-style 'text-properties)
 
   :config
+  ;; (setq org-cite-global-bibliography '((concat org-directory (.resources/bibliography.bib))))
+  (setq org-cite-global-bibliography '("~/GoogleDrive/org/.resources/bibliography.bib"))
+  (setq org-cite-processor '((t csl ~/GoogleDrive/org/.resources/ieee.csl ~/GoogleDrive/org/.resources/ieee.csl)))
+
   ;; Make surround with latex env work nicely
   (require 'tex-site)
   (use-package org-ref
@@ -46,7 +50,7 @@
           (while (and (< (point) pos2) (not (eobp)))
             (join-line 1)))
         (fill-paragraph t t)
-        (vr/replace "- ([A-z]+)" "\\1" pos1 pos2)
+        (replace-regexp "- \([A-z]+\)" "\1")
         (dolist (ele (list "` a" "` e" "` o" "` u" "` i" "’"))
           (setq elt ele)
           (goto-char (point-min))
@@ -1175,7 +1179,8 @@ point. "
   :after org
   :straight (:type built-in)
   :config
-  (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) (python . t) (latex . t)(gnuplot . t)))
+  (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) (python . t) (latex . t)(gnuplot . t)(plantuml . t)))
+  (setq org-plantuml-exec-mode 'plantuml)
   (setq org-src-fontify-natively t)
   (setq-default
    org-src-tab-acts-natively t
@@ -1433,7 +1438,6 @@ point. "
   (org-cite-follow-processor 'citar)
   (org-cite-activate-processor 'citar)
   (citar-bibliography org-cite-global-bibliography)
-  (citar-org-roam-note-title-template "${author} - ${title}")
   :config
 
   (setq citar-bibliography "~/GoogleDrive/org/.resources/bibliography.bib")
@@ -1592,7 +1596,7 @@ point. "
 
   (use-package org-anki-fast-flashcards
     :ensure nil
-    :straight (:host github :repo "Stefanomarton/org-anki-fast-flashcards")
+    :straight (:host github :repo "Stefanomarton/org-anki-fast-flash-cards")
     :bind
     (:map org-mode-map
           ("<escape>af" . oaff-create-flashcard)))
