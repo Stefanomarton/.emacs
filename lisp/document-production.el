@@ -54,7 +54,7 @@
   :mode ("\\.tex?\\'" . LaTeX-mode)
   :hook
   (LaTeX-mode-hook . prettify-symbols-mode)
-  :straight auctex
+  :straight (auctex :type git :host github :repo "emacs-straight/auctex" :files ("*" (:exclude ".git")))
   :config
   (add-to-list 'major-mode-remap-alist '(latex-mode . LaTeX-mode))
   (advice-add #'TeX-completing-read-multiple :around #'vertico--advice)
