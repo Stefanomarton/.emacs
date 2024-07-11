@@ -367,4 +367,15 @@ targets."
   :config
   (undo-tree-mode))
 
+(use-package simple
+  :straight (:type built-in)
+  :config
+  (setq save-interprogram-paste-before-kill t)
+  :init
+  (defun pulse-current-region (&rest _)
+    (if mark-active
+        (pulse-momentary-highlight-region (region-beginning) (region-end))
+      (pulse-momentary-highlight-region (mark) (point))))
+  (advice-add #'kill-ring-save :before #'pulse-current-region))
+
 (provide 'base-packages)
