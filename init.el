@@ -6,6 +6,8 @@
 ;; Straight is my package manager of choice
 ;; Avoid check for modification at startup, save up to ~0.2 s.
 (setq straight-check-for-modifications 'live-with-find)
+(setq straight-recipes-gnu-elpa-use-mirror t)
+(setq straight-repository-branch "develop")
 
 ;; Boostrapping function
 (defvar bootstrap-version)
@@ -21,7 +23,8 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(setq straight-repository-branch "develop")
+(straight-use-package 'auctex)
+(straight-use-package 'org)
 
 ;; Use shallow cloning as I don't need all the package branches
 (setq straight-vc-git-default-clone-depth '(1 single-branch))
