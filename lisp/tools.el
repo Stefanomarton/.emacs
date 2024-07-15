@@ -41,8 +41,36 @@
   (setopt ellama-language "Italian")
   (require 'llm-ollama)
   (setopt ellama-provider
-		  (make-llm-ollama
-		   :chat-model "llama3" :embedding-model "llama3")))
+		  '(
+            ("llama3" . (make-llm-ollama
+				         :chat-model "llama3"
+				         :embedding-model "llama3"))
+            ("codegemma" . (make-llm-ollama
+				            :chat-model "codegemma:instruct"
+				            :embedding-model "codegemma:instruct")))))
+
+;; (use-package elisa
+;;   :init
+;;   (setopt elisa-limit 5)
+;;   ;; reranker increases answer quality significantly
+;;   (setopt elisa-reranker-enabled t)
+;;   ;; prompt rewriting may increase quality of answers
+;;   ;; disable it if you want direct control over prompt
+;;   (setopt elisa-prompt-rewriting-enabled t)
+;;   (require 'llm-ollama)
+;;   ;; gemma 2 works very good in my use cases
+;;   ;; it also boasts strong multilingual capabilities
+;;   (setopt elisa-chat-provider
+;; 	      (make-llm-ollama
+;; 	       :chat-model "gemma2:9b-instruct-q6_K"
+;; 	       :embedding-model "chatfire/bge-m3:q8_0"
+;; 	       ;; set context window to 8k
+;; 	       :default-chat-non-standard-params '(("num_ctx" . 8192))))
+;;   ;; this embedding model has stong multilingual capabilities
+;;   (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "chatfire/bge-m3:q8_0"))
+;;   :config
+;;   ;; searxng works better than duckduckgo in my tests
+;;   (setopt elisa-web-search-function 'elisa-search-searxng))
 
 (use-package google-this
   :commands google-this)
