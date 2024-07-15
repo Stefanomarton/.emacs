@@ -1,7 +1,8 @@
 ;;; orgconfig.el --- org-mode configuration -*- lexical-binding: t; -*-
 
 (use-package org
-  :straight nil
+  :straight t
+  :ensure nil
   :bind (:map org-mode-map
               ("C-," . embrace-commander)
               ("C-c o h" . consult-org-heading)
@@ -14,8 +15,8 @@
   (org-mode . yas-minor-mode-on)
   (org-mode . er/add-latex-in-org-mode-expansions)
   (org-mode . my/org-header-outline-path-mode)
-  ;; (org-mode . display-fill-column-indicator-mode)
   (org-mode . auto-fill-mode)
+  (org-mode . org-set-attachments-folder)
 
   :custom
   (org-use-speed-commands t)
@@ -28,6 +29,31 @@
   (setq org-fold-core-style 'text-properties)
 
   :config
+  ;; Dinamically define attachments folder
+  (defvar org-attachments-folder nil
+    "Variable to store the attachments folder for Org mode files.")
+
+  (defun org-set-attachments-folder ()
+    "Set the attachments folder for the current Org mode buffer."
+    (let ((buf-dir (file-name-directory (buffer-file-name)))
+          (org-dir (expand-file-name org-directory)))
+      (setq org-attachments-folder
+            (if (string-prefix-p org-dir buf-dir)
+                (concat org-dir ".attachments/" (file-name-sans-extension (buffer-name)))
+              ".attachments"))))
+
+  (defadvice switch-to-buffer (after execute-function-on-buffer-switch activate)
+    "Advice to execute function when switching to a buffer."
+    (when (eq major-mode 'org-mode)
+      (org-set-attachments-folder)))
+
+  (defadvice find-file (after execute-function-on-file-open activate)
+    "Advice to execute function when opening a file."
+    (when (and buffer-file-name
+               (string= (file-name-extension buffer-file-name) "org"))
+      (org-set-attachments-folder)))
+
+
   ;; (setq org-cite-global-bibliography '((concat org-directory (.resources/bibliography.bib))))
   (setq org-cite-global-bibliography '("~/GoogleDrive/org/.resources/bibliography.bib"))
   (setq org-cite-processor '((t csl ~/GoogleDrive/org/.resources/ieee.csl ~/GoogleDrive/org/.resources/ieee.csl)))
@@ -198,8 +224,6 @@ point. "
   (advice-add 'org-raise-scripts :after #'my/org-raise-scripts-no-braces)
 
   (setq org-export-headline-levels 6)
-
-  (setq org-export-preserve-breaks nil) ;; preserve newline in exports
 
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.5)) ;; fix dimension of latex fragments
 
@@ -1195,14 +1219,10 @@ point. "
   (setq org-download-image-latex-width 7)
   (setq org-download-heading-lvl nil)
   (defun custom/org-download-dir ()
-    "Download files in ./attachments/$filename/"
+    "Download files `org-attachments-folder'"
     (setq-local org-download-image-dir (concat
-                                        org-directory
-    			                        ".attachments/"
-    			                        (file-name-sans-extension (buffer-name))
-    			                        "/")
-                )                                                                    ; Store downloads in ./resources/%filename/
-    )                                                                                ; relative to the .org file
+                                        org-attachments-folder
+    			         			    "/")))
   (add-hook 'org-mode-hook 'custom/org-download-dir)
   (add-hook 'org-roam-mode-hook 'custom/org-download-dir)
 
@@ -1216,6 +1236,21 @@ point. "
               link)
             (format-time-string "%Y-%m-%d %H:%M:%S")))
   (setq org-download-annotate-function 'my-org-download-annotate-default)
+  )
+
+(use-package org-plantuml-mindmap
+  :straight (:host github :repo "Stefanomarton/org-plantuml-mindmap")
+  :config
+  (setq org-plantuml-mindmap-result-type "svg")
+
+  (defun my/org-plantuml-mindmap-create ()
+    "Insert a PlantUML mind map code block in the current Org buffer."
+    (interactive)
+    (setq-local org-plantuml-mindmap-folder (concat
+    			                             org-attachments-folder
+    			                             (file-name-sans-extension (buffer-name))
+    			                             "/"))
+    (org-plantuml-mindmap-create))
   )
 
 
