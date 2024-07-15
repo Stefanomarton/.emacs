@@ -88,12 +88,24 @@
         (consult-org-heading)
       (consult-outline)))
 
+  (defun my/consult-ripgrep (prefix)
+    "Execute different commands based on the universal prefix argument PREFIX."
+    (interactive "P")
+    (if (equal prefix '(4))  ; Check if the prefix is C-u (universal prefix argument)
+        (progn
+          ;; Command to execute when C-u is used
+          (consult-git-grep))
+      (progn
+        ;; Command to execute when no prefix or other prefix is used
+        (consult-ripgrep default-directory)
+        )))
+
   :bind
   ("<escape> p" . consult-yank-from-kill-ring)
   ("C-x C-b" . consult-buffer)
   ("<escape> c l" . consult-line)
   ("<escape> R" . consult-recent-file)
-  ("<escape> g" . consult-ripgrep)
+  ("<escape> g" . my/consult-ripgrep)
   ("<escape> G" . magit)
   ("<escape> c c" . consult-complex-command)
   ("<escape> t t" . consult-todo)
