@@ -1,40 +1,38 @@
 ;;; appearance.el -*- lexical-binding: t; -*-
 ;;; Configuration for making Emacs look pretty.
 
-(use-package emacs
-  :config
-  ;; Prefere visual line
-  ;; (global-visual-line-mode t)
 
-  ;; I keep losing the curson
-  (blink-cursor-mode 0)
+;; I keep losing the curson
+(blink-cursor-mode 0)
 
-  ;; Enable `prettify-symbols' globally.
-  (global-prettify-symbols-mode t)
-  (setq prettify-symbols-unprettify-at-point 'right-edge)
+;; Enable `prettify-symbols' globally.
+(global-prettify-symbols-mode t)
+(setq prettify-symbols-unprettify-at-point 'right-edge)
 
-  ;; Display line number relative and absolute
-  (setq display-line-numbers-grow-only t)
-  (setq display-line-numbers-width-start 15)
-  (setq display-line-numbers-type 'relative)
+;; Display line number relative and absolute
+(setq display-line-numbers-grow-only t)
+(setq display-line-numbers-width-start 15)
+(setq display-line-numbers-type 'relative)
 
-  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-  (add-hook 'markdown-mode-hook 'display-line-numbers-mode)
-  (add-hook 'latex-mode-hook 'display-line-numbers-mode)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'markdown-mode-hook 'display-line-numbers-mode)
+(add-hook 'latex-mode-hook 'display-line-numbers-mode)
 
-  ;; Highlight the current line
-  (add-hook 'prog-mode-hook 'hl-line-mode)
-  (setq hl-line-sticky-flag nil)          ; Avoid seeing the bar in all windows
+;; Highlight the current line
+(add-hook 'prog-mode-hook 'hl-line-mode)
+(setq hl-line-sticky-flag nil)          ; Avoid seeing the bar in all windows
 
-  ;; Line spacing
-  (setq line-spacing 0.12))
+;; Line spacing
+(setq line-spacing 0.12)
 
 ;; I like icons
-(use-package nerd-icons)
+(use-package nerd-icons
+ :ensure t  
+  )
 
 ;; Customize the divider beetween windows
 (use-package frame
-  :straight (:type built-in)
+  :ensure nil
   :config
 
   (defun setup-margin ()
@@ -51,6 +49,7 @@
   (setq window-divider-default-places nil))
 
 (use-package ewal
+  :ensure t
   :init
   (setq ewal-use-built-in-always-p nil
         ewal-use-built-in-on-failure-p t
@@ -65,6 +64,7 @@
 
 ;; Cool aspect
 (use-package mixed-pitch
+  :ensure t
   :hook
   (text-mode . mixed-pitch-mode)
   :config
@@ -78,6 +78,7 @@
   (setq mixed-pitch-set-height nil))
 
 (use-package emacs
+  :ensure nil
   :hook
   (text-mode . variable-pitch-mode)
   :config
@@ -99,14 +100,17 @@
   )
 
 (use-package breadcrumb
+  :ensure t
   :hook
   (prog-mode . breadcrumb-local-mode)
   (conf-unix-mode . breadcrumb-local-mode))
 
 (use-package focus
+  :ensure t
   :commands (focus-mode))
 
 (use-package goggles
+  :ensure t
   :hook ((prog-mode text-mode) . goggles-mode)
   :config
   (setq-default goggles-pulse t))

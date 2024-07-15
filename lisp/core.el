@@ -75,6 +75,7 @@
 
 ;; I care about having my history in minibuffers
 (use-package savehist
+  :ensure nil
   :hook after-init
   :init
   (savehist-mode))
@@ -86,6 +87,7 @@
 
 ;; Automatically revert buffers and dired listings when something on disk
 (use-package autorevert
+  :ensure nil
   :config
   (setq global-auto-revert-non-file-buffers t
         auto-revert-verbose nil)
@@ -160,6 +162,7 @@
 (setq-default bidi-display-reordering 'left-to-right)
 
 (use-package emacs
+  :ensure nil
   :hook
   (after-make-frame-functions . my/new-frame-settings)
 
@@ -192,6 +195,7 @@
 
 ;; Fix clipboard in TTY
 (use-package xclip
+  :ensure t
   :init
   (add-hook 'after-init-hook 'xclip-mode)
   :config
@@ -201,6 +205,7 @@
 
 ;; Save some key presses
 (use-package repeat
+  :ensure nil
   :config
   (defun my/repeat-mode ()
     (let ((inhibit-message t)
@@ -230,8 +235,17 @@
 
   ;; Use which-key to show help
   (use-package which-key
-    :after which-key
+    :defer 1
+    :diminish which-key-mode
+    :custom
+    (which-key-allow-evil-operators t)
+    (which-key-show-remaining-keys t)
+    (which-key-sort-order 'which-key-prefix-then-key-order)
+    (which-key-idle-delay 0.5)
     :config
+    (which-key-mode)
+    (which-key-setup-minibuffer)
+
     (advice-add 'repeat-post-hook :after
                 (defun my/which-key-repeat ()
                   (when-let ((cmd (or this-command real-this-command))
@@ -334,6 +348,7 @@
 (define-key global-map (kbd "<escape>k") 'kill-buffer-and-window)
 
 (use-package compile
+  :ensure nil
   :defer t
   :hook (compilation-filter . ansi-color-compilation-filter)
   :config

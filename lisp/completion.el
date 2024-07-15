@@ -2,6 +2,7 @@
 
 ;; Enable vertico for the best vertical completion experience
 (use-package vertico
+  :ensure t
   :bind
   (:map vertico-map
 	    ("C-e" . embark-minimal-act)
@@ -48,6 +49,7 @@
 
 
 (use-package vertico-posframe
+  :ensure t
   :config
   ;; (setq vertico-posframe-width 120)
   (setq vertico-posframe-border-width 3)
@@ -58,6 +60,7 @@
 
 ;; orderless completion method
 (use-package orderless
+  :ensure t
   :config
   (setq orderless-affix-dispatch-alist nil)
   (setq completion-styles '(orderless basic)
@@ -66,12 +69,14 @@
 
 ;; i like some help while searching
 (use-package marginalia
+  :ensure t
   :after vertico
   :config
   (marginalia-mode))
 
 ;; musthave
 (use-package consult
+  :ensure t
   :init
   (setq consult-preview-allowed-hooks '(global-font-lock-mode-check-buffers save-place-find-file-hook display-line-numbers-mode))
 
@@ -112,10 +117,11 @@
   (advice-add #'register-preview :override #'consult-register-window))
 
 (use-package consult-dir
+  :ensure t
   :after consult)
 
 (use-package consult-todo
-  :straight (:host github :repo "liuyinz/consult-todo")
+  :ensure (:host github :repo "liuyinz/consult-todo")
   :after consult
   :config
   (setq consult-todo-narrow
@@ -125,11 +131,13 @@
           (?h . "ASK"))))
 
 (use-package cape
+  :ensure t
   :after corfu
   :config
   (setq cape-dict-file '("/usr/share/dict/italian" "/usr/share/dict/british-english")))
 
 (use-package corfu
+  :ensure t
   :bind
   (:map corfu-popupinfo-map
         ("M-d" . corfu-popupinfo-toggle))
@@ -217,6 +225,7 @@
   (global-corfu-mode))
 
 (use-package nerd-icons-corfu
+  :ensure t
   :after corfu
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))

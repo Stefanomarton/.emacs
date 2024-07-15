@@ -2,6 +2,7 @@
 
 ;; Better dired
 (use-package dirvish
+  :ensure t
   :bind
   (:map global-map
         ("C-x C-j" . dirvish-dwim))
@@ -21,6 +22,7 @@
 ;;         ))
 
 (use-package dired-narrow
+  :ensure t
   :after dirvish
   :config
   (defun dired-narrow-ex-ac ()
@@ -30,8 +32,15 @@
   (setq dired-narrow-exit-when-1-left t)
   (setq dired-narrow-exit-action 'dired-narrow-ex-ac))
 
+(use-package transient
+  :ensure t)
+
+(use-package casual-lib
+  :ensure t)
+
 (use-package casual-dired
-  :straight (:host github :repo "kickingvegas/casual-dired")
+  :after casual-lib
+  :ensure (:host github :repo "kickingvegas/casual-dired")
   :bind (:map dired-mode-map ("C-o" . 'casual-dired-tmenu)))
 
 (provide 'file-management)

@@ -1,18 +1,13 @@
 ;;; project-management.el --- Project management packages -*- lexical-binding: t; -*-
 
 (use-package projectile
+  :ensure t
   :config
   (projectile-mode)
   (setq projectile-track-known-projects-automatically nil)
   (setq projectile-completion-system 'consult)
 
-  (use-package consult-projectile
-    :bind
-    ("C-x p p" . consult-projectile)
-    ("C-x p f" . consult-projectile-find-file)
-    ("C-x p t" . projectile-run-vterm-other-window)
-    ("C-x p s" . consult-projectile-switch-project)
-    ("C-x p a" . projectile-add-known-project))
+
 
   (setq projectile-indexing-method 'alien)
 
@@ -20,7 +15,17 @@
   (add-hook 'after-init-hook 'projectile-mode)
   )
 
+(use-package consult-projectile
+ :ensure t
+    :bind
+    ("C-x p p" . consult-projectile)
+    ("C-x p f" . consult-projectile-find-file)
+    ("C-x p t" . projectile-run-vterm-other-window)
+    ("C-x p s" . consult-projectile-switch-project)
+    ("C-x p a" . projectile-add-known-project))
+
 (use-package hl-todo
+  :ensure t
   :hook
   (prog-mode . hl-todo-mode)
   (org-mode . hl-todo-mode)
@@ -35,6 +40,7 @@
 
 
 (use-package magit
+  :ensure t  
   :commands (magit-status magit-file-dispatch magit-dispatch dotfiles-magit-status magit-status-with-removed-dotfiles-args)
   :config
   (magit-auto-revert-mode)
@@ -58,10 +64,12 @@
     (call-interactively 'magit-status)))
 
 (use-package magit-delta
+  :ensure t  
   :after magit
   :hook (magit-mode . magit-delta-mode))
 
 (use-package git-gutter
+  :ensure t  
   :hook ((prog-mode text-mode-hook LaTeX-mode) . git-gutter-mode)
   :config
   (git-gutter-mode)
@@ -82,6 +90,7 @@
   (("<leader>gn" . hydra-git-gutter/body)))
 
 (use-package git-gutter-fringe
+  :ensure t  
   :config
   (fringe-mode nil)
   (setq-default left-margin-width 1)

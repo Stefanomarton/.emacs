@@ -1,7 +1,6 @@
 ;;; orgconfig.el --- org-mode configuration -*- lexical-binding: t; -*-
 
 (use-package org
-  :straight t
   :ensure nil
   :bind (:map org-mode-map
               ("C-," . embrace-commander)
@@ -10,13 +9,11 @@
               ("<escape> <" . org-demote-subtree)
               ("<escape> J" . my-fix-text-region))
   :hook
-  ;; (org-mode . org-cdlatex-mode)
   (org-mode . org-margin-mode)
   (org-mode . yas-minor-mode-on)
   (org-mode . er/add-latex-in-org-mode-expansions)
   (org-mode . my/org-header-outline-path-mode)
   (org-mode . auto-fill-mode)
-  (org-mode . org-set-attachments-folder)
 
   :custom
   (org-use-speed-commands t)
@@ -41,18 +38,6 @@
             (if (string-prefix-p org-dir buf-dir)
                 (concat org-dir ".attachments/" (file-name-sans-extension (buffer-name)))
               ".attachments"))))
-
-  (defadvice switch-to-buffer (after execute-function-on-buffer-switch activate)
-    "Advice to execute function when switching to a buffer."
-    (when (eq major-mode 'org-mode)
-      (org-set-attachments-folder)))
-
-  (defadvice find-file (after execute-function-on-file-open activate)
-    "Advice to execute function when opening a file."
-    (when (and buffer-file-name
-               (string= (file-name-extension buffer-file-name) "org"))
-      (org-set-attachments-folder)))
-
 
   ;; (setq org-cite-global-bibliography '((concat org-directory (.resources/bibliography.bib))))
   (setq org-cite-global-bibliography '("~/GoogleDrive/org/.resources/bibliography.bib"))
@@ -941,14 +926,12 @@ point. "
   )
 
 (use-package ox
-  :straight (:type built-in)
   :ensure nil
   :after org
   :commands org-export-dispatch
   :config
   (setq org-export-with-broken-links t)
   (use-package ox-latex
-    :straight nil
     :ensure nil
     :after ox
     :config
@@ -1191,17 +1174,18 @@ point. "
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
   (use-package ox-hugo
+    :ensure t
     :after ox)
   )
 
 (use-package org-table-auto-align
   :hook
   (org-mode . org-table-auto-align-mode)
-  :straight (:host github :repo "Stefanomarton/org-table-auto-align-mode"))
+  :ensure (:host github :repo "Stefanomarton/org-table-auto-align-mode"))
 
 (use-package org-src
   :after org
-  :straight (:type built-in)
+  :ensure nil
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) (python . t) (latex . t)(gnuplot . t)(plantuml . t)))
   (setq org-plantuml-exec-mode 'plantuml)
@@ -1211,22 +1195,23 @@ point. "
    org-src-preserve-indentation t))
 
 (use-package org-download
-  ;; :defer t
+  :ensure t
   :commands (org-download-clipboard)
   :init
   (setq org-download-display-inline-images 'posframe)
   (setq org-download-method 'directory)
   (setq org-download-image-latex-width 7)
   (setq org-download-heading-lvl nil)
+
+  :config
   (defun custom/org-download-dir ()
     "Download files `org-attachments-folder'"
     (setq-local org-download-image-dir (concat
-                                        org-attachments-folder
+                                        (org-set-attachments-folder)
     			         			    "/")))
-  (add-hook 'org-mode-hook 'custom/org-download-dir)
-  (add-hook 'org-roam-mode-hook 'custom/org-download-dir)
 
-  :config
+  (advice-add 'org-download-clipboard :before #'custom/org-download-dir)
+
   ;; Modify function to avoid writing useless comment
   (defun my-org-download-annotate-default (link)
     "Annotate LINK with the time of download."
@@ -1235,28 +1220,25 @@ point. "
                 "screenshot"
               link)
             (format-time-string "%Y-%m-%d %H:%M:%S")))
-  (setq org-download-annotate-function 'my-org-download-annotate-default)
-  )
+  (setq org-download-annotate-function 'my-org-download-annotate-default))
 
 (use-package org-plantuml-mindmap
-  :straight (:host github :repo "Stefanomarton/org-plantuml-mindmap")
+  :after org
+  :ensure (:host github :repo "Stefanomarton/org-plantuml-mindmap")
   :config
   (setq org-plantuml-mindmap-result-type "svg")
+  (advice-add 'org-plantuml-mindmap-create :before #'custom/plantuml-mindmap-folder)
 
-  (defun my/org-plantuml-mindmap-create ()
-    "Insert a PlantUML mind map code block in the current Org buffer."
-    (interactive)
+  (defun custom/plantuml-mindmap-folder ()
     (setq-local org-plantuml-mindmap-folder (concat
-    			                             org-attachments-folder
+    			                             (org-set-attachments-folder)
     			                             (file-name-sans-extension (buffer-name))
-    			                             "/"))
-    (org-plantuml-mindmap-create))
-  )
+    			                             "/"))))
 
 
 (use-package org-roam
-  :straight (:host github :repo "org-roam/org-roam"
-                   :files (:defaults "extensions/*"))
+  :ensure (:host github :repo "org-roam/org-roam"
+                 :files (:defaults "extensions/*"))
   ;; :defer 0.5
   :commands (org-roam-node-find org-roam-capture consult-notes)
   :init
@@ -1448,7 +1430,7 @@ point. "
 
 (use-package org-roam-ui
   :commands org-roam-ui-mode
-  :straight
+  :ensure
   (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
   :config
   (setq org-roam-ui-sync-theme t
@@ -1458,6 +1440,7 @@ point. "
 
 
 (use-package consult-org-roam
+  :ensure t
   :commands (consult-org-roam-file-find)
   :custom
   (consult-org-roam-buffer-narrow-key ?r)
@@ -1466,7 +1449,7 @@ point. "
 
 
 (use-package citar
-  ;; :defer t
+  :ensure t
   :after (org org-roam)
   :custom
   (org-cite-insert-processor 'citar)
@@ -1488,6 +1471,7 @@ point. "
   (org-mode . citar-capf-setup))
 
 (use-package citar-org-roam
+  :ensure t
   :after citar
   :custom
   (citar-org-roam-note-title-template "${author} - ${title}")
@@ -1497,13 +1481,14 @@ point. "
   (citar-org-roam-mode))
 
 (use-package citar-embark
+  :ensure t
   :after citar
   :config
   (citar-embark-mode))
 
 (use-package consult-notes
   :commands (consult-notes)
-  :straight (:type git :host github :repo "mclear-tools/consult-notes")
+  :ensure (:type git :host github :repo "mclear-tools/consult-notes")
   :custom
 
   (consult-notes-file-dir-sources
@@ -1581,7 +1566,7 @@ point. "
 
 (use-package org-appear
   :after org-mode
-  :straight (:type git :host github :repo "awth13/org-appear")
+  :ensure (:type git :host github :repo "awth13/org-appear")
   :hook (org-mode . org-appear-mode)
   :config
   (setq org-hide-emphasis-markers t)
@@ -1593,11 +1578,13 @@ point. "
   (setq org-appear-autoemphasis t))
 
 (use-package anki-editor
+  :ensure t
   :commands (anki-editor-push-notes anki-editor-insert-note)
   :config
   (setq anki-editor-create-decks t))
 
 (use-package org-anki
+  :ensure t
   :bind
   (:map org-mode-map
         ("<escape>as" . my/org-anki-sync-all)
@@ -1630,14 +1617,14 @@ point. "
   (setq org-anki-default-note-type "Personal")
 
   (use-package org-anki-fast-flashcards
-    :ensure nil
-    :straight (:host github :repo "Stefanomarton/org-anki-fast-flash-cards")
+    :ensure (:host github :repo "Stefanomarton/org-anki-fast-flash-cards")
     :bind
     (:map org-mode-map
           ("<escape>af" . oaff-create-flashcard)))
   )
 
 (use-package org-transclusion
+  :ensure t
   :after org-mode
   :bind (:map org-mode-map
               ("<leader>ota" . org-transclusion-add)
@@ -1645,6 +1632,7 @@ point. "
 
 ;; Keep a journal
 (use-package org-journal
+  :ensure t
   :defer 2
   ;; :bind (:map evil-normal-state-map
   ;;             ("<leader>oj" . org-journal-new-entry)
@@ -1657,6 +1645,7 @@ point. "
 
 ;; Cool org mode
 (use-package org-modern
+  :ensure t
   :hook
   (org-mode . org-modern-mode)
   (org-modern-mode . org-margin-mode)
@@ -1673,11 +1662,11 @@ point. "
 ;; Cool margin annotations
 (use-package org-margin
   :hook (org-mode . org-margin-mode)
-  :straight (:host github :repo "rougier/org-margin")
+  :ensure (:host github :repo "rougier/org-margin")
   :requires svg-lib)
 
 (use-package org-ipe
-  :straight (:host github :repo "Stefanomarton/org-ipe"))
+  :ensure (:host github :repo "Stefanomarton/org-ipe"))
 
 (provide 'orgconfig)
 

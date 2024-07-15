@@ -2,6 +2,7 @@
 
 ;; emacs tools
 (use-package helpful
+  :ensure t
   :bind
   ([remap describe-command] . helpful-command)
   ([remap describe-key] . helpful-key)
@@ -9,6 +10,7 @@
   ([remap describe-function] . helpful-function))
 
 (use-package fix-word
+  :ensure t  
   :bind
   (([remap upcase-word] . fix-word-upcase))
   (([remap downcase-word] . fix-word-downcase))
@@ -16,27 +18,17 @@
   )
 
 (use-package altcaps
+  :ensure t  
   :commands altcaps)
 
 ;; Startup time evaluation
 (use-package esup
+  :ensure t  
   :commands esup)
 
-;; (use-package vterm
-;;   :commands vterm
-;;   :bind (:map global-map
-;;               ("<escape>v" . vterm-other-window))
-;;   :config
-;;   ;; (set-fontset-font t 'unicode (font-spec :family "JetBrainsMono Nerd Font"))
-;;   :custom
-;;   (setq term-toggle-no-confirm-exit t)
-;;   (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *"
-;; 	    vterm-internal-use-ligatures t
-;; 	    vterm-max-scrollback 10000
-;; 	    vterm-shell "zsh"
-;; 	    ))
 
 (use-package ellama
+  :ensure t  
   :init
   (setopt ellama-language "Italian")
   (require 'llm-ollama)
@@ -49,42 +41,25 @@
 				            :chat-model "codegemma:instruct"
 				            :embedding-model "codegemma:instruct")))))
 
-;; (use-package elisa
-;;   :init
-;;   (setopt elisa-limit 5)
-;;   ;; reranker increases answer quality significantly
-;;   (setopt elisa-reranker-enabled t)
-;;   ;; prompt rewriting may increase quality of answers
-;;   ;; disable it if you want direct control over prompt
-;;   (setopt elisa-prompt-rewriting-enabled t)
-;;   (require 'llm-ollama)
-;;   ;; gemma 2 works very good in my use cases
-;;   ;; it also boasts strong multilingual capabilities
-;;   (setopt elisa-chat-provider
-;; 	      (make-llm-ollama
-;; 	       :chat-model "gemma2:9b-instruct-q6_K"
-;; 	       :embedding-model "chatfire/bge-m3:q8_0"
-;; 	       ;; set context window to 8k
-;; 	       :default-chat-non-standard-params '(("num_ctx" . 8192))))
-;;   ;; this embedding model has stong multilingual capabilities
-;;   (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "chatfire/bge-m3:q8_0"))
-;;   :config
-;;   ;; searxng works better than duckduckgo in my tests
-;;   (setopt elisa-web-search-function 'elisa-search-searxng))
 
 (use-package google-this
+  :ensure t  
   :commands google-this)
 
 (use-package csv-mode
+  :ensure t  
   :mode ("\\.csv\\'" . kbd-mode))
 
 (use-package pkg-info
+  :ensure t  
   :defer t)
 
 (use-package bug-hunter
+  :ensure t  
   :defer t)
 
 (use-package explain-pause-mode
+  :ensure (:host github :repo "lastquestion/explain-pause-mode")  
   :defer t)
 
 ;; (use-package golden-ratio
@@ -94,15 +69,18 @@
 ;;   (golden-ratio-mode))
 
 (use-package winner
+  :ensure nil
   :hook after-init
   :config
   (winner-mode))
 
 (use-package ebuku
+  :ensure t  
   :commands ebuku)
 
 
 (use-package sudo-edit
+  :ensure t  
   :commands sudo-edit)
 
 (use-package popper
@@ -119,23 +97,25 @@
           compilation-mode))
   (popper-mode +1)
   (setq popper-group-function #'popper-group-by-projectile)
-  ;; (popper-echo-mode +1)
-  ;; Match eshell, shell, term and/or vterm buffers
   )
 
 (use-package zoxide
+  :ensure t  
   :bind (:map global-map
               ("<escape>z" . zoxide-find-file)))
 
 (use-package visual-regexp
+  :ensure t  
   :bind (:map global-map
               ([remap isearch-forward] . vr/isearch-forward)
               ([remap isearch-backward] . vr/isearch-backward)
               ("C-M-s" . vr/replace)
               )
   :config
-  (setq vr/auto-show-help nil)
-  (use-package visual-regexp-steroids))
+  (setq vr/auto-show-help nil))
+
+(use-package visual-regexp-steroids
+    :ensure (:host github :repo "benma/visual-regexp-steroids.el"))
 
 (provide 'tools)
 

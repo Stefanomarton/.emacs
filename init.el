@@ -3,34 +3,48 @@
   ;; 1MB in bytes, default 4096 bytes
   (setq read-process-output-max 1048576))
 
-;; Straight is my package manager of choice
-;; Avoid check for modification at startup, save up to ~0.2 s.
-(setq straight-check-for-modifications 'live-with-find)
-(setq straight-recipes-gnu-elpa-use-mirror t)
-(setq straight-repository-branch "develop")
+(defvar elpaca-installer-version 0.7)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil :depth 1
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                 ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                 ,@(when-let ((depth (plist-get order :depth)))
+                                                     (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                 ,(plist-get order :repo) ,repo))))
+                 ((zerop (call-process "git" nil buffer t "checkout"
+                                       (or (plist-get order :ref) "--"))))
+                 (emacs (concat invocation-directory invocation-name))
+                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                 ((require 'elpaca))
+                 ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
 
-;; Boostrapping function
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-(straight-use-package 'auctex)
-(straight-use-package 'org)
-
-;; Use shallow cloning as I don't need all the package branches
-(setq straight-vc-git-default-clone-depth '(1 single-branch))
-
-;; Install use-package and ensure listed packages are installed
-(setq straight-use-package-by-default t)
+(elpaca elpaca-use-package
+  (elpaca-use-package-mode)
+  (setq elpaca-use-package-by-default t))
 
 ;; Uncommented this sometimes for debugging
 ;; (setq use-package-verbose t)
@@ -42,7 +56,7 @@
 ;; reached".
 ;; [1]: https://gitlab.com/koral/gcmh/
 
-(use-package gcmh :defer t)
+(use-package gcmh :ensure t :defer t)
 
 (add-hook 'emacs-startup-hook
 	      (lambda ()
@@ -51,14 +65,14 @@
 	        (require 'gcmh)
 	        (gcmh-mode 1)))
 
-;; Everything is what I classify as the "early-load" is in the early-init.el file.
-;; The rest of my configuration is broken into "modules", which I include into
-;; the init.el at macro expansion time.
+;; ;; Everything is what I classify as the "early-load" is in the early-init.el file.
+;; ;; The rest of my configuration is broken into "modules", which I include into
+;; ;; the init.el at macro expansion time.
 
-;; Directory containing configuration 'modules'.
+;; ;; Directory containing configuration 'modules'.
 (defvar module-directory "~/.config/emacs/lisp")
 
-;; Multiples macros to properly load submodules
+;; ;; Multiples macros to properly load submodules
 
 (defmacro insert-code-from-file (path)
   "Read the forms in the file at PATH into a progn."
@@ -91,14 +105,14 @@
   (setq comp-deferred-compilation t
         comp-deferred-compilation-black-list '("/mu4e.*\\.el$")))
 
-;; As stated https://github.com/jwiegley/use-package?tab=readme-ov-file#use-packageel-is-no-longer-needed-at-runtime
+;; ;; As stated https://github.com/jwiegley/use-package?tab=readme-ov-file#use-packageel-is-no-longer-needed-at-runtime
 (eval-when-compile
   (require 'use-package))
 (require 'bind-key)
 
 (load-module "core")
-;; (load-module "evil")
-;; (load-module "keybindings")
+;; ;; (load-module "evil")
+;; ;; (load-module "keybindings")
 (load-module "file-management")
 (load-module "completion")
 (load-module "appearance")
@@ -113,17 +127,5 @@
 (load-module "document-production")
 (load-module "orgconfig")
 (load-module "server")
-
-;; Show startup time in message
-(add-hook 'after-init-hook
-          `(lambda ()
-             (let ((elapsed
-                    (float-time
-                     (time-subtract (current-time) emacs-start-time))))
-               (message "Loading %s...done (%.2fs) [after-init]"
-                        ,load-file-name elapsed))) t)
-
-(put 'dired-find-alternate-file 'disabled nil)
-(put 'downcase-region 'disabled nil)
 
 ;;; init.el ends here

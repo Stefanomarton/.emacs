@@ -1,7 +1,7 @@
 ;;; programming.el --- Programming languages configuration  -*- lexical-binding: t; -*-
 
 (use-package treesit
-  :straight (:type built-in)
+  :ensure nil
   :preface
   (defun mp-setup-install-grammars ()
     "Install Tree-sitter grammars if they are absent."
@@ -47,7 +47,7 @@
   (mp-setup-install-grammars))
 
 (use-package macrursors
-  :straight (:host github
+  :ensure (:host github
                    :repo "corytertel/macrursors")
   :bind
   (:map global-map
@@ -74,13 +74,14 @@
 
 ;; Lua setup
 (use-package lua-mode
+  :ensure t
   :mode ("\\.lua?\\'" . lua-mode)
   )
 
 (use-package lisp-mode
+  :ensure nil
   :hook
   (after-save-hook . auto-byte-recompile)
-  :straight (:type built-in)
   :config
   (defun auto-byte-recompile ()
     "If the current buffer is in emacs-lisp-mode and there already exists an `.elc'
@@ -100,14 +101,17 @@ file corresponding to the current buffer file, then recompile the file."
                  (window-height . 0.2)))
 
   (use-package lisp-extra-font-lock
+    :ensure t
     :config
     (lisp-extra-font-lock-mode))
 
   (use-package eros
+    :ensure t
     :config
     (eros-mode))
 
   (use-package lispy
+    :ensure t
     :config
     (lispy-mode)
     ))
@@ -116,7 +120,7 @@ file corresponding to the current buffer file, then recompile the file."
 
 ;; Highlight kmonad files
 (use-package kbd-mode
-  :straight (:host github
+  :ensure (:host github
                    :repo "kmonad/kbd-mode")
   :mode ("\\.kbd\\'" . kbd-mode))
 
@@ -127,16 +131,17 @@ file corresponding to the current buffer file, then recompile the file."
   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
 (use-package yaml-mode
+  :ensure t
   :mode "\\.yml\\'"
   )
 
 (use-package yuck-mode
+  :ensure t
   :mode "\\.yuck\\'"
   )
 
 (use-package gnuplot-mode
-  :straight (:host github
-                   :repo "emacs-gnuplot/gnuplot")
+  :ensure t
   :mode "\\.plt\\'"
   )
 

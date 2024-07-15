@@ -2,6 +2,7 @@
 
 ;; Editorconfig, auto set indenting
 (use-package editorconfig
+  :ensure t
   :after find-file
   :config
   (editorconfig-mode 1)
@@ -39,7 +40,7 @@
 
 ;; Autopair parenthesis
 (use-package electric
-  :straight (:type built-in)
+  :ensure nil
   :hook
   (prog-mode . electric-layout-mode)
   (org-mode . electric-layout-mode)
@@ -50,6 +51,7 @@
   )
 
 (use-package paren
+  :ensure nil
   :hook
   (prog-mode . show-paren-mode)
   (text-mode . show-paren-mode)
@@ -69,6 +71,7 @@
 
 ;; Highlight nested parentheses
 (use-package rainbow-delimiters
+  :ensure t
   :hook
   (prog-mode . rainbow-delimiters-mode)
   :config
@@ -80,12 +83,14 @@
 
 ;; Highlight colorstring with the right color
 (use-package rainbow-mode
+  :ensure t
   :commands rainbow-mode
   :config
   (add-hook 'prog-mode #'rainbow-mode)
   )
 
 (use-package avy
+  :ensure t
   :bind
   ("<escape> f" . avy-goto-char-in-line-end)
   ("<escape> F" . avy-goto-char-in-line-beg)
@@ -154,6 +159,7 @@
 	    (alist-get ?Y avy-dispatch-alist) 'avy-action-yank-whole-line))
 
 (use-package expand-region
+  :ensure t
   :bind
   (:map global-map
         ("C-<escape>" . er/expand-region))
@@ -295,7 +301,8 @@
 
 ;; Visual indicator when recording macros
 (use-package kmacro
-  :defer
+  :ensure nil
+  :defer t
   :config
   (defsubst my/mode-line-macro-recording ()
     "Display macro being recorded."

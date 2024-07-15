@@ -2,6 +2,7 @@
 
 ;; Recent file list
 (use-package recentf
+  :ensure nil
   :config
   (add-hook 'emacs-startup-hook 'recentf-mode)
   (add-hook 'after-init-hook
@@ -11,26 +12,9 @@
   (setq recentf-auto-cleanup 'never)
   (setq recentf-max-saved-items 25))
 
-
-;; Zoxide
-;; (use-package zoxide)
-
-;;Which-key
-(use-package which-key
-  :defer 1
-  :diminish which-key-mode
-  :custom
-  (which-key-allow-evil-operators t)
-  (which-key-show-remaining-keys t)
-  (which-key-sort-order 'which-key-prefix-then-key-order)
-  (which-key-idle-delay 0.5)
-  :config
-  (which-key-mode)
-  (which-key-setup-minibuffer))
-
-
 ;; Embark
 (use-package embark
+  :ensure t
   :demand t
   :bind
   (:map global-map
@@ -93,8 +77,8 @@ targets."
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
-  :straight (:host github :repo "oantolin/embark"
-		           :files ("embark-consult.el"))
+  :ensure (:host github :repo "oantolin/embark"
+		         :files ("embark-consult.el"))
   :hook
   (embark-collect-mode . consult-preview-at-point-mode)
   :after (embark consult)
@@ -107,6 +91,7 @@ targets."
 ;; Nice auto formatting
 ;; Format-all
 (use-package format-all
+  :ensure t
   :hook
   (format-all-mode . format-all-ensure-formatter)
   (prog-mode . format-all-mode)
@@ -118,7 +103,7 @@ targets."
 
 ;;Outline
 (use-package outline
-  :straight (:type built-in)
+  :ensure nil
   :hook
   (emacs-lisp-mode . outline-minor-mode)
   (python-ts-mode . outline-minor-mode))
@@ -126,7 +111,7 @@ targets."
 
 ;;Scratchbuffer
 (use-package scratch
-  :straight t
+  :ensure t
   ;;   :preface
   ;;   (defun my/scratch-buffer-setup ()
   ;;     "Add contents to `scratch' buffer and name it accordingly.
@@ -138,10 +123,12 @@ targets."
 
 ;;Hydra
 (use-package hydra
+  :ensure t
   :defer 0.5)
 
 ;; Embrace
 (use-package embrace
+  :ensure t
   :demand t
   :bind
   (:map global-map
@@ -173,8 +160,9 @@ targets."
   )
 
 (use-package selected
+  :ensure t
   :init
-  (add-hook 'after-init-hook 'selected-global-mode)
+  (selected-global-mode)
   :bind (:map selected-keymap
               ("U" . upcase-region)
               ("D" . downcase-region)
@@ -346,29 +334,34 @@ targets."
   (selected-global-mode))
 
 (use-package tab-jump-out
+  :ensure t
   :hook after-init
   :config
   (setq yas-fallback-behavior '(apply tab-jump-out 1)))
 
 (use-package wgrep
+  :ensure t
   :commands (wgrep-change-to-wgrep-mode)
   :config (setq wgrep-auto-save-buffer t))
 
 (use-package undo-fu
+  :ensure t
   :commands (undo))
 
 ;; ;; Persistent undo
 (use-package undo-fu-session
+  :ensure t
   :config
   (setq undo-fu-session-linear t)
   (undo-fu-session-global-mode))
 
 (use-package undo-tree
+  :ensure t
   :config
   (undo-tree-mode))
 
 (use-package simple
-  :straight (:type built-in)
+  :ensure nil
   :config
   (setq save-interprogram-paste-before-kill t)
   :init
