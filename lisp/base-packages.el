@@ -77,8 +77,7 @@ targets."
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
-  :ensure (:host github :repo "oantolin/embark"
-		         :files ("embark-consult.el"))
+  :ensure (:host github :repo "oantolin/embark" :files ("embark-consult.el"))
   :hook
   (embark-collect-mode . consult-preview-at-point-mode)
   :after (embark consult)
@@ -193,6 +192,8 @@ targets."
         ("D" . downcase-region)
         ("C" . capitalize-region)
 
+        ("~" . surround-region-with-tilde)
+
         ("u" . undo-in-region)
 
         ("p" . surround-region-with-parethesis)
@@ -281,6 +282,11 @@ targets."
     "Surround the active region with hard-coded strings"
     (interactive)
     (surround-region--surround "\\\(" "\\\)"))
+
+  (defun surround-region-with-tilde ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (surround-region--surround "~" "~"))
 
   (defun surround-region-with-chem ()
     "Surround the active region with hard-coded strings"
