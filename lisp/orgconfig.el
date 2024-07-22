@@ -1371,7 +1371,7 @@ point. "
            :unnarrowed t)
           ("w" "work" plain "%?"
            :if-new
-           (file+head "work/${slug}.org" "#+TITLE: ${title}\n#+author: Stefano Marton\n#+FILETAGS: %^g :article:\n")
+           (file+head "work/${slug}.org" "#+TITLE: ${title}\n#+author: Stefano Marton\n#+FILETAGS: %^g\n")
            :immediate-finish t
            :unnarrowed t)))
 
@@ -1577,11 +1577,26 @@ point. "
   (setq org-appear-inside-latex nil)
   (setq org-appear-autoemphasis t))
 
+
 (use-package anki-editor
-  :ensure t
-  :commands (anki-editor-push-notes anki-editor-insert-note)
+  :bind
+  (:map org-mode-map
+        ("<escape>aP" . anki-editor-push-notes))
+  :ensure (:repo "anki-editor/anki-editor")
   :config
-  (setq anki-editor-create-decks t))
+  (setq anki-editor-default-note-type "Personal")
+  (setq anki-editor-note-match "+LEVEL>1&+ANKI")
+  (setq anki-editor-ignored-org-tags '("ANKI"))
+
+  ;; ;; see anki-editor.el source file
+  ;; (defun anki-editor-map-note-entries (func &optional match scope &rest skip)
+  ;;   (let ((org-use-property-inheritance t))
+  ;;     (apply #'org-map-entries
+  ;;            func
+  ;;            anki-editor-note-match
+  ;;            scope
+  ;;            skip)))
+  )
 
 (use-package org-anki
   :ensure t
@@ -1667,6 +1682,8 @@ point. "
 
 (use-package org-ipe
   :ensure (:host github :repo "Stefanomarton/org-ipe"))
+
+;; (use-package denote)
 
 (provide 'orgconfig)
 
