@@ -97,6 +97,8 @@ targets."
   (LaTeX-mode . format-all-mode)
   (markdown-mode . format-all-mode)
   :config
+  (setq-default format-all-formatters
+                '(("TOML" (taplo-fmt))))
   (setq format-all-show-errors 'error))
 
 
@@ -376,5 +378,19 @@ targets."
         (pulse-momentary-highlight-region (region-beginning) (region-end))
       (pulse-momentary-highlight-region (mark) (point))))
   (advice-add #'kill-ring-save :before #'pulse-current-region))
+
+(defun my-replace-region-with-regex-in-buffer ()
+  "Search and replace the text in the region under the cursor throughout the entire file using regex."
+  (interactive)
+  (if (use-region-p)
+      (let ((region-text (buffer-substring-no-properties (region-beginning) (region-end))))
+        (deactivate-mark)
+        (goto-char (point-min))
+        (let ((search-text (read-string (format "Search for regex (default %s): " region-text) nil nil region-text))
+              (replace-text (read-string (format "Replace '%s' with: " region-text))))
+          (query-replace-regexp search-text replace-text)))
+    (message "No region selected")))
+
+(global-set-key (kbd "C-c r") 'my-replace-region-with-regex-in-buffer)
 
 (provide 'base-packages)
