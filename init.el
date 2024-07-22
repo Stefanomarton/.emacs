@@ -128,3 +128,4 @@
 (load-module "server")
 
 ;;; init.el ends here
+(put 'eshell 'disabled nil)
