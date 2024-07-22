@@ -27,7 +27,7 @@
 
 ;; I like icons
 (use-package nerd-icons
- :ensure t  
+  :ensure t
   )
 
 ;; Customize the divider beetween windows
@@ -84,17 +84,17 @@
   :config
   (set-face-attribute 'default nil
 		              :family "JuliaMono"
-		              :height 135
+		              :height 150
 		              :weight 'normal
 		              :width 'normal)
   (set-face-attribute 'variable-pitch nil
     	              :family "JuliaMono"
-    	              :height 135
+    	              :height 150
     	              :weight 'normal
     	              :width 'normal)
   (set-face-attribute 'fixed-pitch nil
 		              :family "JuliaMono"
-		              :height 135
+		              :height 150
 		              :weight 'normal
 		              :width 'normal)
   )
