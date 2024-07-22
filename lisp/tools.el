@@ -10,7 +10,7 @@
   ([remap describe-function] . helpful-function))
 
 (use-package fix-word
-  :ensure t  
+  :ensure t
   :bind
   (([remap upcase-word] . fix-word-upcase))
   (([remap downcase-word] . fix-word-downcase))
@@ -18,17 +18,17 @@
   )
 
 (use-package altcaps
-  :ensure t  
+  :ensure t
   :commands altcaps)
 
 ;; Startup time evaluation
 (use-package esup
-  :ensure t  
+  :ensure t
   :commands esup)
 
 
 (use-package ellama
-  :ensure t  
+  :ensure t
   :init
   (setopt ellama-language "Italian")
   (require 'llm-ollama)
@@ -43,23 +43,23 @@
 
 
 (use-package google-this
-  :ensure t  
+  :ensure t
   :commands google-this)
 
 (use-package csv-mode
-  :ensure t  
+  :ensure t
   :mode ("\\.csv\\'" . kbd-mode))
 
 (use-package pkg-info
-  :ensure t  
+  :ensure t
   :defer t)
 
 (use-package bug-hunter
-  :ensure t  
+  :ensure t
   :defer t)
 
 (use-package explain-pause-mode
-  :ensure (:host github :repo "lastquestion/explain-pause-mode")  
+  :ensure (:host github :repo "lastquestion/explain-pause-mode")
   :defer t)
 
 ;; (use-package golden-ratio
@@ -75,12 +75,12 @@
   (winner-mode))
 
 (use-package ebuku
-  :ensure t  
+  :ensure t
   :commands ebuku)
 
 
 (use-package sudo-edit
-  :ensure t  
+  :ensure t
   :commands sudo-edit)
 
 (use-package popper
@@ -100,12 +100,12 @@
   )
 
 (use-package zoxide
-  :ensure t  
+  :ensure t
   :bind (:map global-map
               ("<escape>z" . zoxide-find-file)))
 
 (use-package visual-regexp
-  :ensure t  
+  :ensure t
   :bind (:map global-map
               ([remap isearch-forward] . vr/isearch-forward)
               ([remap isearch-backward] . vr/isearch-backward)
@@ -115,7 +115,7 @@
   (setq vr/auto-show-help nil))
 
 (use-package visual-regexp-steroids
-    :ensure (:host github :repo "benma/visual-regexp-steroids.el"))
+  :ensure (:host github :repo "benma/visual-regexp-steroids.el"))
 
 (provide 'tools)
 
