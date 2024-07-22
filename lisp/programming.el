@@ -48,7 +48,7 @@
 
 (use-package macrursors
   :ensure (:host github
-                   :repo "corytertel/macrursors")
+                 :repo "corytertel/macrursors")
   :bind
   (:map global-map
         ("C-c SPC" . macrursors-select)
@@ -117,23 +117,16 @@ file corresponding to the current buffer file, then recompile the file."
     ))
 
 
-
 ;; Highlight kmonad files
 (use-package kbd-mode
   :ensure (:host github
-                   :repo "kmonad/kbd-mode")
+                 :repo "kmonad/kbd-mode")
   :mode ("\\.kbd\\'" . kbd-mode))
-
 
 (use-package yasnippet-capf
   :after cape
   :config
   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
-
-(use-package yaml-mode
-  :ensure t
-  :mode "\\.yml\\'"
-  )
 
 (use-package yuck-mode
   :ensure t
@@ -144,6 +137,59 @@ file corresponding to the current buffer file, then recompile the file."
   :ensure t
   :mode "\\.plt\\'"
   )
+
+(use-package yaml-pro
+  :ensure t
+  :mode "\\.yml\\'"
+  :bind
+  (:map yaml-pro-ts-mode-map
+        ("C-M-n" . yaml-pro-ts-next-subtree)
+        ("C-M-p" . yaml-pro-ts-prev-subtree)
+        ("C-M-u" . yaml-pro-ts-up-level)
+        ("C-M-d" . yaml-pro-ts-down-level)
+        ("C-M-k" . yaml-pro-ts-kill-subtree)
+        ("C-M-<backspace>" . yaml-pro-ts-kill-subtree)
+        ("C-M-a" . yaml-pro-ts-first-sibling)
+        ("C-M-e" . yaml-pro-ts-last-sibling))
+
+  :config
+  ;; Enable auto format for yaml-pro-mode-hook
+  (add-hook 'yaml-pro-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook 'yaml-pro-format nil 'local)))
+
+  ;; Define repeat-keymap for yaml-pro-mode
+  (defvar-keymap my/yaml-pro/tree-repeat-map
+    :repeat t
+    "n" #'yaml-pro-ts-next-subtree
+    "p" #'yaml-pro-ts-prev-subtree
+    "u" #'yaml-pro-ts-up-level
+    "d" #'yaml-pro-ts-down-level
+    "m" #'yaml-pro-ts-mark-subtree
+    "k" #'yaml-pro-ts-kill-subtree
+    "a" #'yaml-pro-ts-first-sibling
+    "e" #'yaml-pro-ts-last-sibling
+    "SPC" #'my/yaml-pro/set-mark)
+
+  (defun my/yaml-pro/set-mark ()
+    (interactive)
+    (my/region/set-mark 'my/yaml-pro/set-mark))
+
+  (defun my/region/set-mark (command-name)
+    (if (eq last-command command-name)
+        (if (region-active-p)
+            (progn
+              (deactivate-mark)
+              (message "Mark deactivated"))
+          (activate-mark)
+          (message "Mark activated"))
+      (set-mark-command nil)))
+  )
+
+(use-package toml-ts-mode
+  :ensure nil
+  :hook
+  (toml-ts-mode . format-all-mode))
 
 (provide 'programming)
 
