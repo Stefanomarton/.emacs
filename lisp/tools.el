@@ -33,13 +33,8 @@
   (setopt ellama-language "Italian")
   (require 'llm-ollama)
   (setopt ellama-provider
-		  '(
-            ("llama3" . (make-llm-ollama
-				         :chat-model "llama3"
-				         :embedding-model "llama3"))
-            ("codegemma" . (make-llm-ollama
-				            :chat-model "codegemma:instruct"
-				            :embedding-model "codegemma:instruct")))))
+		  (make-llm-ollama
+		   :chat-model "llama3" :embedding-model "llama3")))
 
 
 (use-package google-this
