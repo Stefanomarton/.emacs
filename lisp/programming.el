@@ -191,6 +191,9 @@ file corresponding to the current buffer file, then recompile the file."
   :hook
   (toml-ts-mode . format-all-mode))
 
+(use-package pyvenv
+  :ensure t)
+
 (provide 'programming)
 
 ;;; programming.el ends here
