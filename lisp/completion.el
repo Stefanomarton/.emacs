@@ -107,7 +107,7 @@
   ("<escape> R" . consult-recent-file)
   ("<escape> g" . my/consult-ripgrep)
   ("<escape> G" . magit)
-  ("<escape> c c" . consult-complex-command)
+  ("<escape> c x" . consult-complex-command)
   ("<escape> t t" . consult-todo)
   ("<escape> t k" . consult-keep-lines)
   ("<escape> t f" . consult-focus-lines)

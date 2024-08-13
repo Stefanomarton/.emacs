@@ -112,6 +112,34 @@
 (use-package visual-regexp-steroids
   :ensure (:host github :repo "benma/visual-regexp-steroids.el"))
 
+(use-package calc
+  :ensure nil
+  :bind
+  ("<escape> c c" . calc)
+  :config
+
+
+  (defun eval-math-expr (beg end)
+    (interactive "r")
+    (require 'calc)
+    (let ((result
+           (calc-eval
+            (buffer-substring beg end))))
+      (save-excursion
+        (goto-char end) (insert " = " result))))
+  )
+
+(use-package casual-calc
+  :ensure t
+  :bind (:map
+         calc-mode-map
+         ("C-o" . casual-calc-tmenu)
+         :map
+         calc-alg-map
+         ("C-o" . casual-calc-tmenu))
+  :after (calc))
+
+
 (provide 'tools)
 
 ;;; tools.el ends here
