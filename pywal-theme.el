@@ -4,7 +4,9 @@
 
 (deftheme pywal "pywal theme")
 
-(let ((class '((class color) (min-colors 89)))
+;; (setq ewal-json-file "~/colors.json")
+
+(let (
       (bg (ewal-load-color 'background 0))
       (bg1 (ewal-load-color 'background -5))
       (bg2 (ewal-load-color 'background 2 3))
@@ -41,20 +43,21 @@
   (custom-theme-set-faces
    'pywal
    ;; Set basic faces
-   `(default ((t (:family "JuliaMono" :background "black" :foreground ,fg))))
-   ;; `(default ((t (:family "JuliaMono" :background ,bg :foreground ,fg))))
+   ;; `(default ((t (:family "JuliaMono" :background "black" :foreground ,fg))))
+   `(default ((t (:family "JuliaMono" :background ,bg :foreground ,fg))))
    `(fringe ((t (:foreground ,fg :background ,bg))))
 
    `(hl-line ((t (:background ,hl))))
    `(region ((t (:foreground ,violet :background ,hl-alt))))
 
    ;; `(mode-line ((t (:height 140 :foreground ,fg :background "black" :box (:line-width 5 :color "black")))))
-   `(mode-line ((t (:height 1 :foreground ,fg :background "black"))))
-   `(mode-line-inactive ((t (:height 1 :foreground ,comment :background "black"))))
+   `(mode-line ((t (:height 1 :foreground ,fg :background ,bg))))
+   `(mode-line-inactive ((t (:height 1 :foreground ,comment :background ,bg))))
    ;; `(mode-line-inactive ((t (:height 140 :foreground ,comment :background ,bg :box (:line-width 20 :color ,bg)))))
    ;; '(mode-line-buffer-id ((t (:box (:line-width 1 :color ,fg) :weight bold))))
 
-   `(header-line ((t (:height 160 :foreground ,fg :background ,hl :box (:line-width 20 :color ,bg)))))
+   ;; `(header-line ((t (:height 160 :foreground ,fg :background ,hl :box (:line-width 20 :color ,bg)))))
+   `(header-line ((t (:height 160 :foreground ,fg :background ,hl))))
 
    `(font-lock-comment-face ((t (:family "JuliaMono Light" :foreground ,comment :slant oblique))))
    `(font-lock-builtin-face ((t (:foreground ,violet))))
