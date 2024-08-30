@@ -19,6 +19,13 @@
   :ensure t
   :after eglot)
 
+(use-package eglot-booster
+  :ensure (:host github :repo "jdtsmith/eglot-booster")
+  :after eglot
+  :config
+  (eglot-booster-mode)
+  )
+
 (provide 'lsp)
 
 ;;; lsp.el ends here
