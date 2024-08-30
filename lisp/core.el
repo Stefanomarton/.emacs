@@ -356,4 +356,10 @@
         compilation-ask-about-save nil
         compilation-scroll-output 'first-error))
 
+(add-to-list 'exec-path "~/.local/bin")
+
+;; Isearch
+
+(setq isearch-allow-motion t)
+
 (provide 'core)
