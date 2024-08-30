@@ -49,7 +49,7 @@
   (setq window-divider-default-places nil))
 
 (use-package ewal
-  :ensure t
+  :ensure (:host github :repo "cyruseuros/ewal")
   :init
   (setq ewal-use-built-in-always-p nil
         ewal-use-built-in-on-failure-p t
