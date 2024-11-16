@@ -70,21 +70,32 @@
   :ensure t
   :commands sudo-edit)
 
-(use-package popper
-  :ensure t ; or :straight t
-  :bind (("<escape>,"   . popper-toggle)
-         ("<escape>."   . popper-cycle)
-         ("C-M-`" . popper-toggle-type))
-  :init
-  (setq popper-reference-buffers
-        '("\\*Messages\\*"
-          "Output\\*$"
-          "\\*Async Shell Command\\*"
-          help-mode
-          compilation-mode))
-  (popper-mode +1)
-  (setq popper-group-function #'popper-group-by-projectile)
-  )
+(use-package term-toggle
+  :ensure (:host github :repo "amno1/emacs-term-toggle")
+  :bind (("<escape>." . term-toggle-eshell)))
+
+(use-package eshell
+  :ensure nil
+  :config
+  (add-hook 'eshell-mode-hook (lambda () (setenv "TERM" "xterm-256color")))
+  (setq  eshell-scroll-to-bottom-on-input 'all
+         eshell-error-if-no-glob t
+         eshell-hist-ignoredups t
+         eshell-save-history-on-exit t
+         eshell-prefer-lisp-functions nil
+         eshell-destroy-buffer-when-process-dies t)
+  (setq eshell-prompt-function
+        (lambda ()
+          (concat
+           (propertize "[" 'face `(:foreground "#2aa198"))
+           (propertize (user-login-name) 'face `(:foreground "#dc322f"))
+           (propertize "@" 'face `(:foreground "#2aa198"))
+           (propertize (system-name) 'face `(:foreground "#268bd2"))
+           (propertize "]──[" 'face `(:foreground "#2aa198"))
+           (propertize (concat (eshell/pwd)) 'face `(:foreground "#93a1a1"))
+           (propertize "]\n" 'face `(:foreground "#2aa198"))
+           (propertize (if (= (user-uid) 0) " # " " λ ") 'face `(:foreground "#2aa198"))
+           ))))
 
 (use-package zoxide
   :ensure t
