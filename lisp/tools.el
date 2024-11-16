@@ -9,14 +9,6 @@
   ([remap describe-variable] . helpful-variable)
   ([remap describe-function] . helpful-function))
 
-(use-package fix-word
-  :ensure t
-  :bind
-  (([remap upcase-word] . fix-word-upcase))
-  (([remap downcase-word] . fix-word-downcase))
-  (([remap capitalize-word] . fix-word-capitalize))
-  )
-
 (use-package altcaps
   :ensure t
   :commands altcaps)
