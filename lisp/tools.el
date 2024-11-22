@@ -21,13 +21,18 @@
 
 (use-package ellama
   :ensure t
+  :bind (("<escape>ec" . ellama-chat)
+         ("<escape>eiw" . ellama-improve-wording)
+         ("<escape>eig" . ellama-improve-grammar)
+         ("<escape>eic" . ellama-improve-conciseness)
+         ("<escape>ea" . ellama-ask-about)
+         )
   :init
   (setopt ellama-language "Italian")
   (require 'llm-ollama)
   (setopt ellama-provider
 		  (make-llm-ollama
-		   :chat-model "llama3" :embedding-model "llama3")))
-
+		   :chat-model "llama3.2-vision" :embedding-model "llama3.2-vision")))
 
 (use-package google-this
   :ensure t
