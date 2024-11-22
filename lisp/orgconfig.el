@@ -132,21 +132,11 @@ point. "
 
   (setq org-directory "~/GoogleDrive/org/")
 
+  (setq denote-directory (concat drive-folder "denote"))
   (setq org-link-abbrev-alist
-        `(("image-dir" . ,(format "file:%s%s" org-directory ".attachments/"))))
+        `(("image-dir" . ,(format "file:%s%s" denote-directory "/.attachments/"))))
 
   (bind-keys :map org-mode-map ("<S-return>" . sbr-org-insert-dwim))
-
-  (defun hide-subtree-and-parent ()
-    (interactive)
-    (outline-up-heading 1)
-    (hide-subtree))
-
-  ;; (if (featurep 'evil)
-  ;;     (progn
-  ;;       (evil-define-key 'normal org-mode-map (kbd "hs") 'hide-subtree-and-parent)
-  ;;       (evil-define-key 'insert org-mode-map (kbd "C-a a") 'hide-subtree-and-parent)
-  ;;       ))
 
   (setq org-blank-before-new-entry
         '((heading . nil)
@@ -195,10 +185,6 @@ point. "
     (org-timestamp '(16) nil)
     )
 
-  ;; (if (featurep 'evil)
-  ;;     (progn
-  ;;       (evil-define-key 'normal org-mode-map (kbd "gt") 'my/org-time-stamp)))
-
   ;; Make org use `display-buffer' like every other Emacs citizen.
   (advice-add #'org-switch-to-buffer-other-window :override #'switch-to-buffer-other-window)
 
@@ -240,7 +226,7 @@ point. "
     "Copy new PDF files from /tmp/pdf to home/stefanom/pdf."
     (interactive)
     (let ((source-directory "/tmp/pdf/")
-          (destination-directory "~/GoogleDrive/org/pdf/"))
+          (destination-directory "~/GoogleDrive/denote/.output/"))
       (dolist (file (directory-files source-directory t "\\.pdf$"))
         (let ((filename (file-name-nondirectory file))
               (destination-file (concat destination-directory (file-name-nondirectory file))))
@@ -254,12 +240,6 @@ point. "
 
   (add-hook 'org-mode-hook
             (lambda () (add-hook 'after-save-hook 'export-org-latex-and-copy-pdf nil 'local)))
-
-  ;; (if (featurep 'evil)
-  ;;     (progn
-  ;;       (evil-define-key 'normal org-mode-map (kbd "<leader>ee") 'export-org-latex-and-copy-pdf)
-  ;;       ))
-
 
   (setq org-latex-default-class "report")
   (setq org-startup-folded t)
@@ -1241,218 +1221,6 @@ point. "
     			                             "/"))))
 
 
-(use-package org-roam
-  :ensure (:host github :repo "org-roam/org-roam"
-                 :files (:defaults "extensions/*"))
-  ;; :defer 0.5
-  :commands (org-roam-node-find org-roam-capture consult-notes)
-  :init
-  (setq org-roam-directory (file-truename "~/GoogleDrive/org"))
-  :custom
-  (org-roam-complete-everywhere t)
-  :bind
-  ("C-C of" . consult-org-roam-file-find)
-  ("C-C og" . consult-notes-search-in-all-notes)
-  ("C-C oo" . consult-notes)
-  ("C-C on" . consult-notes-org-roam-find-node)
-  ("C-C ok" . org-roam-capture)
-  ("C-C oc" . my/org-roam-node-find-courses)
-
-  (:map org-mode-map
-        ("<leader>ob" . org-roam-buffer-toggle)
-        ("C-c o i" . org-roam-node-insert)
-        )
-
-  :config
-  (setq org-roam-mode-sections
-        '((org-roam-backlinks-section :unique t)
-          org-roam-reflinks-section))
-  ;; configuration for link buffer
-  (add-to-list 'display-buffer-alist
-               '("\\*org-roam\\*"
-                 (display-buffer-in-direction)
-                 (direction . right)
-                 (window-width . 0.33)
-                 (window-height . fit-window-to-buffer))
-               '("\w+\.org" (display-buffer-full-frame)))
-
-  ;; If you're using a vertical completion framework, you might want a more informative completion interface
-  (cl-defmethod org-roam-node-type ((node org-roam-node))
-    "Return the TYPE of NODE."
-    (condition-case nil
-        (file-name-nondirectory
-         (directory-file-name
-          (file-name-directory
-           (file-relative-name (org-roam-node-file node) org-roam-directory))))
-      (error "")))
-
-  (setq org-roam-node-display-template
-        (concat "${type:15} ${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-
-  (org-roam-db-autosync-mode)
-
-  ;; If using org-roam-protocol
-  (require 'org-roam-protocol)
-
-
-  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; ;; update modified time stamp ;;
-  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;; (defun disable-undo-one-off ()
-  ;;   (interactive)
-  ;;   (let ((undo buffer-undo-list))        ; save the undo list
-  ;;     (buffer-disable-undo)               ; disable undo
-  ;;     (time-stamp)                     ; do your thing
-  ;;     (buffer-enable-undo)                ; re-enable undo
-  ;;     (setq buffer-undo-list undo)))      ; restore the undo list
-
-  ;; (add-hook 'org-mode-hook (lambda ()
-  ;;                            (setq-local time-stamp-active t
-  ;;                                        time-stamp-line-limit 18
-  ;;                                        time-stamp-start "^#\\+LAST_MODIFIED: [ \t]*"
-  ;;                                        time-stamp-end "$"
-  ;;                                        time-stamp-format "\[%Y-%m-%d %a %H:%M:%S\]")
-  ;;                            (add-hook 'before-save-hook 'disable-undo-one-off)))
-
-  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; customise the slug function
-  (defun hiddyn/select-tag ()
-    (setq hiddyn/tag-list (sort (completing-read-multiple "Select a tag: " (org-roam-tag-completions)) #'string<))
-    (mapconcat 'identity hiddyn/tag-list "_"))
-
-  (defun hiddyn/filetags ()
-    (concat ":" (mapconcat 'identity hiddyn/tag-list ":") ":"))
-
-  (setq org-roam-capture-templates
-        '(("u" "uni" plain
-           "%?"
-           :if-new
-           (file+head "uni/%<%Y%m%d>--${slug}__%(hiddyn/select-tag).org"
-                      "#+title: ${title}\n#+author: Stefano Marton\n#+filetags: %(hiddyn/filetags)\n#+CREATED: %U\n#+LAST_MODIFIED: %U")
-           :immediate-finish t
-           :unnarrowed t)
-          ("c" "course" plain
-           "%?"
-           :if-new (file+head "uni/courses/%<%Y%m%d>--${slug}__%(hiddyn/select-tag).org"
-                              "#+title: ${title}\n#+author: Stefano Marton\n#+filetags: %(hiddyn/filetags)\n#+CREATED: %U\n#+LAST_MODIFIED: %U")
-           :immediate-finish t
-           :unnarrowed t)
-          ("a" "anki" plain
-           "%?"
-           :if-new (file+head "anki/%<%Y%m%d>--${slug}__%(hiddyn/select-tag).org"
-                              "#+title: ${title}\n#+author: Stefano Marton\n#+filetags: %(hiddyn/filetags)")
-           :immediate-finish t
-           :unnarrowed t)
-          ("p" "personal" plain "%?"
-           :if-new
-           (file+head "personal/%<%Y%m%d>--${slug}__%(hiddyn/select-tag).org"
-                      "#+title: ${title}\n#+author: Stefano Marton\n#+filetags: %(hiddyn/filetags)\n#+CREATED: %U\n#+LAST_MODIFIED: %U")
-           :immediate-finish t
-           :unnarrowed t)
-          ("o" "progenitor" plain "%?"
-           :if-new
-           (file+head "progenitor/%<%Y%m%d>--${slug}__%(hiddyn/select-tag).org"
-                      "#+title: ${title}\n#+author: Stefano Marton\n#+filetags: %(hiddyn/filetags)\n#+CREATED: %U\n#+LAST_MODIFIED: %U")
-           :immediate-finish t
-           :unnarrowed t)
-          ("b" "blog" plain "%?"
-           :if-new
-           (file+head "blog/${title}.org" "#+title: ${title}\n#+author: Stefano Marton\n")
-           :immediate-finish t
-           :unnarrowed t)
-          ("l" "literature note" plain
-           "%?"
-           :target
-           (file+head
-            "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/%<%Y%m%d>--${citar-citekey}__%(hiddyn/select-tag).org"
-            "#+title: ${citar-citekey}\n#+CREATED: %U\n#+LAST_MODIFIED: %U\n\n")
-           :unnarrowed t)
-          ("m" "meta" plain "%?"
-           :if-new
-           (file+head "meta/%<%Y%m%d>--${slug}__%(hiddyn/select-tag).org"
-                      "#+title: ${title}\n#+author: Stefano Marton\n#+filetags: %(hiddyn/filetags)\n#+CREATED: %U\n#+LAST_MODIFIED: %U")
-           :immediate-finish t
-           :unnarrowed t)
-          ("w" "work" plain "%?"
-           :if-new
-           (file+head "work/${slug}.org" "#+TITLE: ${title}\n#+author: Stefano Marton\n#+FILETAGS: %^g\n")
-           :immediate-finish t
-           :unnarrowed t)))
-
-  ;; convert title to slug
-  (cl-defmethod org-roam-node-slug ((node org-roam-node))
-    "Return the slug of NODE."
-    (let ((title (org-roam-node-title node))
-          (slug-trim-chars '(;; Combining Diacritical Marks https://www.unicode.org/charts/PDF/U0300.pdf
-                             768 ; U+0300 COMBINING GRAVE ACCENT
-                             769 ; U+0301 COMBINING ACUTE ACCENT
-                             770 ; U+0302 COMBINING CIRCUMFLEX ACCENT
-                             771 ; U+0303 COMBINING TILDE
-                             772 ; U+0304 COMBINING MACRON
-                             774 ; U+0306 COMBINING BREVE
-                             775 ; U+0307 COMBINING DOT ABOVE
-                             776 ; U+0308 COMBINING DIAERESIS
-                             777 ; U+0309 COMBINING HOOK ABOVE
-                             778 ; U+030A COMBINING RING ABOVE
-                             780 ; U+030C COMBINING CARON
-                             795 ; U+031B COMBINING HORN
-                             803 ; U+0323 COMBINING DOT BELOW
-                             804 ; U+0324 COMBINING DIAERESIS BELOW
-                             805 ; U+0325 COMBINING RING BELOW
-                             807 ; U+0327 COMBINING CEDILLA
-                             813 ; U+032D COMBINING CIRCUMFLEX ACCENT BELOW
-                             814 ; U+032E COMBINING BREVE BELOW
-                             816 ; U+0330 COMBINING TILDE BELOW
-                             817 ; U+0331 COMBINING MACRON BELOW
-                             )))
-      (cl-flet* ((nonspacing-mark-p (char)
-                   (memq char slug-trim-chars))
-                 (strip-nonspacing-marks (s)
-                   (string-glyph-decompose
-                    (apply #'string (seq-remove #'nonspacing-mark-p
-                                                (string-glyph-decompose s)))))
-                 (cl-replace (title pair)
-                   (replace-regexp-in-string (car pair) (cdr pair) title)))
-        (let* ((pairs `(
-                        ("[^[:alnum:][:digit:][:blank:]]" . "") ;; convert anything not alphanumeric
-                        (" " . "-")                   ;; remove sequential underscores
-                        ("--*" . "-")                   ;; remove sequential underscores
-                        ("^-" . "")                     ;; remove starting underscore
-                        ("-$" . "")))                   ;; remove ending underscore
-               (slug (-reduce-from #'cl-replace (strip-nonspacing-marks title) pairs)))
-          (downcase slug)))))
-
-  (defun my/org-roam-node-find-courses ()
-    "Show list of `org-roam-node-find' only under dirA."
-    (interactive)
-    (org-roam-node-find nil nil
-                        (lambda (node)
-                          (file-in-directory-p
-                           (org-roam-node-file node)
-                           (expand-file-name "uni/courses" org-roam-directory)))))
-  )
-
-(use-package org-roam-ui
-  :commands org-roam-ui-mode
-  :ensure
-  (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t))
-
-
-(use-package consult-org-roam
-  :ensure t
-  :commands (consult-org-roam-file-find)
-  :custom
-  (consult-org-roam-buffer-narrow-key ?r)
-  :config
-  (consult-org-roam-mode))
-
-
 (use-package citar
   :ensure t
   :after (org org-roam)
@@ -1475,16 +1243,6 @@ point. "
   (LaTeX-mode . citar-capf-setup)
   (org-mode . citar-capf-setup))
 
-(use-package citar-org-roam
-  :ensure t
-  :after citar
-  :custom
-  (citar-org-roam-note-title-template "${author} - ${title}")
-  (citar-org-roam-capture-template-key "l")
-  (citar-org-roam-subdir "uni/papers")
-  :config
-  (citar-org-roam-mode))
-
 (use-package citar-embark
   :ensure t
   :after citar
@@ -1497,15 +1255,12 @@ point. "
   :custom
 
   (consult-notes-file-dir-sources
-   '(("course"             ?c "~/GoogleDrive/org/uni/courses/")
+   '(("course"   ?c "~/GoogleDrive/org/uni/courses/")
      ("obsidian" ?o "~/GoogleDrive/Obsidian/University/")
      ("obsidian" ?o "~/GoogleDrive/Obsidian/Personal/")
      ("obsidian" ?o "~/GoogleDrive/Obsidian/")
      ("obsidian" ?o "~/GoogleDrive/Obsidian/Work/")
      ))
-
-  (consult-notes-org-roam-template
-   (concat "${type:20} ${title:70}" (propertize "${fmtime:20}" 'face 'font-lock-comment-face)(propertize "${tags:20}" 'face 'org-tag) "${blinks:3}"))
 
   :commands (consult-notes
              consult-notes-search-in-all-notes
@@ -1527,45 +1282,44 @@ point. "
   ;; make embark-export use dired for notes
   (setf (alist-get consult-notes-category embark-exporters-alist) #'embark-export-dired)
 
-  (consult-notes-org-roam-mode)
-
   ;; Search org-roam notes for citations (depends on citar)
-  (defun consult-notes-org-roam-cited (reference)
-    "Return a list of notes that cite the REFERENCE."
-    (interactive (list (citar-select-ref
-                        :rebuild-cache current-prefix-arg
-                        :filter (citar-has-note))))
-    (let* ((ids
-            (org-roam-db-query [:select * :from citations
-                                        :where (= cite-key $s1)]
-                               (car reference)))
-           (anodes
-            (mapcar (lambda (id)
-                      (org-roam-node-from-id (car id)))
-                    ids))
-           (template
-            (org-roam-node--process-display-format org-roam-node-display-template))
-           (bnodes
-            (mapcar (lambda (node)
-                      (org-roam-node-read--to-candidate node template)) anodes))
-           (node (completing-read
-                  "Node: "
-                  (lambda (string pred action)
-                    (if (eq action 'metadata)
-                        `(metadata
-                          ;; get title using annotation function
-                          (annotation-function
-                           . ,(lambda (title)
-                                (funcall org-roam-node-annotation-function
-                                         (get-text-property 0 'node title))))
-                          (category . org-roam-node))
-                      (complete-with-action action bnodes string pred)))))
-           (fnode
-            (cdr (assoc node bnodes))))
-      (if ids
-          ;; Open node in other window
-          (org-roam-node-open fnode)
-        (message "No notes cite this reference."))))
+  ;; (defun consult-notes-org-roam-cited (reference)
+  ;;   "Return a list of notes that cite the REFERENCE."
+  ;;   (interactive (list (citar-select-ref
+  ;;                       :rebuild-cache current-prefix-arg
+  ;;                       :filter (citar-has-note))))
+  ;;   (let* ((ids
+  ;;           (org-roam-db-query [:select * :from citations
+  ;;                                       :where (= cite-key $s1)]
+  ;;                              (car reference)))
+  ;;          (anodes
+  ;;           (mapcar (lambda (id)
+  ;;                     (org-roam-node-from-id (car id)))
+  ;;                   ids))
+  ;;          (template
+  ;;           (org-roam-node--process-display-format org-roam-node-display-template))
+  ;;          (bnodes
+  ;;           (mapcar (lambda (node)
+  ;;                     (org-roam-node-read--to-candidate node template)) anodes))
+  ;;          (node (completing-read
+  ;;                 "Node: "
+  ;;                 (lambda (string pred action)
+  ;;                   (if (eq action 'metadata)
+  ;;                       `(metadata
+  ;;                         ;; get title using annotation function
+  ;;                         (annotation-function
+  ;;                          . ,(lambda (title)
+  ;;                               (funcall org-roam-node-annotation-function
+  ;;                                        (get-text-property 0 'node title))))
+  ;;                         (category . org-roam-node))
+  ;;                     (complete-with-action action bnodes string pred)))))
+  ;;          (fnode
+  ;;           (cdr (assoc node bnodes))))
+  ;;     (if ids
+  ;;         ;; Open node in other window
+  ;;         (org-roam-node-open fnode)
+  ;;       (message "No notes cite this reference."))))
+  ;;
   )
 
 
@@ -1650,19 +1404,6 @@ point. "
               ("<leader>ota" . org-transclusion-add)
               ("<leader>otm" . org-transclusion-mode)))
 
-;; Keep a journal
-(use-package org-journal
-  :ensure t
-  :defer 2
-  ;; :bind (:map evil-normal-state-map
-  ;;             ("<leader>oj" . org-journal-new-entry)
-  ;;             ("<leader>oJ" . org-journal-open-current-journal-file))
-  :config
-  (setq org-journal-dir "~/GoogleDrive/org/journal/"
-        org-journal-date-format "%A, %d %B %Y"
-        org-journal-file-type 'weekly))
-
-
 ;; Cool org mode
 (use-package org-modern
   :ensure t
@@ -1687,8 +1428,6 @@ point. "
 
 (use-package org-ipe
   :ensure (:host github :repo "Stefanomarton/org-ipe"))
-
-;; (use-package denote)
 
 (provide 'orgconfig)
 
