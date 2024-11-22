@@ -45,13 +45,20 @@
   (consult-denote-mode))
 
 (use-package citar-denote
-  :requires (citar denote)
   :ensure t
   :bind
-  ("<escape>dp" . citar-create-note)
-  :custom
-  (citar-open-always-create-notes t)
-  (citar-denote-subdir "uni/papers")
-  )
+  (:map global-map
+        ("<escape>dpc" . citar-create-note)
+        ("<escape>dpo" . citar-denote-open-note)
+        ("<escape>dpn" . citar-denote-nocite))
+  (:map org-mode-map
+        ("<escape>dpk" . citar-denote-add-citekey)
+        ("<escape>dpK" . citar-denote-remove-citekey)
+        ("<escape>dpd" . citar-denote-dwim)
+        ("<escape>dpe" . citar-denote-open-reference-entry))
+  :config
+  (setq citar-open-always-create-notes t)
+  (setq citar-denote-subdir "/uni/papers")
+  (citar-denote-mode))
 
 (provide 'denote)

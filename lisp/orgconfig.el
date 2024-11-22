@@ -1223,15 +1223,19 @@ point. "
 
 (use-package citar
   :ensure t
-  :after (org org-roam)
+  :after (citar-denote)
   :custom
   (org-cite-insert-processor 'citar)
   (org-cite-follow-processor 'citar)
   (org-cite-activate-processor 'citar)
   (citar-bibliography org-cite-global-bibliography)
+
+  (citar-file-note-extensions)
   :config
 
-  (setq citar-bibliography "~/GoogleDrive/org/.resources/bibliography.bib")
+  (setq citar-notes-paths (list (expand-file-name "uni/papers" denote-directory)))
+
+  (setq citar-bibliography (expand-file-name ".resources/bibliography.bib" denote-directory))
 
   (defun citar-file-open (file)
 	"Open FILE. Overwritten by hgi, to open pdf files from citar in external PDF viewer and not in internal one."
