@@ -9,6 +9,12 @@
   ("<escape>dj" . denote-journal-extras-new-or-existing-entry)
   ("<escape>dr" . denote-region)
   ("<escape>dt" . denote-type)
+  ("<escape>dl" . denote-link)
+  ("<escape>dL" . denote-find-link)
+  ("<escape>db" . denote-backlinks)
+  ("<escape>dB" . denote-find-backlink)
+  ("<escape>dr" . denote-rename-file)
+  ("<escape>dR" . denote-rename-file-using-front-matter)
 
   :hook
   (dired-mode . denote-dired-mode)
