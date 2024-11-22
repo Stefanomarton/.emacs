@@ -109,6 +109,8 @@
 (eval-when-compile
   (require 'use-package))
 
+(defvar drive-folder "~/GoogleDrive/")
+
 (load-module "core")
 ;; ;; (load-module "evil")
 ;; ;; (load-module "keybindings")
@@ -125,6 +127,7 @@
 (load-module "lsp")
 (load-module "document-production")
 (load-module "orgconfig")
+(load-module "denote")
 (load-module "server")
 
 ;;; init.el ends here
