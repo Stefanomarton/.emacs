@@ -49,12 +49,6 @@
   :ensure (:host github :repo "lastquestion/explain-pause-mode")
   :defer t)
 
-;; (use-package golden-ratio
-;;   :hook after-init
-;;   :config
-;;   (setq golden-ratio-exclude-modes '(emacs-lisp-compilation-mode)) ; Exclude modes from `golder-ratio-mode'
-;;   (golden-ratio-mode))
-
 (use-package winner
   :ensure nil
   :hook after-init
@@ -64,7 +58,6 @@
 (use-package ebuku
   :ensure t
   :commands ebuku)
-
 
 (use-package sudo-edit
   :ensure t
@@ -105,8 +98,8 @@
 (use-package visual-regexp
   :ensure t
   :bind (:map global-map
-              ([remap isearch-forward] . vr/isearch-forward)
-              ([remap isearch-backward] . vr/isearch-backward)
+              ;; ([remap isearch-forward] . vr/isearch-forward)
+              ;; ([remap isearch-backward] . vr/isearch-backward)
               ("C-M-s" . vr/replace)
               )
   :config
