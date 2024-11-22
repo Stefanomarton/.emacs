@@ -35,13 +35,9 @@
 (use-package transient
   :ensure t)
 
-(use-package casual-lib
-  :ensure t)
-
-(use-package casual-dired
-  :after casual-lib
-  :ensure (:host github :repo "kickingvegas/casual-dired")
-  :bind (:map dired-mode-map ("C-o" . 'casual-dired-tmenu)))
+;(use-package casual-dired
+;  :ensure (:host github :repo "kickingvegas/casual-dired")
+;  :bind (:map dired-mode-map ("C-o" . 'casual-dired-tmenu)))
 
 (provide 'file-management)
 ;;; file-management.el ends here

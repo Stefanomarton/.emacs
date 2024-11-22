@@ -132,7 +132,7 @@
         (goto-char end) (insert " = " result))))
   )
 
-(use-package casual-calc
+(use-package casual
   :ensure t
   :bind (:map
          calc-mode-map
