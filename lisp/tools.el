@@ -140,6 +140,14 @@
          ("C-o" . casual-calc-tmenu))
   :after (calc))
 
+(use-package diff
+  :ensure nil
+  :bind
+  ("C-c u d" . diff-current-buffer-with-file)
+  :config
+  (defun diff-current-buffer-with-file ()
+    (interactive)
+    (diff-buffer-with-file (current-buffer))))
 
 (provide 'tools)
 
