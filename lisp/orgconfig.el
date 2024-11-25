@@ -21,6 +21,8 @@
   (org-list-allow-alphabetical t)
   (org-image-actual-width 500)
   (org-hide-leading-stars nil)
+  (org-special-ctrl-a/e t)
+  (org-catch-invisible-edits 'show)
 
   :init
   (setq org-fold-core-style 'text-properties)
@@ -921,6 +923,10 @@ point. "
     :after ox
     :config
 
+    ;; setup directory to latex `preview'
+    (setq org-preview-latex-image-directory ".ltximg/")
+    (setq org-latex-preview-ltxpng-directory ".ltximg/")
+
     (setq org-latex-pdf-process
           '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
             "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
@@ -1328,17 +1334,14 @@ point. "
 
 
 (use-package org-appear
-  :after org-mode
   :ensure (:type git :host github :repo "awth13/org-appear")
   :hook (org-mode . org-appear-mode)
-  :config
-  (setq org-hide-emphasis-markers t)
-  (setq org-appear-elements '(bold italic underline verbatim code))
+  :init
   (setq org-appear-autolinks t)
   (setq org-appear-autokeywords t)
-  (setq org-appear-autoentities t)
-  (setq org-appear-inside-latex nil)
-  (setq org-appear-autoemphasis t))
+  (setq org-appear-autoemphasis t)
+  (setq org-appear-trigger 'always)
+  )
 
 
 (use-package anki-editor
