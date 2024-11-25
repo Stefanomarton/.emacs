@@ -149,6 +149,7 @@
   (setq cape-dict-file '("/usr/share/dict/italian" "/usr/share/dict/british-english")))
 
 (use-package corfu
+  :defer 2
   :ensure t
   :bind
   (:map corfu-popupinfo-map
