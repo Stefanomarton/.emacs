@@ -1,5 +1,3 @@
-;;; pywal-theme.el --- My personal pywal theme
-
 (require 'ewal)
 
 (deftheme pywal "pywal theme")
@@ -133,7 +131,7 @@
    `(rainbow-delimiters-mismatched-face ((t (:foreground ,violet-alt ))))
    `(rainbow-delimiters-unmatched-face ((t (:foreground ,cyan-alt ))))
 
-   `(org-document-title ((t (:foreground ,yellow :weight ultra-bold))))
+   `(org-document-title ((t (:foreground ,yellow :weight ultra-bold :height 160))))
    `(org-level-1 ((t (:foreground ,blue :weight ultra-bold :height 160))))
    `(org-level-2 ((t (:foreground ,green :weight ultra-bold :height 160))))
    `(org-level-3 ((t (:foreground ,green :weight ultra-bold :height 150))))
