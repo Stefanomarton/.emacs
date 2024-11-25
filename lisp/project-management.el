@@ -1,3 +1,4 @@
+
 ;;; project-management.el --- Project management packages -*- lexical-binding: t; -*-
 
 (use-package projectile
@@ -16,13 +17,13 @@
   )
 
 (use-package consult-projectile
- :ensure t
-    :bind
-    ("C-x p p" . consult-projectile)
-    ("C-x p f" . consult-projectile-find-file)
-    ("C-x p t" . projectile-run-vterm-other-window)
-    ("C-x p s" . consult-projectile-switch-project)
-    ("C-x p a" . projectile-add-known-project))
+  :ensure t
+  :bind
+  ("C-x p p" . consult-projectile)
+  ("C-x p f" . consult-projectile-find-file)
+  ("C-x p t" . projectile-run-vterm-other-window)
+  ("C-x p s" . consult-projectile-switch-project)
+  ("C-x p a" . projectile-add-known-project))
 
 (use-package hl-todo
   :ensure t
@@ -40,7 +41,7 @@
 
 
 (use-package magit
-  :ensure t  
+  :ensure t
   :commands (magit-status magit-file-dispatch magit-dispatch dotfiles-magit-status magit-status-with-removed-dotfiles-args)
   :config
   (magit-auto-revert-mode)
@@ -64,12 +65,12 @@
     (call-interactively 'magit-status)))
 
 (use-package magit-delta
-  :ensure t  
+  :ensure t
   :after magit
   :hook (magit-mode . magit-delta-mode))
 
 (use-package git-gutter
-  :ensure t  
+  :ensure t
   :hook ((prog-mode text-mode-hook LaTeX-mode) . git-gutter-mode)
   :config
   (git-gutter-mode)
@@ -90,13 +91,22 @@
   (("<leader>gn" . hydra-git-gutter/body)))
 
 (use-package git-gutter-fringe
-  :ensure t  
+  :ensure t
   :config
   (fringe-mode nil)
   (setq-default left-margin-width 1)
   (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
   (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
   (define-fringe-bitmap 'git-gutter-fr:deleted [224] nil nil '(center repeated)))
+
+(use-package ediff
+  :ensure nil
+  :defer t
+  :config
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-keep-variants nil)
+  )
 
 (provide 'project-management)
 ;;; project-management.el ends here
