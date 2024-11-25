@@ -31,15 +31,45 @@
 
   (setq denote-directory (concat drive-folder "denote"))
   (setq denote-excluded-directories-regexp ".output")
-
   (setq denote-backlinks-show-context t)
 
   ;; journal config
+  (require 'denote-journal-extras)
   (setq denote-journal-extras-directory (expand-file-name "personal/journal" denote-directory))
   (setq denote-journal-extras-title-format "%Y %m %d")
 
-  (denote-rename-buffer-mode 1)
-  )
+  ;; link configuration
+  (defun my/denote-link-description-with-signature-and-title (file)
+    "Return link description for FILE.
+   - If the region is active, use it as the description.
+   - If the region is not active, ask for a prompt and use the input.
+   - If the prompt is empty, check if FILE has a signature, then format the description
+     as a sequence of the signature text and the title with two spaces between them.
+   - If FILE does not have a signature, then use its title as the description.
+
+   This is useful as the value of the user option
+   `denote-link-description-function`."
+
+    (let* ((file-type (denote-filetype-heuristics file))
+           (signature (denote-retrieve-filename-signature file))
+           (title (denote-retrieve-title-or-filename file file-type))
+           (region-text (denote--get-active-region-content))
+           (prompt-text (if (string-empty-p region-text)
+                            (read-string "Enter description (leave blank for default): ")
+                          nil)))  ; Don't ask for prompt if region is active
+      (cond
+       (region-text region-text)
+       ((not (string-empty-p prompt-text)) prompt-text)
+       ((and signature title) (format "%s  %s" signature title))
+       (title (format "%s" title))
+       (signature (format "%s" signature))
+       (t ""))))
+
+
+
+  (setq denote-link-description-format #'my/denote-link-description-with-signature-and-title)
+
+  (denote-rename-buffer-mode 1))
 
 (use-package consult-denote
   :requires (denote consult)
