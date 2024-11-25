@@ -12,16 +12,8 @@
   :init
   (dirvish-override-dired-mode))
 
-;; (use-package openwith
-;;   :config
-;;   (openwith-mode 1)
-;;   (setq openwith-associations '(
-;;                                 ("\\.pdf\\'" "zathura" (file))
-;;                                 ("https'" "floorp" (file))
-;;                                 )
-;;         ))
-
 (use-package dired-narrow
+  :defer 1
   :ensure t
   :after dirvish
   :config
@@ -35,9 +27,6 @@
 (use-package transient
   :ensure t)
 
-;(use-package casual-dired
-;  :ensure (:host github :repo "kickingvegas/casual-dired")
-;  :bind (:map dired-mode-map ("C-o" . 'casual-dired-tmenu)))
 
 (provide 'file-management)
 ;;; file-management.el ends here
