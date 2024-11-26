@@ -48,19 +48,27 @@
 
   (setq window-divider-default-places nil))
 
-(use-package ewal
-  :ensure (:host github :repo "cyruseuros/ewal")
-  :init
-  (setq ewal-use-built-in-always-p nil
-        ewal-use-built-in-on-failure-p t
-        ewal-built-in-palette "sexy-material")
-  :config
-  ;; Suppose all custom themes are safe
-  (setq ewal-shade-percent-difference 10)
-  (setq custom-safe-themes t)
-  (add-to-list 'custom-theme-load-path "~/.config/emacs")
-  (load-theme 'pywal))
+;; (use-package ewal
+;;   :ensure (:host github :repo "cyruseuros/ewal")
+;;   :init
+;;   (setq ewal-use-built-in-always-p nil
+;;         ewal-use-built-in-on-failure-p t
+;;         ewal-built-in-palette "sexy-material")
+;;   :config
+;;   ;; Suppose all custom themes are safe
+;;   (setq ewal-shade-percent-difference 10)
+;;   (setq custom-safe-themes t)
+;;   (add-to-list 'custom-theme-load-path "~/.config/emacs")
+;;   (load-theme 'pywal))
 
+(use-package mindre-theme
+  :ensure t
+  :config
+  (setq mindre-use-more-bold t
+        mindre-use-more-fading t
+        mindre-use-faded-lisp-parens t
+        mindre-faded-lisp-parens-modes '(emacs-lisp-mode lisp-mode scheme-mode racket-mode))
+  (load-theme 'mindre t))
 
 ;; Cool aspect
 (use-package mixed-pitch
