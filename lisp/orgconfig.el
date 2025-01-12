@@ -23,6 +23,7 @@
   (org-hide-leading-stars nil)
   (org-special-ctrl-a/e t)
   (org-catch-invisible-edits 'show)
+  (org-id-link-to-org-use-id nil)
 
   :init
   (setq org-fold-core-style 'text-properties)
@@ -32,13 +33,18 @@
   (defvar org-attachments-folder nil
     "Variable to store the attachments folder for Org mode files.")
 
+  (defun extract-timestamp (filename)
+    "Extract the timestamp from a FILENAME in the format '20240622T150711--...'."
+    (string-match "\\`\\([0-9T]+\\)--" filename)
+    (match-string 1 filename))
+
   (defun org-set-attachments-folder ()
     "Set the attachments folder for the current Org mode buffer."
     (let ((buf-dir (file-name-directory (buffer-file-name)))
           (org-dir (expand-file-name org-directory)))
       (setq org-attachments-folder
             (if (string-prefix-p org-dir buf-dir)
-                (concat org-dir ".attachments/" (file-name-sans-extension (buffer-name)))
+                (concat org-dir ".attachments/" (extract-timestamp (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
               ".attachments"))))
 
   ;; (setq org-cite-global-bibliography '((concat org-directory (.resources/bibliography.bib))))
@@ -132,9 +138,10 @@ point. "
         (org-table-copy-down (prefix-numeric-value arg))
       (sbr-org-insert-dwim arg)))
 
-  (setq org-directory "~/GoogleDrive/org/")
+  (setq org-directory "~/GoogleDrive/denote/")
 
   (setq denote-directory (concat drive-folder "denote"))
+
   (setq org-link-abbrev-alist
         `(("image-dir" . ,(format "file:%s%s" denote-directory "/.attachments/"))))
 
@@ -144,7 +151,7 @@ point. "
         '((heading . nil)
           (plain-list-item . auto)))
   (setq
-   org-ellipsis " "
+   org-ellipsis " ↓"
    org-fontify-quote-and-verse-blocks t
    org-fontify-whole-heading-line t)
 
@@ -1162,7 +1169,9 @@ point. "
                    ("\\chapter{%s}" . "\\chapter*{%s}")
                    ("\\section{%s}" . "\\section*{%s}")
                    ("\\subsection{%s}" . "\\subsection*{%s}")
-                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\begin{enumerate} \\item \\textit{%s}" "\\end{enumerate}")
+                   )))
 
   (use-package ox-hugo
     :ensure t
@@ -1211,7 +1220,22 @@ point. "
                 "screenshot"
               link)
             (format-time-string "%Y-%m-%d %H:%M:%S")))
-  (setq org-download-annotate-function 'my-org-download-annotate-default))
+
+  (setq org-download-annotate-function 'my-org-download-annotate-default)
+
+
+  (defun my/org-download-link-format-function (filename)
+    "Generate an Org link with a cleaned path, removing everything before the timestamp."
+    (let ((regex ".*/\\([0-9]+T[0-9]+/.*\\)"))
+      (format "[[image-dir:%s]]"
+              (if (string-match regex filename)
+                  (match-string 1 filename)
+                filename))))
+
+  (defun my/org-download-clipboard ()
+    (interactive)
+    (setq-local org-download-link-format-function 'my/org-download-link-format-function)
+    (org-download-clipboard)))
 
 (use-package org-plantuml-mindmap
   :after org

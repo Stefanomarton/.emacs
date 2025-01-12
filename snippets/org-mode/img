@@ -3,4 +3,4 @@
 # key: igm
 # condition: (and (not (texmathp)))
 # --
-`(org-download-clipboard)`
+`(my/org-download-clipboard)`
