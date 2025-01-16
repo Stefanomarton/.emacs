@@ -47,9 +47,8 @@
                 (concat org-dir ".attachments/" (extract-timestamp (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
               ".attachments"))))
 
-  ;; (setq org-cite-global-bibliography '((concat org-directory (.resources/bibliography.bib))))
-  (setq org-cite-global-bibliography '("~/GoogleDrive/org/.resources/bibliography.bib"))
-  (setq org-cite-processor '((t csl ~/GoogleDrive/org/.resources/ieee.csl ~/GoogleDrive/org/.resources/ieee.csl)))
+  (setq org-cite-global-bibliography '("~/GoogleDrive/denote/.resources/bibliography.bib"))
+  ;; (setq org-cite-processor '((t csl ~/GoogleDrive/org/.resources/ieee.csl ~/GoogleDrive/org/.resources/ieee.csl)))
 
   ;; Make surround with latex env work nicely
   (require 'tex-site)
@@ -241,14 +240,14 @@ point. "
               (destination-file (concat destination-directory (file-name-nondirectory file))))
           (copy-file file destination-file t)))))
 
-  (defun export-org-latex-and-copy-pdf ()
-    "Export Org mode to LaTeX asynchronously and copy new PDF files."
-    (interactive)
-    (org-latex-export-to-pdf t)
-    (run-at-time "5 sec" nil 'copy-new-pdf-files))
+  ;; (defun export-org-latex-and-copy-pdf ()
+  ;;   "Export Org mode to LaTeX asynchronously and copy new PDF files."
+  ;;   (interactive)
+  ;;   (org-latex-export-to-pdf t)
+  ;;   (run-at-time "5 sec" nil 'copy-new-pdf-files))
 
-  (add-hook 'org-mode-hook
-            (lambda () (add-hook 'after-save-hook 'export-org-latex-and-copy-pdf nil 'local)))
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda () (add-hook 'after-save-hook 'export-org-latex-and-copy-pdf nil 'local)))
 
   (setq org-latex-default-class "report")
   (setq org-startup-folded t)
