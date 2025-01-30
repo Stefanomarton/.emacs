@@ -29,7 +29,7 @@
       (denote--command-with-features #'denote-subdirectory :use-last-input-as-def-title nil nil nil)))
 
 
-  (setq denote-directory (concat drive-folder "denote"))
+  (setq denote-directory (concat drive-folder "notes"))
   (setq denote-excluded-directories-regexp ".output")
   (setq denote-backlinks-show-context t)
 
