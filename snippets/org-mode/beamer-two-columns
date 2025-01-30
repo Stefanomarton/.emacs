@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: beamer two columns
+# key: beamer2col
+# --
+*** Left Column                                           :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+
+*** Right Column                                            :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
