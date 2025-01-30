@@ -109,7 +109,7 @@
 (eval-when-compile
   (require 'use-package))
 
-(defvar drive-folder "~/GoogleDrive/")
+(defvar drive-folder "~/.Nextcloud/")
 
 (load-module "core")
 ;; ;; (load-module "evil")
@@ -126,7 +126,8 @@
 (load-module "programming")
 (load-module "lsp")
 (load-module "document-production")
-(load-module "orgconfig")
+(load-module "org-config")
+(load-module "org-beamer")
 (load-module "denote")
 (load-module "server")
 
