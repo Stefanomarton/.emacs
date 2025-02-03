@@ -3,6 +3,8 @@
 (use-package denote
   :demand t
   :ensure (:wait t)
+  :init
+  (setq denote-directory (concat drive-folder "notes"))
 
   :bind
   ("<escape>do" . my/denote-open-or-create)
@@ -28,8 +30,6 @@
         (find-file target)
       (denote--command-with-features #'denote-subdirectory :use-last-input-as-def-title nil nil nil)))
 
-
-  (setq denote-directory (concat drive-folder "notes"))
   (setq denote-excluded-directories-regexp ".output")
   (setq denote-backlinks-show-context t)
 
