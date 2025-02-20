@@ -131,7 +131,6 @@
 (load-module "org-config")
 (load-module "org-beamer")
 (load-module "denote")
-(load-module "server")
 
 ;;; init.el ends here
 (put 'eshell 'disabled nil)
