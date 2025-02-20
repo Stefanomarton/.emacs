@@ -243,7 +243,8 @@
 	                       (yas-expand-snippet "$$ \n $1 \n $$ \n \n $0"))))
 
 (use-package laas
-  :ensure (:host github :repo "Stefanomarton/LaTeX-auto-activating-snippets")
+  :ensure (:host github :repo "tecosaur/LaTeX-auto-activating-snippets")
+  ;; :ensure t
   :hook
   (LaTeX-mode . laas-mode)
   (markdown-mode . laas-mode)
@@ -326,7 +327,10 @@
                     ".q" (lambda () (interactive) (laas-wrap-previous-object "sqrt"))
                     ".v" (lambda () (interactive) (laas-wrap-previous-object "vec"))
                     ".t" (lambda () (interactive) (laas-wrap-previous-object "text"))
-                    ".b" (lambda () (interactive) (laas-wrap-previous-object "mathbf"))))
+                    ".b" (lambda () (interactive) (laas-wrap-previous-object "mathbf")))
+  :init
+  (defvar AUCTeX-version "13.2")
+  )
 
 (use-package cdlatex
   ;; :commands latex-mode
