@@ -49,31 +49,31 @@
   :config
   (mp-setup-install-grammars))
 
-(use-package macrursors
-  :ensure (:host github
-                 :repo "corytertel/macrursors")
-  :bind
-  (:map global-map
-        ("C-c SPC" . macrursors-select)
-        ("C->" . macrursors-mark-next-instance-of)
-        ("C-<" . macrursors-mark-previous-instance-of)
-        ("C-;" . macrursors-mark-map))
-  (:map macrursors-mark-map
-        ("C-;" . macrursors-mark-all-lines-or-instances)
-        (";" . rursors-mark-all-lines-or-instances)
-        ("l" . rursors-mark-all-lists)
-        ("s" . macrursors-mark-all-symbols)
-        ("e" . macrursors-mark-all-sexps)
-        ("f" . macrursors-mark-all-defuns)
-        ("n" . macrursors-mark-all-numbers)
-        ("." . macrursors-mark-all-sentences)
-        ("r" . macrursors-mark-all-lines))
-  :init
-  (define-prefix-command 'macrursors-mark-map)
-  :config
-  (dolist (mode '(corfu-mode goggles-mode beacon-mode))
-    (add-hook 'macrursors-pre-finish-hook mode)
-    (add-hook 'macrursors-post-finish-hook mode)))
+;; (use-package macrursors
+;;   :ensure (:host github
+;;                  :repo "corytertel/macrursors")
+;;   :bind
+;;   (:map global-map
+;;         ("C-c SPC" . macrursors-select)
+;;         ("C->" . macrursors-mark-next-instance-of)
+;;         ("C-<" . macrursors-mark-previous-instance-of)
+;;         ("C-;" . macrursors-mark-map))
+;;   (:map macrursors-mark-map
+;;         ("C-;" . macrursors-mark-all-lines-or-instances)
+;;         (";" . rursors-mark-all-lines-or-instances)
+;;         ("l" . rursors-mark-all-lists)
+;;         ("s" . macrursors-mark-all-symbols)
+;;         ("e" . macrursors-mark-all-sexps)
+;;         ("f" . macrursors-mark-all-defuns)
+;;         ("n" . macrursors-mark-all-numbers)
+;;         ("." . macrursors-mark-all-sentences)
+;;         ("r" . macrursors-mark-all-lines))
+;;   :init
+;;   (define-prefix-command 'macrursors-mark-map)
+;;   :config
+;;   (dolist (mode '(corfu-mode goggles-mode beacon-mode))
+;;     (add-hook 'macrursors-pre-finish-hook mode)
+;;     (add-hook 'macrursors-post-finish-hook mode)))
 
 ;; Lua setup
 (use-package lua-mode
