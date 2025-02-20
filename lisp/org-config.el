@@ -41,7 +41,7 @@
   (defun org-set-attachments-folder ()
     "Set the attachments folder for the current Org mode buffer."
     (let ((buf-dir (file-name-directory (buffer-file-name)))
-          (org-dir (expand-file-name org-directory)))
+          (org-dir (expand-file-name notes-folder)))
       (setq org-attachments-folder
             (if (string-prefix-p org-dir buf-dir)
                 (concat org-dir ".attachments/" (extract-timestamp (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
@@ -137,12 +137,12 @@ point. "
         (org-table-copy-down (prefix-numeric-value arg))
       (sbr-org-insert-dwim arg)))
 
-  (setq org-directory "~/GoogleDrive/denote/")
+  (setq org-directory notes-folder)
 
-  (setq denote-directory (concat drive-folder "denote"))
+  (setq denote-directory notes-folder)
 
   (setq org-link-abbrev-alist
-        `(("image-dir" . ,(format "file:%s%s" denote-directory "/.attachments/"))))
+        `(("image-dir" . ,(format "file:%s%s" notes-folder "/.attachments/"))))
 
   (bind-keys :map org-mode-map ("<S-return>" . sbr-org-insert-dwim))
 
@@ -1198,7 +1198,7 @@ point. "
 
 (use-package org-download
   :ensure t
-  :commands (org-download-clipboard)
+  :commands (my/org-download-clipboard)
   :init
   (setq org-download-display-inline-images 'posframe)
   (setq org-download-method 'directory)
@@ -1212,7 +1212,7 @@ point. "
                                         (org-set-attachments-folder)
     			         			    "/")))
 
-  (advice-add 'org-download-clipboard :before #'custom/org-download-dir)
+  (advice-add 'my/org-download-clipboard :before #'custom/org-download-dir)
 
   ;; Modify function to avoid writing useless comment
   (defun my-org-download-annotate-default (link)
@@ -1265,9 +1265,9 @@ point. "
   (citar-file-note-extensions)
   :config
 
-  (setq citar-notes-paths (list (expand-file-name "uni/papers" denote-directory)))
+  (setq citar-notes-paths (list (expand-file-name "uni/papers" notes-folder)))
 
-  (setq citar-bibliography (expand-file-name ".resources/bibliography.bib" denote-directory))q
+  (setq citar-bibliography (expand-file-name ".resources/bibliography.bib" notes-folder))
 
   (defun citar-file-open (file)
 	"Open FILE. Overwritten by hgi, to open pdf files from citar in external PDF viewer and not in internal one."

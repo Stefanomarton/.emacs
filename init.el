@@ -112,6 +112,7 @@
   (require 'use-package))
 
 (defvar drive-folder "~/.marton-drive/")
+(defvar notes-folder (concat drive-folder "notes"))
 
 (load-module "core")
 ;; ;; (load-module "evil")

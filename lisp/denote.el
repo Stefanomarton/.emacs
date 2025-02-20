@@ -4,7 +4,7 @@
   :demand t
   :ensure (:wait t)
   :init
-  (setq denote-directory (concat drive-folder "notes"))
+  (setq denote-directory notes-folder)
 
   :bind
   ("<escape>do" . my/denote-open-or-create)
@@ -23,6 +23,8 @@
   (text-mode-hook . denote-fontify-links-mode-maybe)
 
   :config
+  (setq-default denote-directory (concat drive-folder "notes"))
+
   ;; Modify default command to use `denote-subdirectory' when creating TARGET
   (defun my/denote-open-or-create (target)
     (interactive (list (denote-file-prompt nil nil :no-require-match)))
