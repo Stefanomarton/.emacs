@@ -47,8 +47,8 @@
                 (concat org-dir ".attachments/" (extract-timestamp (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
               ".attachments"))))
 
-  (setq org-cite-global-bibliography '("~/GoogleDrive/denote/.resources/bibliography.bib"))
-  ;; (setq org-cite-processor '((t csl ~/GoogleDrive/org/.resources/ieee.csl ~/GoogleDrive/org/.resources/ieee.csl)))
+  (setq org-cite-global-bibliography '("~/.marton-drive/notes/.resources/bibliography.bib"))
+  (setq org-cite-processor '((t csl ~/marton-drive/notes/.resources/ieee.csl ~/GoogleDrive/org/.resources/ieee.csl)))
 
   ;; Make surround with latex env work nicely
   (require 'tex-site)
@@ -1097,6 +1097,7 @@ point. "
                  '("memoir"
                    "\\documentclass[a4paper,11pt, openany]{memoir}
                  %%% set up the recto page layout
+                 \\usepackage{gensymb}
                  \\checkandfixthelayout
                  \\setlength{\\evensidemargin}{\\oddsidemargin}% after \\checkandfix
                  \\sidefootmargin{right}
@@ -1106,9 +1107,11 @@ point. "
                  \\usepackage[italian]{babel}
                  \\usepackage{tabularx}
                  \\usepackage{booktabs}
+                 \\setcounter{tocdepth}{2}
                  \\renewcommand\\labelenumi{(\\roman{enumi})}
                  \\renewcommand\\theenumi\\labelenumi
-                 \\usepackage[marginal]{footmisc} % cleaner footnotes
+                 % \\usepackage[marginal]{footmisc} % cleaner footnotes
+                 \\setlength{\\sidefoothsep}{0.5cm}
                  \\usepackage[utf8]{inputenc}
                  % \\usepackage[T1]{fontenc}
                  \\usepackage{fixltx2e}
@@ -1264,7 +1267,7 @@ point. "
 
   (setq citar-notes-paths (list (expand-file-name "uni/papers" denote-directory)))
 
-  (setq citar-bibliography (expand-file-name ".resources/bibliography.bib" denote-directory))
+  (setq citar-bibliography (expand-file-name ".resources/bibliography.bib" denote-directory))q
 
   (defun citar-file-open (file)
 	"Open FILE. Overwritten by hgi, to open pdf files from citar in external PDF viewer and not in internal one."
