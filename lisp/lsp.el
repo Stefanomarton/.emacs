@@ -5,6 +5,7 @@
   :hook
   (python-ts-mode . eglot-ensure)
   (LaTeX-mode . eglot-ensure)
+  (nix-mode . eglot-ensure)
   :config
   (setq eglot-workspace-configuration
         '((pylsp
@@ -19,12 +20,21 @@
   :ensure t
   :after eglot)
 
-(use-package eglot-booster
-  :ensure (:host github :repo "jdtsmith/eglot-booster")
-  :after eglot
-  :config
-  (eglot-booster-mode)
-  )
+;; (use-package eglot-booster
+;;   :ensure (:host github :repo "jdtsmith/eglot-booster")
+;;   :after eglot
+;;   :config
+;;   (eglot-booster-mode)
+;;   )
+
+;; (use-package lsp-bridge
+;;   :ensure '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
+;;                        :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+;;                        :build (:not compile))
+;;   :config
+;;   (setq lsp-bridge-tex-lsp-server "digestif")
+;;   (global-lsp-bridge-mode)
+;;   (acm-mode))
 
 (provide 'lsp)
 
