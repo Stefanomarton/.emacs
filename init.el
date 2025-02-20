@@ -111,7 +111,7 @@
 (eval-when-compile
   (require 'use-package))
 
-(defvar drive-folder "~/.Nextcloud/")
+(defvar drive-folder "~/.marton-drive/")
 
 (load-module "core")
 ;; ;; (load-module "evil")
