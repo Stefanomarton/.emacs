@@ -190,6 +190,7 @@ file corresponding to the current buffer file, then recompile the file."
   )
 
 (use-package toml-ts-mode
+  :mode "\\.toml'"
   :ensure nil
   :hook
   (toml-ts-mode . format-all-mode))
