@@ -23,6 +23,8 @@
                (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
                (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))
                (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"))
+               (nix . ("https://github.com/nix-community/tree-sitter-nix"))
+               (hyprlang . ("https://github.com/tree-sitter-grammars/tree-sitter-hyprlang"))
                ))
       (add-to-list 'treesit-language-source-alist grammar)
       ;; Only install `grammar' if we don't already have it
@@ -197,11 +199,11 @@ file corresponding to the current buffer file, then recompile the file."
 
 (use-package hyprlang-ts-mode
   :ensure (:host github :repo "Nathan-Melaku/hyprlang-ts-mode")
-  :config
-  (add-to-list 'treesit-language-source-alist
-               '(hyprlang "https://github.com/tree-sitter-grammars/tree-sitter-hyprlang"))
   :custom
   (hyprlang-ts-mode-indent-offset 4))
+
+(use-package nix-ts-mode
+  :mode "\\.nix\\'")
 
 (provide 'programming)
 
