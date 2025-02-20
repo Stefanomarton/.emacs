@@ -41,6 +41,7 @@
     (setq-local line-spacing 0.12)
     ;; (set-window-margins nil 1 1)
     )
+  (add-to-list 'default-frame-alist '(alpha-background . 90))
 
   ;; (add-hook 'window-configuration-change-hook #'setup-margin)
   (add-hook 'text-mode-hook #'setup-margin)
@@ -61,14 +62,24 @@
 ;;   (add-to-list 'custom-theme-load-path "~/.config/emacs")
 ;;   (load-theme 'pywal))
 
-(use-package mindre-theme
+;; (use-package mindre-theme
+;;   :ensure t
+;;   :config
+;;   (setq mindre-use-more-bold t
+;;         mindre-use-more-fading t
+;;         mindre-use-faded-lisp-parens t
+;;         mindre-faded-lisp-parens-modes '(emacs-lisp-mode lisp-mode scheme-mode racket-mode))
+;;   (load-theme 'mindre t))
+
+(use-package base16-theme
   :ensure t
   :config
-  (setq mindre-use-more-bold t
-        mindre-use-more-fading t
-        mindre-use-faded-lisp-parens t
-        mindre-faded-lisp-parens-modes '(emacs-lisp-mode lisp-mode scheme-mode racket-mode))
-  (load-theme 'mindre t))
+  (setq base16-theme-distinct-fringe-background nil)
+  ;; (add-to-list 'custom-theme-load-path "~/.config/emacs")
+  (setq base16-theme-256-color-source 'colors)
+  ;; (load-theme 'base16-mountain t)
+  (load-theme 'base16-everforest-dark-hard t)
+  )
 
 ;; Cool aspect
 (use-package mixed-pitch
