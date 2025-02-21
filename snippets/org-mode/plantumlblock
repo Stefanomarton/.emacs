@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: plantuml block
+# key: puml
+# --
+#+begin_src plantuml :results svg :file `(concat org-attachments-folder "/svg/" (format-time-string "%Y%m%d%H%M%S") ".svg")`
+@${1:$$(yas-choose-value '("mindmap" "average" "below average"))}
+$2
+@$1
+#+end_src
