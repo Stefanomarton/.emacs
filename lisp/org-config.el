@@ -44,7 +44,7 @@
           (org-dir (expand-file-name notes-folder)))
       (setq org-attachments-folder
             (if (string-prefix-p org-dir buf-dir)
-                (concat org-dir ".attachments/" (extract-timestamp (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
+                (concat org-dir "/.attachments/" (extract-timestamp (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
               ".attachments"))))
 
   (setq org-cite-global-bibliography '("~/.marton-drive/notes/.resources/bibliography.bib"))
@@ -54,8 +54,6 @@
   (require 'tex-site)
   (use-package org-ref
     :after org-mode)
-
-  (setq org-agenda-files '("~/GoogleDrive/org/agenda/work.org"))
 
   (defun my-fix-text-region (pos1 pos2)
     "Replace strings within a region."
@@ -1239,6 +1237,7 @@ point. "
     (setq-local org-download-link-format-function 'my/org-download-link-format-function)
     (org-download-clipboard)))
 
+
 (use-package org-plantuml-mindmap
   :after org
   :ensure (:host github :repo "Stefanomarton/org-plantuml-mindmap")
@@ -1251,7 +1250,6 @@ point. "
     			                             (org-set-attachments-folder)
     			                             (file-name-sans-extension (buffer-name))
     			                             "/"))))
-
 
 (use-package citar
   :ensure t
@@ -1285,80 +1283,6 @@ point. "
   :config
   (citar-embark-mode))
 
-(use-package consult-notes
-  :commands (consult-notes)
-  :ensure (:type git :host github :repo "mclear-tools/consult-notes")
-  :custom
-
-  (consult-notes-file-dir-sources
-   '(("course"   ?c "~/GoogleDrive/org/uni/courses/")
-     ("obsidian" ?o "~/GoogleDrive/Obsidian/University/")
-     ("obsidian" ?o "~/GoogleDrive/Obsidian/Personal/")
-     ("obsidian" ?o "~/GoogleDrive/Obsidian/")
-     ("obsidian" ?o "~/GoogleDrive/Obsidian/Work/")
-     ))
-
-  :commands (consult-notes
-             consult-notes-search-in-all-notes
-             consult-notes-org-roam-find-node
-             consult-notes-org-roam-find-node-relation)
-  :config
-  (defun consult-notes-my-embark-function (cand)
-    "Do something with CAND"
-    (interactive "fNote: ")
-    (my-function))
-
-  (defvar-keymap consult-notes-map
-    :doc "Keymap for Embark notes actions."
-    :parent embark-file-map
-    "m" #'consult-notes-my-embark-function)
-
-  (add-to-list 'embark-keymap-alist `(,consult-notes-category . consult-notes-map))
-
-  ;; make embark-export use dired for notes
-  (setf (alist-get consult-notes-category embark-exporters-alist) #'embark-export-dired)
-
-  ;; Search org-roam notes for citations (depends on citar)
-  ;; (defun consult-notes-org-roam-cited (reference)
-  ;;   "Return a list of notes that cite the REFERENCE."
-  ;;   (interactive (list (citar-select-ref
-  ;;                       :rebuild-cache current-prefix-arg
-  ;;                       :filter (citar-has-note))))
-  ;;   (let* ((ids
-  ;;           (org-roam-db-query [:select * :from citations
-  ;;                                       :where (= cite-key $s1)]
-  ;;                              (car reference)))
-  ;;          (anodes
-  ;;           (mapcar (lambda (id)
-  ;;                     (org-roam-node-from-id (car id)))
-  ;;                   ids))
-  ;;          (template
-  ;;           (org-roam-node--process-display-format org-roam-node-display-template))
-  ;;          (bnodes
-  ;;           (mapcar (lambda (node)
-  ;;                     (org-roam-node-read--to-candidate node template)) anodes))
-  ;;          (node (completing-read
-  ;;                 "Node: "
-  ;;                 (lambda (string pred action)
-  ;;                   (if (eq action 'metadata)
-  ;;                       `(metadata
-  ;;                         ;; get title using annotation function
-  ;;                         (annotation-function
-  ;;                          . ,(lambda (title)
-  ;;                               (funcall org-roam-node-annotation-function
-  ;;                                        (get-text-property 0 'node title))))
-  ;;                         (category . org-roam-node))
-  ;;                     (complete-with-action action bnodes string pred)))))
-  ;;          (fnode
-  ;;           (cdr (assoc node bnodes))))
-  ;;     (if ids
-  ;;         ;; Open node in other window
-  ;;         (org-roam-node-open fnode)
-  ;;       (message "No notes cite this reference."))))
-  ;;
-  )
-
-
 (use-package org-appear
   :ensure (:type git :host github :repo "awth13/org-appear")
   :hook (org-mode . org-appear-mode)
@@ -1366,9 +1290,7 @@ point. "
   (setq org-appear-autolinks t)
   (setq org-appear-autokeywords t)
   (setq org-appear-autoemphasis t)
-  (setq org-appear-trigger 'always)
-  )
-
+  (setq org-appear-trigger 'always))
 
 (use-package anki-editor
   :bind
