@@ -1,7 +1,7 @@
 ;;; orgconfig.el --- org-mode configuration -*- lexical-binding: t; -*-
 
 (use-package org
-  :ensure nil
+  :ensure t
   :bind (:map org-mode-map
               ("C-," . embrace-commander)
               ("C-c o h" . consult-org-heading)
@@ -1026,6 +1026,7 @@ point. "
                  '("article"
                    "\\documentclass[11pt,a4paper]{article}
                  \\setlength{\\parindent}{0pt}
+                 \\setlength{\\parskip}{5pt}
                  \\usepackage{mhchem}
                  \\usepackage[inkscapelatex=false]{svg}
                  \\usepackage[utf8]{inputenc}
@@ -1034,7 +1035,11 @@ point. "
                  \\usepackage[T1]{fontenc}
                  \\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
                  \\hypersetup{
-	             colorlinks=true,       % false: boxed links; true: colored links
+                     colorlinks=true,       % false: boxed links; true: colored links
+                     linkcolor=blue,        % color of internal links
+                     citecolor=blue,        % color of links to bibliography
+                     filecolor=blue,     % color of file links
+                     urlcolor=blue
                  }
 
                  \\usepackage[most]{tcolorbox}
@@ -1067,6 +1072,7 @@ point. "
                  \\usepackage{enumerate}
                  \\definecolor{bg}{rgb}{0.95,0.95,0.95}
                  \\tolerance=1000
+                 \\renewcommand{\\tableofcontents}{}
                  [NO-DEFAULT-PACKAGES]
                  [PACKAGES]
                  [EXTRA]
@@ -1076,20 +1082,6 @@ point. "
                    ("\\subsection{%s}" . "\\subsection*{%s}")
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                    ("\\paragraph{%s}" . "\\paragraph*{%s}")))
-
-
-    (add-to-list 'org-latex-classes '("ebook"
-                                      "\\documentclass[11pt, oneside]{memoir}
-                 \\setstocksize{9in}{6in}
-                 \\settrimmedsize{\\stockheight}{\\stockwidth}{*}
-                 \\setlrmarginsandblock{2cm}{2cm}{*} % Left and right margin
-                 \\setulmarginsandblock{2cm}{2cm}{*} % Upper and lower margin
-                 \\checkandfixthelayout
-                 % Much more laTeX code omitted
-                 "
-                                      ("\\chapter{%s}" . "\\chapter*{%s}")
-                                      ("\\section{%s}" . "\\section*{%s}")
-                                      ("\\subsection{%s}" . "\\subsection*{%s}")))
 
     (add-to-list 'org-latex-classes
                  '("memoir"
@@ -1357,7 +1349,21 @@ point. "
   :after org-mode
   :bind (:map org-mode-map
               ("<leader>ota" . org-transclusion-add)
-              ("<leader>otm" . org-transclusion-mode)))
+              ("<leader>otm" . org-transclusion-mode))
+  :config
+  (defun denote-org-transclusion-add (link plist)
+    (when (string= "denote" (org-element-property :type link))
+      (let* ((denote-id (org-element-property :path link))     ;; get denote id from denote:<denote-id> link
+             (file-path (denote-get-path-by-id denote-id))     ;; path resolved by the id
+             (new-link (with-temp-buffer                       ;; create a [[file:/path/to/denote/note]] org link
+                         (insert "file:")                      ;; and store it in 'new-link' variable
+                         (insert file-path)
+                         (beginning-of-buffer)
+                         (org-element-link-parser))))
+        (org-transclusion-add-org-file new-link plist))))      ;; re-use the org transclusion infrastructure for file: links
+  (cl-pushnew 'denote-org-transclusion-add                     ;; register the org transclusion 'plugin'
+              org-transclusion-add-functions)
+  )
 
 ;; Cool org mode
 (use-package org-modern
