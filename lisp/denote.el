@@ -1,5 +1,14 @@
 ;;; denote.el -*- lexical-binding: t; -*-;;;
 
+(use-package denote-journal
+  :ensure (:host github :repo "protesilaos/denote-journal")
+  :bind
+  ("<escape>dj" . denote-journal-new-or-existing-entry)
+  :config
+  (setq denote-journal-directory (expand-file-name "personal/journal" denote-directory))
+  (setq denote-journal-title-format "%Y %m %d")
+  )
+
 (use-package denote
   :demand t
   :ensure (:wait t)
@@ -8,7 +17,7 @@
 
   :bind
   ("<escape>do" . my/denote-open-or-create)
-  ("<escape>dj" . denote-journal-extras-new-or-existing-entry)
+
   ("<escape>dr" . denote-region)
   ("<escape>dt" . denote-type)
   ("<escape>dl" . denote-link)
@@ -25,6 +34,16 @@
   :config
   (setq-default denote-directory (concat drive-folder "notes"))
 
+  (setq denote-templates
+        `((journal . ,(concat "* Score giornaliero (0-10)\n\n"
+                              "Serenità: \n"
+                              "Energia: \n"
+                              "\n\n"
+                              "* Commento generale giornata"
+                              "\n\n"
+                              "* Riflessione del giorno\n"
+                              ))))
+
   ;; Modify default command to use `denote-subdirectory' when creating TARGET
   (defun my/denote-open-or-create (target)
     (interactive (list (denote-file-prompt nil nil :no-require-match)))
@@ -34,11 +53,6 @@
 
   (setq denote-excluded-directories-regexp ".output")
   (setq denote-backlinks-show-context t)
-
-  ;; journal config
-  (require 'denote-journal-extras)
-  (setq denote-journal-extras-directory (expand-file-name "personal/journal" denote-directory))
-  (setq denote-journal-extras-title-format "%Y %m %d")
 
   ;; link configuration
   (defun my/denote-link-description-with-signature-and-title (file)
