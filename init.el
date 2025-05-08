@@ -131,6 +131,7 @@
 (load-module "document-production")
 (load-module "org-config")
 (load-module "org-beamer")
+(load-module "org-navigation")
 (load-module "denote")
 (load-module "server")
 
