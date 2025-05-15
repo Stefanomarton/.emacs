@@ -104,4 +104,6 @@ Narrow to the nearest level-1 heading (parent), then move to the selected headin
         (org-fold-show-set-visibility (point-min) (point-max) t)
         ))))
 
+(provide 'org-navigation)
+
 ;;; org-navigation ends here

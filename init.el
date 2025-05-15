@@ -129,9 +129,14 @@
 (load-module "programming")
 (load-module "lsp")
 (load-module "document-production")
-(load-module "org-config")
-(load-module "org-beamer")
-(load-module "org-navigation")
+
+(load-module "org/org-config")
+(load-module "org/org-beamer")
+(load-module "org/org-navigation")
+(load-module "org/org-export")
+(load-module "org/org-appearance")
+(load-module "org/org-extensions")
+
 (load-module "denote")
 (load-module "server")
 

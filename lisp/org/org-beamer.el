@@ -42,5 +42,6 @@
       ))
   )
 
+(provide 'org-beamer)
 
 ;;; beamer.el ends here
