@@ -202,6 +202,8 @@ targets."
         ("s" . surround-region-with-square-brackets)
         ("c" . surround-region-with-curly-brackets)
 
+        ("i" . surround-region-with-italic)
+
         (",c" . surround-region-with-command)
         (",C" . surround-region-with-cancel)
         (",t" . surround-region-with-text)
@@ -331,6 +333,11 @@ targets."
     "Surround the active region with hard-coded strings"
     (interactive)
     (yas-expand-snippet "^{`(yas-selected-text)`}"))
+
+  (defun surround-region-with-italic ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (yas-expand-snippet "/`(yas-selected-text)`/"))
 
   (defun surround-region-newline-with-math ()
     "Surround the active region with hard-coded strings"
