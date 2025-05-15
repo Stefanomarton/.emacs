@@ -12,17 +12,17 @@
   :init
   (dirvish-override-dired-mode))
 
-(use-package dired-narrow
-  :defer 1
-  :ensure t
-  :after dirvish
-  :config
-  (defun dired-narrow-ex-ac ()
-    ;; Revert buffer and enter the directory after narrowing
-    (revert-buffer)
-    (dired-find-alternate-file))
-  (setq dired-narrow-exit-when-1-left t)
-  (setq dired-narrow-exit-action 'dired-narrow-ex-ac))
+;; (use-package dired-narrow
+;;   :defer 1
+;;   :ensure t
+;;   :after dirvish
+;;   :config
+;;   (defun dired-narrow-ex-ac ()
+;;     ;; Revert buffer and enter the directory after narrowing
+;;     (revert-buffer)
+;;     (dired-find-alternate-file))
+;;   (setq dired-narrow-exit-when-1-left t)
+;;   (setq dired-narrow-exit-action 'dired-narrow-ex-ac))
 
 (use-package transient
   :ensure t)

@@ -113,11 +113,12 @@ file corresponding to the current buffer file, then recompile the file."
     :config
     (eros-mode))
 
-  (use-package lispy
-    :ensure t
-    :config
-    (lispy-mode)
-    ))
+  ;; (use-package lispy
+  ;;   :ensure t
+  ;;   :config
+  ;;   (lispy-mode)
+  ;;   )
+  )
 
 
 ;; Highlight kmonad files
