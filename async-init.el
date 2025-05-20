@@ -10,5 +10,8 @@
 (defvar drive-folder "~/.marton-drive/")
 (defvar notes-folder (concat drive-folder "notes"))
 
+(setq org-link-abbrev-alist
+      `(("image-dir" . ,(format "file:%s%s" notes-folder "/.attachments/"))))
+
 (load "org-export.el")
-(load "org-attachments.el")
+;; (load "org-attachments.el")

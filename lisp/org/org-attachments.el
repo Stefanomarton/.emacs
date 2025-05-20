@@ -62,7 +62,35 @@
   (defun my/org-download-clipboard ()
     (interactive)
     (setq-local org-download-link-format-function 'my/org-download-link-format-function)
-    (org-download-clipboard)))
+    (org-download-clipboard))
+
+  (defun org-download-clipboard (&optional basename)
+    "Capture the image from the clipboard and insert the resulting file."
+    (interactive)
+    (let ((org-download-screenshot-method
+           (cl-case system-type
+             (gnu/linux
+              (if (string= "wayland" (getenv "XDG_SESSION_TYPE"))
+                  (if (executable-find "wl-paste")
+                      "wl-paste -t image/png > %s"
+                    (user-error
+                     "Please install the \"wl-paste\" program included in wl-clipboard"))
+                (if (executable-find "xclip")
+                    "xclip -selection clipboard -t image/png -o > %s"
+                  (user-error
+                   "Please install the \"xclip\" program"))))
+             ((windows-nt cygwin)
+              (if (executable-find "magick")
+                  "magick convert clipboard: %s"
+                (user-error
+                 "Please install the \"magick\" program included in ImageMagick")))
+             ((darwin berkeley-unix)
+              (if (executable-find "pngpaste")
+                  "pngpaste %s"
+                (user-error
+                 "Please install the \"pngpaste\" program from Homebrew."))))))
+      (org-download-screenshot basename)))
+  )
 
 (provide 'org-attachments)
 

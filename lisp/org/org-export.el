@@ -95,74 +95,17 @@
       (setq org-latex-classes nil))
 
     (setq org-latex-default-class "report")
+
     (add-to-list 'org-latex-classes
                  '("report"
                    "\\documentclass[a4paper,11pt,titlepage]{report}
-                 \\usepackage[inkscapelatex=false]{svg}
-                 \\hbadness 99999
-                 \\usepackage{tabularx}
-                 \\usepackage{booktabs}
-                 \\usepackage[marginal]{footmisc} % cleaner footnotes
-                 \\usepackage[utf8]{inputenc}
-                 \\usepackage[margin=3cm]{geometry}
-                 % \\usepackage[T1]{fontenc}
-                 \\usepackage{fixltx2e}
-                 \\usepackage{graphicx}
-                 \\usepackage{longtable}
-                 \\usepackage{float}
-                 \\usepackage{wrapfig}
-                 \\usepackage{rotating}
-                 \\usepackage{cancel}
-                 \\setlength{\\parskip}{1pt}
-                 \\usepackage{parskip}
-                 \\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
-                 \\usepackage{mhchem}
-                 \\usepackage[normalem]{ulem}
-                 \\usepackage{amsmath}
-                 \\usepackage{cleveref}
-                 \\renewcommand\\labelenumi{(\\roman{enumi})}
-                 \\renewcommand\\theenumi\\labelenumi
-                 \\usepackage{mathtools}
-                 \\DeclarePairedDelimiter\\bra{\\langle}{\\rvert}
-                 \\DeclarePairedDelimiter\\ket{\\lvert}{\\rangle}
-                 \\DeclarePairedDelimiterX\\braket[2]{\\langle}{\\rangle}{#1\\,\\delimsize\\vert\\,\\mathopen{}#2}
-                 \\usepackage{amsmath}
-                 \\usepackage{textcomp}
-                 \\usepackage{xfrac}
-                 \\usepackage{marvosym}
-                 \\usepackage{wasysym}
-                 \\usepackage{amssymb}
-                 \\usepackage{hyperref}
-                 \\hypersetup{
-                     colorlinks=true,       % false: boxed links; true: colored links
-                     linkcolor=blue,        % color of internal links
-                     citecolor=blue,        % color of links to bibliography
-                     filecolor=blue,     % color of file links
-                     urlcolor=blue
-                 }
-                 %% \\usepackage{mathpazo}
-
-                 \\usepackage{newpxtext}
-                 \\usepackage{newpxmath}
-                 \\usepackage{color}
-                 \\definecolor{bg}{rgb}{0.95,0.95,0.95}
-                 % Define cool colorboxes
-                 \\usepackage[most]{tcolorbox}
-                 \\newtcolorbox{bx}{
-                    enhanced,
-                    boxrule=0pt,frame hidden,
-                    borderline west={4pt}{0pt}{black},
-                    colback=black!5!white,
-                    sharp corners,
-                 }
-                 \\usepackage{enumitem}
-                 \\setlist{noitemsep}
-                 \\tolerance=1000
-                 [NO-DEFAULT-PACKAGES]
-                 [PACKAGES]
-                 [EXTRA]
-                 \\linespread{1.1}
-                 \\hypersetup{pdfborder=0 0 0}"
+                   \\input{~/projects/programming/latex/templates/basic.tex}
+                   \\input{~/projects/programming/latex/templates/report.tex}
+                   [NO-DEFAULT-PACKAGES]
+                   [PACKAGES]
+                   [EXTRA]
+                   \\linespread{1.1}
+                   \\hypersetup{pdfborder=0 0 0}"
                    ("\\chapter{%s}" . "\\chapter*{%s}")
                    ("\\section{%s}" . "\\section*{%s}")
                    ("\\subsection{%s}" . "\\subsection*{%s}")
@@ -170,63 +113,16 @@
                    ("\\paragraph{%s}" . "\\paragraph*{%s}")
                    ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-
     (add-to-list 'org-latex-classes
                  '("article"
                    "\\documentclass[11pt,a4paper]{article}
-                 \\setlength{\\parindent}{0pt}
-                 \\setlength{\\parskip}{5pt}
-                 \\usepackage{mhchem}
-                 \\usepackage[inkscapelatex=false]{svg}
-                 \\usepackage[utf8]{inputenc}
-                 \\usepackage{tabularx}
-                 \\usepackage{booktabs}
-                 \\usepackage[T1]{fontenc}
-                 \\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
-                 \\hypersetup{
-                     colorlinks=true,       % false: boxed links; true: colored links
-                     linkcolor=blue,        % color of internal links
-                     citecolor=blue,        % color of links to bibliography
-                     filecolor=blue,     % color of file links
-                     urlcolor=blue
-                 }
-
-                 \\usepackage[most]{tcolorbox}
-                 \\newtcolorbox{bx}{
-                    enhanced,
-                    boxrule=0pt,frame hidden,
-                    borderline west={4pt}{0pt}{black},
-                    colback=black!5!white,
-                    sharp corners,
-                 }
-                 \\usepackage{fixltx2e}
-                 \\renewcommand\\labelenumi{(\\roman{enumi})}
-                 \\renewcommand\\theenumi\\labelenumi
-                 \\usepackage{graphicx}
-                 \\usepackage{longtable}
-                 \\usepackage{float}
-                 \\usepackage{xfrac}
-                 \\usepackage[margin=2.5cm]{geometry}
-                 \\usepackage{wrapfig}
-                 \\usepackage{rotating}
-                 \\usepackage[normalem]{ulem}
-                 \\usepackage{amsmath}
-                 \\usepackage{textcomp}
-                 \\usepackage{marvosym}
-                 \\usepackage{wasysym}
-                 \\usepackage{amssymb}
-                 \\usepackage{hyperref}
-                 \\usepackage{mathpazo}
-                 \\usepackage{color}
-                 \\usepackage{enumerate}
-                 \\definecolor{bg}{rgb}{0.95,0.95,0.95}
-                 \\tolerance=1000
-                 \\renewcommand{\\tableofcontents}{}
-                 [NO-DEFAULT-PACKAGES]
-                 [PACKAGES]
-                 [EXTRA]
-                 \\linespread{1.1}
-                 \\hypersetup{pdfborder=0 0 0}"
+                    \\input{~/projects/programming/latex/templates/basic.tex}
+                   \\input{~/projects/programming/latex/templates/article.tex}
+                   [NO-DEFAULT-PACKAGES]
+                   [PACKAGES]
+                   [EXTRA]
+                   \\linespread{1.1}
+                   \\hypersetup{pdfborder=0 0 0}"
                    ("\\section{%s}" . "\\section*{%s}")
                    ("\\subsection{%s}" . "\\subsection*{%s}")
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
@@ -234,79 +130,14 @@
 
     (add-to-list 'org-latex-classes
                  '("memoir"
-                   "\\documentclass[a4paper,11pt, openany]{memoir}
-                 %%% set up the recto page layout
-                 \\usepackage{gensymb}
-                 \\checkandfixthelayout
-                 \\setlength{\\evensidemargin}{\\oddsidemargin}% after \\checkandfix
-                 \\sidefootmargin{right}
-                 \\usepackage[inkscapelatex=false]{svg}
-                 \\hbadness 99999
-                 \\usepackage{xfrac}
-                 \\usepackage[italian]{babel}
-                 \\usepackage{tabularx}
-                 \\usepackage{booktabs}
-                 \\setcounter{tocdepth}{2}
-                 \\renewcommand\\labelenumi{(\\roman{enumi})}
-                 \\renewcommand\\theenumi\\labelenumi
-                 % \\usepackage[marginal]{footmisc} % cleaner footnotes
-                 \\setlength{\\sidefoothsep}{0.5cm}
-                 \\usepackage[utf8]{inputenc}
-                 % \\usepackage[T1]{fontenc}
-                 \\usepackage{fixltx2e}
-                 \\usepackage{graphicx}
-                 \\usepackage{longtable}
-                 \\usepackage{float}
-                 \\usepackage{wrapfig}
-                 \\usepackage{rotating}
-                 \\usepackage{cancel}
-                 \\setlength{\\parskip}{5pt}
-                 \\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
-                 \\usepackage{mhchem}
-                 \\usepackage[normalem]{ulem}
-                 \\usepackage{amsmath}
-                 \\usepackage{cleveref}
-
-                 \\usepackage{mathtools}
-                 \\DeclarePairedDelimiter\\bra{\\langle}{\\rvert}
-                 \\DeclarePairedDelimiter\\ket{\\lvert}{\\rangle}
-                 \\DeclarePairedDelimiterX\\braket[2]{\\langle}{\\rangle}{#1\\,\\delimsize\\vert\\,\\mathopen{}#2}
-                 \\usepackage{amsmath}
-                 \\usepackage{textcomp}
-                 \\usepackage{marvosym}
-                 \\usepackage{wasysym}
-                 \\usepackage{amssymb}
-                 \\usepackage{hyperref}
-                 \\hypersetup{
-                     colorlinks=true,       % false: boxed links; true: colored links
-                     linkcolor=blue,        % color of internal links
-                     citecolor=blue,        % color of links to bibliography
-                     filecolor=blue,     % color of file links
-                     urlcolor=blue
-                 }
-                 \\setsecnumdepth{subsection}
-                 \\setlength{\\parindent}{0em}
-                 \\usepackage{newpxtext}
-                 \\usepackage{newpxmath}
-                 \\usepackage{color}
-                 \\definecolor{bg}{rgb}{0.95,0.95,0.95}
-                 % Define cool colorboxes
-                 \\usepackage[most]{tcolorbox}
-                 \\newtcolorbox{bx}{
-                    enhanced,
-                    boxrule=0pt,frame hidden,
-                    borderline west={4pt}{0pt}{black},
-                    colback=black!5!white,
-                    sharp corners,
-                 }
-                 \\usepackage{enumitem}
-                 \\setlist{noitemsep}
-                 \\tolerance=1000
-                 [NO-DEFAULT-PACKAGES]
-                 [PACKAGES]
-                 [EXTRA]
-                 \\linespread{1.1}
-                 \\hypersetup{pdfborder=0 0 0}"
+                   "\\documentclass[a4paper,11pt,twoside,openany]{memoir}
+                    \\input{~/projects/programming/latex/templates/basic.tex}
+                    \\input{~/projects/programming/latex/templates/memoir.tex}
+                    [NO-DEFAULT-PACKAGES]
+                    [PACKAGES]
+                    [EXTRA]
+                    \\linespread{1.1}
+                    \\hypersetup{pdfborder=0 0 0}"
                    ("\\chapter{%s}" . "\\chapter*{%s}")
                    ("\\section{%s}" . "\\section*{%s}")
                    ("\\subsection{%s}" . "\\subsection*{%s}")
@@ -316,79 +147,14 @@
 
     (add-to-list 'org-latex-classes
                  '("big-memoir"
-                   "\\documentclass[a4paper,11pt, openany]{memoir}
-                 %%% set up the recto page layout
-                 \\usepackage{gensymb}
-                 \\checkandfixthelayout
-                 \\setlength{\\evensidemargin}{\\oddsidemargin}% after \\checkandfix
-                 \\sidefootmargin{right}
-                 \\usepackage[inkscapelatex=false]{svg}
-                 \\hbadness 99999
-                 \\usepackage{xfrac}
-                 \\usepackage[italian]{babel}
-                 \\usepackage{tabularx}
-                 \\usepackage{booktabs}
-                 \\setcounter{tocdepth}{2}
-                 \\renewcommand\\labelenumi{(\\roman{enumi})}
-                 \\renewcommand\\theenumi\\labelenumi
-                 % \\usepackage[marginal]{footmisc} % cleaner footnotes
-                 \\setlength{\\sidefoothsep}{0.5cm}
-                 \\usepackage[utf8]{inputenc}
-                 % \\usepackage[T1]{fontenc}
-                 \\usepackage{fixltx2e}
-                 \\usepackage{graphicx}
-                 \\usepackage{longtable}
-                 \\usepackage{float}
-                 \\usepackage{wrapfig}
-                 \\usepackage{rotating}
-                 \\usepackage{cancel}
-                 \\setlength{\\parskip}{5pt}
-                 \\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
-                 \\usepackage{mhchem}
-                 \\usepackage[normalem]{ulem}
-                 \\usepackage{amsmath}
-                 \\usepackage{cleveref}
-
-                 \\usepackage{mathtools}
-                 \\DeclarePairedDelimiter\\bra{\\langle}{\\rvert}
-                 \\DeclarePairedDelimiter\\ket{\\lvert}{\\rangle}
-                 \\DeclarePairedDelimiterX\\braket[2]{\\langle}{\\rangle}{#1\\,\\delimsize\\vert\\,\\mathopen{}#2}
-                 \\usepackage{amsmath}
-                 \\usepackage{textcomp}
-                 \\usepackage{marvosym}
-                 \\usepackage{wasysym}
-                 \\usepackage{amssymb}
-                 \\usepackage{hyperref}
-                 \\hypersetup{
-                     colorlinks=true,       % false: boxed links; true: colored links
-                     linkcolor=blue,        % color of internal links
-                     citecolor=blue,        % color of links to bibliography
-                     filecolor=blue,     % color of file links
-                     urlcolor=blue
-                 }
-                 \\setsecnumdepth{subsection}
-                 \\setlength{\\parindent}{0em}
-                 \\usepackage{newpxtext}
-                 \\usepackage{newpxmath}
-                 \\usepackage{color}
-                 \\definecolor{bg}{rgb}{0.95,0.95,0.95}
-                 % Define cool colorboxes
-                 \\usepackage[most]{tcolorbox}
-                 \\newtcolorbox{bx}{
-                    enhanced,
-                    boxrule=0pt,frame hidden,
-                    borderline west={4pt}{0pt}{black},
-                    colback=black!5!white,
-                    sharp corners,
-                 }
-                 \\usepackage{enumitem}
-                 \\setlist{noitemsep}
-                 \\tolerance=1000
-                 [NO-DEFAULT-PACKAGES]
-                 [PACKAGES]
-                 [EXTRA]
-                 \\linespread{1.1}
-                 \\hypersetup{pdfborder=0 0 0}"
+                   "\\documentclass[a4paper,11pt]{memoir}
+                    \\input{~/projects/programming/latex/templates/basic.tex}
+                    \\input{~/projects/programming/latex/templates/memoir.tex}
+                    [NO-DEFAULT-PACKAGES]
+                    [PACKAGES]
+                    [EXTRA]
+                    \\linespread{1.1}
+                    \\hypersetup{pdfborder=0 0 0}"
                    ("\\part{%s}" . "\\part*{%s}")
                    ("\\chapter{%s}" . "\\chapter*{%s}")
                    ("\\section{%s}" . "\\section*{%s}")
@@ -398,92 +164,80 @@
                    ))
 
     (add-to-list 'org-latex-classes
-                 '("guide"
-                   "\\documentclass[a4paper,11pt, openany]{memoir}
-                 %%% set up the recto page layout
-                 \\usepackage{gensymb}
-                 \\checkandfixthelayout
-                 \\setlength{\\evensidemargin}{\\oddsidemargin}% after \\checkandfix
-                 \\sidefootmargin{right}
-                 \\usepackage[inkscapelatex=false]{svg}
-                 \\hbadness 99999
-                 \\usepackage{xfrac}
-                 \\usepackage[italian]{babel}
-                 \\usepackage{tabularx}
-                 \\usepackage{booktabs}
-                 \\setcounter{tocdepth}{2}
-                 \\renewcommand\\labelenumi{(\\roman{enumi})}
-                 \\renewcommand\\theenumi\\labelenumi
-                 % \\usepackage[marginal]{footmisc} % cleaner footnotes
-                 \\setlength{\\sidefoothsep}{0.5cm}
-                 \\usepackage[utf8]{inputenc}
-                 % \\usepackage[T1]{fontenc}
-                 \\usepackage{fixltx2e}
-                 \\usepackage{graphicx}
-                 \\usepackage{longtable}
-                 \\usepackage{float}
-                 \\usepackage{wrapfig}
-                 \\usepackage{rotating}
-                 \\usepackage{cancel}
-                 \\setlength{\\parskip}{5pt}
-                 \\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
-                 \\usepackage{mhchem}
-                 \\usepackage[normalem]{ulem}
-                 \\usepackage{amsmath}
-                 \\usepackage{cleveref}
-
-                 \\usepackage{mathtools}
-                 \\DeclarePairedDelimiter\\bra{\\langle}{\\rvert}
-                 \\DeclarePairedDelimiter\\ket{\\lvert}{\\rangle}
-                 \\DeclarePairedDelimiterX\\braket[2]{\\langle}{\\rangle}{#1\\,\\delimsize\\vert\\,\\mathopen{}#2}
-                 \\usepackage{amsmath}
-                 \\usepackage{textcomp}
-                 \\usepackage{marvosym}
-                 \\usepackage{wasysym}
-                 \\usepackage{amssymb}
-                 \\usepackage{hyperref}
-                 \\hypersetup{
-                     colorlinks=true,       % false: boxed links; true: colored links
-                     linkcolor=blue,        % color of internal links
-                     citecolor=blue,        % color of links to bibliography
-                     filecolor=blue,     % color of file links
-                     urlcolor=blue
-                 }
-                 \\setsecnumdepth{subsection}
-                 \\setlength{\\parindent}{0em}
-                 \\usepackage{newpxtext}
-                 \\usepackage{newpxmath}
-                 \\usepackage{color}
-                 \\definecolor{bg}{rgb}{0.95,0.95,0.95}
-                 % Define cool colorboxes
-                 \\usepackage[most]{tcolorbox}
-                 \\newtcolorbox{bx}{
-                    enhanced,
-                    boxrule=0pt,frame hidden,
-                    borderline west={4pt}{0pt}{black},
-                    colback=black!5!white,
-                    sharp corners,
-                 }
-                 \\usepackage{enumitem}
-                 \\setlist{noitemsep}
-                 \\tolerance=1000
-                 \\addtopsmarks{headings}{}{
-  \\createmark{chapter}{left}{nonumber}{}{}
-}
-\\pagestyle{headings}
-                 [NO-DEFAULT-PACKAGES]
-                 [PACKAGES]
-                 [EXTRA]
-                 \\linespread{1.1}
-                 \\hypersetup{pdfborder=0 0 0}"
+                 '("marton"
+                   "\\documentclass[a4paper,11pt,article,openany]{memoir}
+                    \\input{~/projects/programming/latex/templates/basic.tex}
+                    \\input{~/projects/programming/latex/templates/marton.tex}
+                    [NO-DEFAULT-PACKAGES]
+                    [PACKAGES]
+                    [EXTRA]
+                    \\linespread{1.1}
+                    \\hypersetup{pdfborder=0 0 0}"
                    ("\\section{%s}" . "\\section*{%s}")
                    ("\\subsection{%s}" . "\\subsection*{%s}")
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                    ("\\begin{enumerate} \\item \\textit{%s}" "\\end{enumerate}")
                    ))
-
     )
   )
+
+(defconst my/titlepage-command (concat
+                                "\\begin{figure}\n"
+                                "\\centering\n"
+                                "\\includegraphics[height=4cm]{~/projects/programming/latex/templates/logo.png}"
+                                "\\end{figure}\n"
+                                "\\begin{center}\n"
+                                "\\vfill\n"
+                                "{\\Huge\\bfseries %t \\par}\n"
+                                "{\\Large %a \\par}\n"
+                                "{\\large \\today \\par}\n"
+                                "\\vfill\n"
+                                "\\thispagestyle{empty}\n"
+                                "\\clearpage"
+                                "\\end{center}\n"
+                                ;; "\\restorepagestyle"
+                                ))
+
+(defconst my/maketitle-command (concat
+                                "\\begin{figure}\n"
+                                "\\centering\n"
+                                "\\includegraphics[height=4cm]{~/projects/programming/latex/templates/logo.png}"
+                                "\\end{figure}\n"
+                                "\\begin{center}\n"
+                                "{\\huge\\bfseries %t \\par}\n"
+                                "{\\Large %a \\par}\n"
+                                "{\\large stefano@marton.dev \\par}\n"
+                                "{\\large \\today \\par}\n"
+                                "\\thispagestyle{empty}\n"
+                                "\\end{center}\n"
+                                ;; "\\restorepagestyle"
+                                ))
+
+(defun my/org-latex-setup-commands-based-on-class (backend)
+  "Set `org-latex-toc-command` and `org-latex-title-command` based on LaTeX class used."
+  (when (eq backend 'latex)
+    (let* ((info (org-export-get-environment 'latex))
+           (class (plist-get info :latex-class)))
+      (cond
+       ((string= class "article")
+        (setq-local org-latex-toc-command "\\tableofcontents"
+                    org-latex-title-command "\\maketitle"))
+       ((string= class "marton")
+        (setq-local org-latex-toc-command "\\tableofcontents \\clearpage"
+                    org-latex-title-command my/maketitle-command
+                    org-latex-default-footnote-command "\\sidefootnote{%s}"
+                    ))
+       ((string= class "memoir")
+        (setq-local org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage"
+                    org-latex-title-command my/titlepage-command
+                    org-latex-default-footnote-command "\\sidefootnote{%s}"
+                    ))
+       (t
+        (setq-local org-latex-toc-command "\\tableofcontents"
+                    org-latex-title-command "\\maketitle"))))))
+
+(add-hook 'org-export-before-processing-hook #'my/org-latex-setup-commands-based-on-class)
+
 
 (provide 'org-export)
 

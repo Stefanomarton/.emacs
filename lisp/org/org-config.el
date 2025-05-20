@@ -25,10 +25,42 @@
   (org-id-link-to-org-use-id nil)
 
   :config
-
   ;; set notes folder used around
   (setq org-directory notes-folder)
   (setq denote-directory notes-folder)
+
+  (setq org-blank-before-new-entry
+        '((heading . t)
+          (plain-list-item . t)))
+  (setq
+   org-ellipsis " ↓"
+   org-fontify-quote-and-verse-blocks t
+   org-fontify-whole-heading-line t)
+
+  (setq org-emphasis-alist '(("*" bold)
+                             ("/" italic)
+                             ("_" underline)
+                             ("=" org-verbatim verbatim)
+                             ("~" org-code verbatim)))
+
+  ;; Make org use `display-buffer' like every other Emacs citizen.
+  (advice-add #'org-switch-to-buffer-other-window :override #'switch-to-buffer-other-window)
+
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.5)) ;; fix dimension of latex fragments
+
+  (add-to-list 'org-file-apps '("\\.pdf" . "zathura %s")) ;; open pdf files with zathura
+
+  (add-hook 'org-mode-hook (lambda ()
+                             (setq-local fill-column 110)
+                             (setq-local set-fill-column 115)))
+
+  ;; all possible latex highlight
+  (setq org-highlight-latex-and-related '(native))
+
+  (setq org-startup-folded t)
+  (setq org-pretty-entities nil)
+  (setq org-pretty-entities-include-sub-superscripts nil)
+  (setq org-use-sub-superscripts '{})
 
   ;; Make surround with latex env work nicely
   (require 'tex-site)
@@ -113,23 +145,7 @@ point. "
         (org-table-copy-down (prefix-numeric-value arg))
       (sbr-org-insert-dwim arg)))
 
-
-
   (bind-keys :map org-mode-map ("<S-return>" . sbr-org-insert-dwim))
-
-  (setq org-blank-before-new-entry
-        '((heading . nil)
-          (plain-list-item . auto)))
-  (setq
-   org-ellipsis " ↓"
-   org-fontify-quote-and-verse-blocks t
-   org-fontify-whole-heading-line t)
-
-  (setq org-emphasis-alist '(("*" bold)
-                             ("/" italic)
-                             ("_" underline)
-                             ("=" org-verbatim verbatim)
-                             ("~" org-code verbatim)))
 
   (defun er/add-latex-in-org-mode-expansions ()
     ;; Make Emacs recognize \ as an escape character in org
@@ -149,27 +165,6 @@ point. "
                      er/mark-latex-inside-pairs
                      er/mark-latex-outside-pairs
                      er/mark-LaTeX-math)))))
-
-
-  (add-hook 'org-mode-hook (lambda ()
-                             (setq-local fill-column 110)
-                             (setq-local set-fill-column 115)))
-
-
-  ;; all possible latex highlight
-  (setq org-highlight-latex-and-related '(native))
-
-  ;; Make org use `display-buffer' like every other Emacs citizen.
-  (advice-add #'org-switch-to-buffer-other-window :override #'switch-to-buffer-other-window)
-
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.5)) ;; fix dimension of latex fragments
-
-  (add-to-list 'org-file-apps '("\\.pdf" . "zathura %s")) ;; open pdf files with zathura
-
-  (setq org-startup-folded t)
-  (setq org-pretty-entities nil)
-  (setq org-pretty-entities-include-sub-superscripts nil)
-  (setq org-use-sub-superscripts '{})
   )
 
 (provide 'orgconfig)
