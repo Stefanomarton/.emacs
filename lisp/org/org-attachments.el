@@ -27,8 +27,10 @@
   :init
   (setq org-download-display-inline-images 'posframe)
   (setq org-download-method 'directory)
-  (setq org-download-image-latex-width 7)
+  ;; (setq org-download-image-latex-width 7)
   (setq org-download-heading-lvl nil)
+
+  ;; (setq org-download-image-attr-list '("#+attr_latex: :width .5\\textwidth :placement [h] :sidecaptions"))
 
   :config
   (defun custom/org-download-dir ()
@@ -61,8 +63,13 @@
 
   (defun my/org-download-clipboard ()
     (interactive)
-    (setq-local org-download-link-format-function 'my/org-download-link-format-function)
-    (org-download-clipboard))
+    (let ((caption (read-string "Side caption: ")))
+      (setq-local
+       org-download-image-attr-list
+       (list (format "#+attr_latex: :width .5\\textwidth :placement [h] :sidecaptions %s" caption)))
+      (setq-local org-download-link-format-function 'my/org-download-link-format-function)
+      (org-download-clipboard)))
+
 
   (defun org-download-clipboard (&optional basename)
     "Capture the image from the clipboard and insert the resulting file."
