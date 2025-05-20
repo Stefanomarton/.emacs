@@ -298,13 +298,13 @@ used as a communication channel."
         ;; If :sidecaptions attribute is a string, output the custom sidecaption block
         (when (and sidecaptions (stringp sidecaptions) (not (string-empty-p sidecaptions)))
           (setq image-code
-                (format "\\begin{figure}
+                (format "\\begin{figure}%s
 \\begin{sidecaption}{%s}
 \\centering
 %s
 \\end{sidecaption}
 \\end{figure}"
-                        sidecaptions image-code)))
+                        placement sidecaptions image-code)))
 
         ;; Return early if sidecaptions used
         (if (and sidecaptions (stringp sidecaptions) (not (string-empty-p sidecaptions)))
