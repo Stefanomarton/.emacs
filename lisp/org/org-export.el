@@ -178,6 +178,197 @@
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                    ("\\begin{enumerate} \\item \\textit{%s}" "\\end{enumerate}")
                    ))
+    (defun org-latex--inline-image (link info)
+      "Return LaTeX code for an inline image.
+LINK is the link pointing to the inline image.  INFO is a plist
+used as a communication channel."
+      (let* ((parent (org-element-parent-element link))
+             (path (let ((raw-path (org-element-property :path link)))
+                     (if (not (file-name-absolute-p raw-path)) raw-path
+                       (expand-file-name raw-path))))
+             (filetype (file-name-extension path))
+             (caption (org-latex--caption/label-string parent info))
+             (caption-above-p (org-latex--caption-above-p link info))
+             (attr (org-export-read-attribute :attr_latex parent))
+             (sidecaptions (plist-get attr :sidecaptions)) ;; now string or nil
+             (float (let ((float (plist-get attr :float)))
+                      (cond
+                       ((org-element-map (org-element-contents parent) t
+                          (lambda (node)
+                            (cond
+                             ((and (org-element-type-p node 'plain-text)
+                                   (not (org-string-nw-p node)))
+                              nil)
+                             ((eq link node)
+                              (throw :org-element-skip nil))
+                             (t 'not-a-float)))
+                          info 'first-match)
+                        nil)
+                       ((string= float "wrap") 'wrap)
+                       ((string= float "sideways") 'sideways)
+                       ((string= float "multicolumn") 'multicolumn)
+                       ((string= float "t") 'figure)
+                       ((and (plist-member attr :float) (not float)) 'nonfloat)
+                       (float float)
+                       ((or (org-element-property :caption parent)
+                            (org-string-nw-p (plist-get attr :caption)))
+                        'figure)
+                       (t 'nonfloat))))
+             (placement
+              (let ((place (plist-get attr :placement)))
+                (cond
+                 (place (format "%s" place))
+                 ((eq float 'wrap) "{l}{0.5\\textwidth}")
+                 ((eq float 'figure)
+                  (format "[%s]" (plist-get info :latex-default-figure-position)))
+                 (t ""))))
+             (center
+              (cond
+               ((org-element-type-p (org-element-parent link) 'link) nil)
+               ((plist-member attr :center) (plist-get attr :center))
+               (t (plist-get info :latex-images-centered))))
+             (comment-include (if (plist-get attr :comment-include) "%" ""))
+             (scale (cond ((eq float 'wrap) "")
+                          ((plist-get attr :scale))
+                          (t (plist-get info :latex-image-default-scale))))
+             (width (cond ((org-string-nw-p scale) "")
+                          ((plist-get attr :width))
+                          ((plist-get attr :height) "")
+                          ((eq float 'wrap) "0.48\\textwidth")
+                          (t (plist-get info :latex-image-default-width))))
+             (height (cond ((org-string-nw-p scale) "")
+                           ((plist-get attr :height))
+                           ((or (plist-get attr :width)
+                                (memq float '(figure wrap))) "")
+                           (t (plist-get info :latex-image-default-height))))
+             (options (let ((opt (or (plist-get attr :options)
+                                     (plist-get info :latex-image-default-option))))
+                        (if (not (string-match "\\`\\[\\(.*\\)\\]\\'" opt)) opt
+                          (match-string 1 opt))))
+             image-code)
+
+        ;; tikz and pgf
+        (if (member filetype '("tikz" "pgf"))
+            (progn
+              (setq image-code (format "\\input{%s}" path))
+              (when (org-string-nw-p options)
+                (setq image-code
+                      (format "\\begin{tikzpicture}[%s]\n%s\n\\end{tikzpicture}"
+                              options image-code)))
+              (setq image-code
+                    (cond ((org-string-nw-p scale)
+                           (format "\\scalebox{%s}{%s}" scale image-code))
+                          ((or (org-string-nw-p width) (org-string-nw-p height))
+                           (format "\\resizebox{%s}{%s}{%s}"
+                                   (if (org-string-nw-p width) width "!")
+                                   (if (org-string-nw-p height) height "!")
+                                   image-code))
+                          (t image-code))))
+          ;; normal image
+          (if (org-string-nw-p scale)
+              (setq options (concat options ",scale=" scale))
+            (when (org-string-nw-p width) (setq options (concat options ",width=" width)))
+            (when (org-string-nw-p height) (setq options (concat options ",height=" height))))
+          (let ((search-option (org-element-property :search-option link)))
+            (when (and search-option
+                       (equal filetype "pdf")
+                       (string-match-p "\\`[0-9]+\\'" search-option)
+                       (not (string-match-p "page=" options)))
+              (setq options (concat options ",page=" search-option))))
+          (setq image-code
+                (format "\\includegraphics%s{%s}"
+                        (cond ((not (org-string-nw-p options)) "")
+                              ((string-prefix-p "," options)
+                               (format "[%s]" (substring options 1)))
+                              (t (format "[%s]" options)))
+                        (if (and (string-match-p "[^[:ascii:]]" path)
+                                 (equal filetype "svg"))
+                            (concat "\\detokenize{" path "}")
+                          path)))
+          (when (equal filetype "svg")
+            (setq image-code (replace-regexp-in-string "^\\\\includegraphics"
+                                                       "\\includesvg"
+                                                       image-code
+                                                       nil t))
+            (setq image-code (replace-regexp-in-string "\\.svg}"
+                                                       "}"
+                                                       image-code
+                                                       nil t))))
+
+        ;; If :sidecaptions attribute is a string, output the custom sidecaption block
+        (when (and sidecaptions (stringp sidecaptions) (not (string-empty-p sidecaptions)))
+          (setq image-code
+                (format "\\begin{figure}
+\\begin{sidecaption}{%s}
+\\centering
+%s
+\\end{sidecaption}
+\\end{figure}"
+                        sidecaptions image-code)))
+
+        ;; Return early if sidecaptions used
+        (if (and sidecaptions (stringp sidecaptions) (not (string-empty-p sidecaptions)))
+            image-code
+          ;; Otherwise default float handling
+          (pcase float
+            ((and (pred stringp) env-string)
+             (format "\\begin{%s}%s
+%s%s
+%s%s
+%s\\end{%s}"
+                     env-string
+                     placement
+                     (if caption-above-p caption "")
+                     (if center "\\centering" "")
+                     comment-include image-code
+                     (if caption-above-p "" caption)
+                     env-string))
+            (`wrap (format "\\begin{wrapfigure}%s
+%s%s
+%s%s
+%s\\end{wrapfigure}"
+                           placement
+                           (if caption-above-p caption "")
+                           (if center "\\centering" "")
+                           comment-include image-code
+                           (if caption-above-p "" caption)))
+            (`sideways (format "\\begin{sidewaysfigure}
+%s%s
+%s%s
+%s\\end{sidewaysfigure}"
+                               (if caption-above-p caption "")
+                               (if center "\\centering" "")
+                               comment-include image-code
+                               (if caption-above-p "" caption)))
+            (`multicolumn (format "\\begin{figure*}%s
+%s%s
+%s%s
+%s\\end{figure*}"
+                                  placement
+                                  (if caption-above-p caption "")
+                                  (if center "\\centering" "")
+                                  comment-include image-code
+                                  (if caption-above-p "" caption)))
+            (`figure (format "\\begin{figure}%s
+%s%s
+%s%s
+%s\\end{figure}"
+                             placement
+                             (if caption-above-p caption "")
+                             (if center "\\centering" "")
+                             comment-include image-code
+                             (if caption-above-p "" caption)))
+            ((guard center)
+             (format "\\begin{center}
+%s%s
+%s\\end{center}"
+                     (if caption-above-p caption "")
+                     image-code
+                     (if caption-above-p "" caption)))
+            (_
+             (concat (if caption-above-p caption "")
+                     image-code
+                     (if caption-above-p caption "")))))))
     )
   )
 
@@ -225,7 +416,7 @@
        ((string= class "marton")
         (setq-local org-latex-toc-command "\\tableofcontents \\clearpage"
                     org-latex-title-command my/maketitle-command
-                    org-latex-default-footnote-command "\\sidefootnote{%s}"
+                    ;; org-latex-default-footnote-command "\\sidefootnote{%s}"
                     ))
        ((string= class "memoir")
         (setq-local org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage"

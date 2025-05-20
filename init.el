@@ -136,6 +136,7 @@
 (load-module "org/org-export")
 (load-module "org/org-appearance")
 (load-module "org/org-extensions")
+(load-module "org/org-attachments")
 
 (load-module "denote")
 (load-module "server")

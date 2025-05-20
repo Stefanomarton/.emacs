@@ -22,8 +22,8 @@
             ".attachments"))))
 
 (use-package org-download
+  :after org
   :ensure t
-  :commands (my/org-download-clipboard)
   :init
   (setq org-download-display-inline-images 'posframe)
   (setq org-download-method 'directory)
