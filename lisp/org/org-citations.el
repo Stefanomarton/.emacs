@@ -1,7 +1,6 @@
 ;;; org-citations.el --- org-mode configuration -*- lexical-binding: t; -*-
 
 (setq org-cite-global-bibliography '("~/.marton-drive/notes/.resources/bibliography.bib"))
-(setq org-cite-processor '((t csl ~/marton-drive/notes/.resources/ieee.csl ~/GoogleDrive/org/.resources/ieee.csl)))
 
 (use-package citar
   :ensure t

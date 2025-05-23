@@ -77,15 +77,10 @@
     (let ((org-download-screenshot-method
            (cl-case system-type
              (gnu/linux
-              (if (string= "wayland" (getenv "XDG_SESSION_TYPE"))
-                  (if (executable-find "wl-paste")
-                      "wl-paste -t image/png > %s"
-                    (user-error
-                     "Please install the \"wl-paste\" program included in wl-clipboard"))
-                (if (executable-find "xclip")
-                    "xclip -selection clipboard -t image/png -o > %s"
-                  (user-error
-                   "Please install the \"xclip\" program"))))
+              (if (executable-find "wl-paste")
+                  "wl-paste -t image/png > %s"
+                (user-error
+                 "Please install the \"wl-paste\" program included in wl-clipboard")))
              ((windows-nt cygwin)
               (if (executable-find "magick")
                   "magick convert clipboard: %s"

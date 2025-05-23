@@ -30,6 +30,10 @@
   (setq org-export-headline-levels 6)
   (setq org-export-async-debug t)
   (setq org-export-async-init-file "~/.config/emacs/async-init.el")
+  (setq org-latex-remove-logfiles nil)
+  (setq org-cite-export-processors '( (beamer biblatex)
+                                      (latex biblatex)
+                                      (t biblatex)))
 
   ;; modify export folder for org export
   ;; taken from https://stackoverflow.com/questions/9559753/emacs-org-mode-export-to-another-directory
@@ -81,6 +85,7 @@
 
     (setq org-latex-pdf-process
           '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+            "biber %o/%b"
             "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
             ))
 
@@ -173,11 +178,13 @@
                     [EXTRA]
                     \\linespread{1.1}
                     \\hypersetup{pdfborder=0 0 0}"
+                   ("\\chapter{%s}" . "\\chapter*{%s}")
                    ("\\section{%s}" . "\\section*{%s}")
                    ("\\subsection{%s}" . "\\subsection*{%s}")
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                    ("\\begin{enumerate} \\item \\textit{%s}" "\\end{enumerate}")
                    ))
+
     (defun org-latex--inline-image (link info)
       "Return LaTeX code for an inline image.
 LINK is the link pointing to the inline image.  INFO is a plist
@@ -414,14 +421,14 @@ used as a communication channel."
         (setq-local org-latex-toc-command "\\tableofcontents"
                     org-latex-title-command "\\maketitle"))
        ((string= class "marton")
-        (setq-local org-latex-toc-command "\\tableofcontents \\clearpage"
-                    org-latex-title-command my/maketitle-command
+        (setq-local org-latex-toc-command "\\tableofcontents"
+                    ;; org-latex-title-command my/maketitle-command
                     ;; org-latex-default-footnote-command "\\sidefootnote{%s}"
                     ))
        ((string= class "memoir")
         (setq-local org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage"
                     org-latex-title-command my/titlepage-command
-                    org-latex-default-footnote-command "\\sidefootnote{%s}"
+                    ;; org-latex-default-footnote-command "\\sidefootnote{%s}"
                     ))
        (t
         (setq-local org-latex-toc-command "\\tableofcontents"
