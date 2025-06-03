@@ -85,7 +85,123 @@
 
   (setq denote-link-description-format #'my/denote-link-description-with-signature-and-title)
 
-  (denote-rename-buffer-mode 1))
+  (defvar my-denote-typst-front-matter
+    "// title:      %s\n// date:       %s\n// tags:       %s\n// identifier: %s\n")
+
+  ;; Add typst as filetype
+  (setq denote-file-types '((org :extension ".org" :front-matter denote-org-front-matter
+                                 :title-key-regexp "^#\\+title\\s-*:" :title-value-function
+                                 denote-format-string-for-org-front-matter
+                                 :title-value-reverse-function denote-trim-whitespace
+                                 :keywords-key-regexp "^#\\+filetags\\s-*:"
+                                 :keywords-value-function
+                                 denote-format-keywords-for-org-front-matter
+                                 :keywords-value-reverse-function
+                                 denote-extract-keywords-from-front-matter :signature-key-regexp
+                                 "^#\\+signature\\s-*:" :signature-value-function
+                                 denote-format-string-for-org-front-matter
+                                 :signature-value-reverse-function denote-trim-whitespace
+                                 :identifier-key-regexp "^#\\+identifier\\s-*:"
+                                 :identifier-value-function
+                                 denote-format-string-for-org-front-matter
+                                 :identifier-value-reverse-function denote-trim-whitespace
+                                 :date-key-regexp "^#\\+date\\s-*:" :date-value-function
+                                 denote-date-org-timestamp :date-value-reverse-function
+                                 denote-extract-date-from-front-matter :link
+                                 denote-org-link-format :link-in-context-regexp
+                                 denote-org-link-in-context-regexp)
+                            (markdown-yaml :extension ".md" :front-matter
+                                           denote-yaml-front-matter :title-key-regexp
+                                           "^title\\s-*:" :title-value-function
+                                           denote-format-string-for-md-front-matter
+                                           :title-value-reverse-function
+                                           denote-trim-whitespace-then-quotes
+                                           :keywords-key-regexp "^tags\\s-*:"
+                                           :keywords-value-function
+                                           denote-format-keywords-for-md-front-matter
+                                           :keywords-value-reverse-function
+                                           denote-extract-keywords-from-front-matter
+                                           :signature-key-regexp "^signature\\s-*:"
+                                           :signature-value-function
+                                           denote-format-string-for-md-front-matter
+                                           :signature-value-reverse-function
+                                           denote-trim-whitespace-then-quotes
+                                           :identifier-key-regexp "^identifier\\s-*:"
+                                           :identifier-value-function
+                                           denote-format-string-for-md-front-matter
+                                           :identifier-value-reverse-function
+                                           denote-trim-whitespace-then-quotes :date-key-regexp
+                                           "^date\\s-*:" :date-value-function denote-date-rfc3339
+                                           :date-value-reverse-function
+                                           denote-extract-date-from-front-matter :link
+                                           denote-md-link-format :link-in-context-regexp
+                                           denote-md-link-in-context-regexp)
+                            (markdown-toml :extension ".md" :front-matter
+                                           denote-toml-front-matter :title-key-regexp
+                                           "^title\\s-*=" :title-value-function
+                                           denote-format-string-for-md-front-matter
+                                           :title-value-reverse-function
+                                           denote-trim-whitespace-then-quotes
+                                           :keywords-key-regexp "^tags\\s-*="
+                                           :keywords-value-function
+                                           denote-format-keywords-for-md-front-matter
+                                           :keywords-value-reverse-function
+                                           denote-extract-keywords-from-front-matter
+                                           :signature-key-regexp "^signature\\s-*="
+                                           :signature-value-function
+                                           denote-format-string-for-md-front-matter
+                                           :signature-value-reverse-function
+                                           denote-trim-whitespace-then-quotes
+                                           :identifier-key-regexp "^identifier\\s-*="
+                                           :identifier-value-function
+                                           denote-format-string-for-md-front-matter
+                                           :identifier-value-reverse-function
+                                           denote-trim-whitespace-then-quotes :date-key-regexp
+                                           "^date\\s-*=" :date-value-function denote-date-rfc3339
+                                           :date-value-reverse-function
+                                           denote-extract-date-from-front-matter :link
+                                           denote-md-link-format :link-in-context-regexp
+                                           denote-md-link-in-context-regexp)
+                            (text :extension ".txt" :front-matter denote-text-front-matter
+                                  :title-key-regexp "^title\\s-*:" :title-value-function
+                                  denote-format-string-for-org-front-matter
+                                  :title-value-reverse-function denote-trim-whitespace
+                                  :keywords-key-regexp "^tags\\s-*:" :keywords-value-function
+                                  denote-format-keywords-for-text-front-matter
+                                  :keywords-value-reverse-function
+                                  denote-extract-keywords-from-front-matter :signature-key-regexp
+                                  "^signature\\s-*:" :signature-value-function
+                                  denote-format-string-for-org-front-matter
+                                  :signature-value-reverse-function denote-trim-whitespace
+                                  :identifier-key-regexp "^identifier\\s-*:"
+                                  :identifier-value-function
+                                  denote-format-string-for-org-front-matter
+                                  :identifier-value-reverse-function denote-trim-whitespace
+                                  :date-key-regexp "^date\\s-*:" :date-value-function
+                                  denote-date-iso-8601 :date-value-reverse-function
+                                  denote-extract-date-from-front-matter :link
+                                  denote-org-link-format :link-in-context-regexp
+                                  denote-org-link-in-context-regexp)
+                            (typst :extension ".typ" :front-matter my-denote-typst-front-matter
+                                   :title-key-regexp "^\ title\\s-*:" :title-value-function
+                                   denote-format-string-for-org-front-matter
+                                   :title-value-reverse-function denote-trim-whitespace
+                                   :keywords-key-regexp "^\ tags\\s-*:" :keywords-value-function
+                                   denote-format-keywords-for-text-front-matter
+                                   :keywords-value-reverse-function
+                                   denote-extract-keywords-from-front-matter :signature-key-regexp
+                                   "^\ signature\\s-*:" :signature-value-function
+                                   denote-format-string-for-org-front-matter
+                                   :signature-value-reverse-function denote-trim-whitespace
+                                   :identifier-key-regexp "^\ identifier\\s-*:"
+                                   :identifier-value-function
+                                   denote-format-string-for-org-front-matter
+                                   :identifier-value-reverse-function denote-trim-whitespace
+                                   :date-key-regexp "^\ date\\s-*:" :date-value-function
+                                   denote-date-iso-8601 :date-value-reverse-function
+                                   denote-extract-date-from-front-matter :link
+                                   denote-org-link-format :link-in-context-regexp
+                                   denote-org-link-in-context-regexp))))
 
 (use-package consult-denote
   :requires (denote consult)
@@ -97,6 +213,7 @@
   (consult-denote-mode))
 
 (use-package citar-denote
+  :after citar
   :ensure t
   :bind
   (:map global-map
