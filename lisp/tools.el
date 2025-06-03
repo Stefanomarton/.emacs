@@ -32,7 +32,17 @@
   (require 'llm-ollama)
   (setopt ellama-provider
 		  (make-llm-ollama
-		   :chat-model "llama3.2-vision" :embedding-model "llama3.2-vision")))
+		   :chat-model "deepseek-r1:14b" :embedding-model "deepseek-r1:14b ")))
+
+(use-package gptel
+  :ensure t
+  :config
+  (setq gptel-default-mode 'org-mode)
+
+  ;; scroll automatically
+  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+
+  )
 
 (use-package google-this
   :ensure t
