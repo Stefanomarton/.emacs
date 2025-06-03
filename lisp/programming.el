@@ -25,6 +25,8 @@
                (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"))
                (nix . ("https://github.com/nix-community/tree-sitter-nix"))
                (hyprlang . ("https://github.com/tree-sitter-grammars/tree-sitter-hyprlang"))
+               (mermaid . ("https://github.com/monaqa/tree-sitter-mermaid"))
+               (typst . ("https://github.com/uben0/tree-sitter-typst"))
                ))
       (add-to-list 'treesit-language-source-alist grammar)
       ;; Only install `grammar' if we don't already have it
