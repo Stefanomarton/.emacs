@@ -82,13 +82,23 @@
   )
 
 (use-package org-ipe
-  :ensure (:host github :repo "Stefanomarton/org-ipe"))
+  :ensure (:host github :repo "Stefanomarton/org-ipe")
+  :config
+  (defun my/org-ipe-insert-drawing ()
+    (interactive)
+    (org-set-attachments-folder)
+    (setq-local org-ipe-folder (concat org-attachments-folder "/ipe"))
+    (org-ipe-insert-drawing))
+  )
 
 (use-package org-table-auto-align
   :hook
   (org-mode . org-table-auto-align-mode)
   :ensure (:host github :repo "Stefanomarton/org-table-auto-align-mode"))
 
+
+(use-package plantuml-mode
+  :ensure t)
 
 (use-package org-plantuml-mindmap
   :after org
@@ -102,6 +112,12 @@
     			                             (org-set-attachments-folder)
     			                             (file-name-sans-extension (buffer-name))
     			                             "/"))))
+
+(use-package mermaid-mode
+  :ensure t)
+
+(use-package mermaid-ts-mode
+  :ensure t)
 
 (provide 'org-extensions)
 

@@ -1,10 +1,8 @@
 ;;; org-citations.el --- org-mode configuration -*- lexical-binding: t; -*-
 
-(setq org-cite-global-bibliography '("~/.marton-drive/notes/.resources/bibliography.bib"))
-
 (use-package citar
   :ensure t
-  :after (citar-denote)
+  :after org
   :custom
   (org-cite-insert-processor 'citar)
   (org-cite-follow-processor 'citar)
@@ -13,6 +11,7 @@
 
   (citar-file-note-extensions)
   :config
+  (setq org-cite-global-bibliography '("~/.marton-drive/notes/.resources/bibliography.bib"))
 
   (setq citar-notes-paths (list (expand-file-name "uni/papers" notes-folder)))
 
@@ -35,7 +34,7 @@
   (citar-embark-mode))
 
 (use-package org-ref
-  :after org-mode)
+  :after org)
 
 (provide 'org-citations)
 

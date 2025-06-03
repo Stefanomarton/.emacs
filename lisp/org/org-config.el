@@ -165,6 +165,11 @@ point. "
                      er/mark-latex-inside-pairs
                      er/mark-latex-outside-pairs
                      er/mark-LaTeX-math)))))
+
+  (setq org-capture-templates
+        '(("b" "Bookmark" entry
+           (file "~/.marton-drive/notes/personal/20250526T212627--bookmarks__bookmarks.org")
+           "** [[%^{Link}][%^{Description}]] :%^{Tag}:\nAdded: %U\nDescription:%^{Description}")))
   )
 
 (provide 'orgconfig)

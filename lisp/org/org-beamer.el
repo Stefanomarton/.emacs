@@ -4,42 +4,95 @@
   :defer t
   :ensure nil
   :config
-  (defun my-beamer-maketitle-filter (output backend info)
-    "Filter to modify \\maketitle for Beamer exports in Org mode."
-    (if (org-export-derived-backend-p backend 'framed-ex)
-        (replace-regexp-in-string
-         "\\\\maketitle"
-         "\\\\begin{frame}[plain]\n\\\\titlepage\n\\\\end{frame}"
-         output)
-      output))
+  (setq org-beamer-frame-level 3)
 
-  (add-to-list 'org-export-filter-final-output-functions
-               'my-beamer-maketitle-filter)
+  (defun org-beamer--format-frame (headline contents info)
+    "Format HEADLINE as a frame.
+CONTENTS holds the contents of the headline.  INFO is a plist
+used as a communication channel."
+    (let* ((fragilep
+            (org-element-map headline org-beamer-verbatim-elements 'identity
+                             info 'first-match))
+           (frame (let ((selection
+                         (or (and fragilep
+                                  (or (string-match-p "\\\\begin{frame}" contents)
+                                      (string-match-p "\\\\end{frame}" contents))
+                                  org-beamer-frame-environment)
+                             "frame")))
+                    (unless (string= selection "frame")
+                      (setq info (plist-put info :beamer-define-frame t)))
+                    selection))
+           ;; Frame options
+           (beamer-opt (org-element-property :BEAMER_OPT headline))
+           (options
+            (cl-remove-if-not #'org-string-nw-p
+                              (append
+                               (org-split-string
+                                (plist-get info :beamer-frame-default-options) ",")
+                               (and beamer-opt
+                                    (org-split-string
+                                     (and (string-match "^\\[?\\(.*?\\)\\]?$" beamer-opt)
+                                          (match-string 1 beamer-opt))
+                                     ",")))))
+           (fragile
+            (and fragilep (not (member "fragile" options)) (list "fragile")))
+           (label
+            (and (not (member "allowframebreaks" options))
+                 (not (cl-some (lambda (s) (string-match-p "^label=" s)) options))
+                 (list
+                  (let ((label (org-beamer--get-label headline info)))
+                    (format (if (string-match-p ":" label)
+                                "label={%s}" "label=%s")
+                            label)))))
+           (opt-string
+            (org-beamer--normalize-argument
+             (mapconcat #'identity (append label fragile options) ",")
+             'option))
+           (title (org-export-data (org-element-property :title headline) info))
+           (env (org-element-property :BEAMER_ENV headline))
+           (frame-title (if (and env (equal (downcase env) "fullframe")) "" title))
+           (subtitle (org-element-property :BEAMER_SUBTITLE headline))
+           ;; Fragile frame content fix
+           (body (if (not fragilep)
+                     contents
+                   (replace-regexp-in-string "\\`\n*" "\\& " (or contents "")))))
 
-  ;; (defvar org-beamer-title-format "\\frame[plain]{\\titlepage}")
+      (concat
+       ;; ✅ Add subsection here
+       (format "\\subsection{%s}\n" title)
 
-  (defun org-framed-export-to-pdf
-      (&optional async subtreep visible-only body-only ext-plist)
-    (interactive)
-    (let ((file (org-export-output-file-name ".tex" subtreep)))
-      (org-export-to-file 'framed-ex file
-        async subtreep visible-only body-only ext-plist
-        #'org-latex-compile)))
+       ;; ✅ Correct begin{frame} line
+       (format "\\begin{%s}%s{%s}"
+               frame
+               (if (org-string-nw-p opt-string)
+                   (format "%s" opt-string)
+                 "")
+               frame-title)
 
-  (org-export-define-derived-backend 'framed-ex 'beamer
-    :menu-entry
-    '(?l 1
-         ((?h "As PDF file (Beamer)" org-framed-export-to-pdf)
-          (?H "As PDF file and open (Beamer)"
-              (lambda (a s v b)
-                (if a (org-framed-export-to-pdf t s v b)
-  	              (org-open-file (org-framed-export-to-pdf nil s v b)))))))
-    :options-alist
-    '(
-      ;; (:latex-title-command nil org-beamer-title-format t)
-      (:date nil nil "\\today" t)
-      (:)
-      ))
+       ;; Optional subtitle
+       (when subtitle
+         (format "{%s}"
+                 (org-export-data
+                  (org-element-parse-secondary-string
+                   subtitle
+                   (org-element-restriction 'keyword))
+                  info)))
+
+       "\n"
+       body
+       (format "\\end{%s}" frame))))
+
+
+  (add-to-list 'org-latex-classes
+               ;; beamer class, for presentations
+               '("its-lesson"
+                 "\\input{~/projects/programming/latex/templates/beamer/its-lessons/lucid.tex}"
+
+                 ("\\makepart{%s}" . "\\makepart{%s}")
+                 ("\\section{%s}" . "\\section{%s}")
+                 ;; ("\\begin{frame}[fragile]\\frametitle{%s}"
+                 ;;  "\\end{frame}")
+                 ))
   )
 
 (provide 'org-beamer)

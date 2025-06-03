@@ -2,12 +2,12 @@
 # name: beamer two columns
 # key: beamer2col
 # --
-*** Left Column                                           :BMCOL:
+**** Left Column                                           :BMCOL:
 :PROPERTIES:
 :BEAMER_col: 0.5
 :END:
 
-*** Right Column                                            :BMCOL:
+**** Right Column                                            :BMCOL:
 :PROPERTIES:
 :BEAMER_col: 0.5
 :END:

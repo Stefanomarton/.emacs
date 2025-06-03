@@ -6,7 +6,12 @@
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((shell . t) (python . t) (latex . t)(gnuplot . t)(plantuml . t)))
+   '((shell . t)
+     (python . t)
+     (latex . t)
+     (gnuplot . t)
+     (plantuml . t)
+     ))
 
   (setq org-confirm-babel-evaluate nil)
 
@@ -173,6 +178,23 @@
                    "\\documentclass[a4paper,11pt,article,openany]{memoir}
                     \\input{~/projects/programming/latex/templates/basic.tex}
                     \\input{~/projects/programming/latex/templates/marton.tex}
+                    [NO-DEFAULT-PACKAGES]
+                    [PACKAGES]
+                    [EXTRA]
+                    \\linespread{1.1}
+                    \\hypersetup{pdfborder=0 0 0}"
+                   ("\\chapter{%s}" . "\\chapter*{%s}")
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\begin{enumerate} \\item \\textit{%s}" "\\end{enumerate}")
+                   ))
+
+    (add-to-list 'org-latex-classes
+                 '("its-dispense"
+                   "\\documentclass[a4paper,11pt,openany]{memoir}
+                    \\input{~/projects/programming/latex/templates/basic.tex}
+                    \\input{~/projects/programming/latex/templates/its-dispense.tex}
                     [NO-DEFAULT-PACKAGES]
                     [PACKAGES]
                     [EXTRA]
@@ -377,64 +399,76 @@ used as a communication channel."
                      image-code
                      (if caption-above-p caption "")))))))
     )
+
+
+  (defconst my/titlepage-command (concat
+                                  "\\begin{figure}\n"
+                                  "\\centering\n"
+                                  "\\includegraphics[height=4cm]{~/projects/programming/latex/templates/logo.png}"
+                                  "\\end{figure}\n"
+                                  "\\begin{center}\n"
+                                  "\\vfill\n"
+                                  "{\\Huge\\bfseries %t \\par}\n"
+                                  "{\\Large %a \\par}\n"
+                                  "{\\large \\today \\par}\n"
+                                  "\\vfill\n"
+                                  "\\thispagestyle{empty}\n"
+                                  "\\clearpage"
+                                  "\\end{center}\n"
+                                  ;; "\\restorepagestyle"
+                                  ))
+
+  (defconst my/maketitle-command (concat
+                                  "\\begin{figure}\n"
+                                  "\\centering\n"
+                                  "\\includegraphics[height=4cm]{~/projects/programming/latex/templates/logo.png}"
+                                  "\\end{figure}\n"
+                                  "\\begin{center}\n"
+                                  "{\\huge\\bfseries %t \\par}\n"
+                                  "{\\Large %a \\par}\n"
+                                  "{\\large stefano@marton.dev \\par}\n"
+                                  "{\\large \\today \\par}\n"
+                                  "\\thispagestyle{empty}\n"
+                                  "\\end{center}\n"
+                                  ;; "\\restorepagestyle"
+                                  ))
+
+  (defun my/org-latex-setup-commands-based-on-class (backend)
+    "Set `org-latex-toc-command` and `org-latex-title-command` based on LaTeX class used."
+    (when (eq backend 'latex)
+      (let* ((info (org-export-get-environment 'latex))
+             (class (plist-get info :latex-class)))
+        (cond
+         ((string= class "article")
+          (setq-local org-latex-toc-command "\\tableofcontents"
+                      org-latex-title-command "\\maketitle"))
+         ((string= class "marton")
+          (setq-local org-latex-toc-command "\\tableofcontents"
+                      ;; org-latex-title-command my/maketitle-command
+                      ;; org-latex-default-footnote-command "\\sidefootnote{%s}"
+                      ))
+         ((string= class "memoir")
+          (setq-local org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage"
+                      org-latex-title-command my/titlepage-command
+                      ;; org-latex-default-footnote-command "\\sidefootnote{%s}"
+                      ))
+         ((string= class "its-dispense")
+          (setq-local org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage \n"
+                      ;; org-latex-title-command my/maketitle-command
+                      ;; org-latex-default-footnote-command "\\sidefootnote{%s}"
+                      ))
+         (t
+          (setq-local org-latex-toc-command "\\tableofcontents"
+                      org-latex-title-command "\\maketitle"))))))
+
+  (add-hook 'org-export-before-processing-hook #'my/org-latex-setup-commands-based-on-class)
+
+  (defun my/org-export-to-ascii-without-toc ()
+    "Export to ASCII with TOC disabled."
+    (let ((org-ascii-with-toc nil))
+      (org-ascii-export-to-ascii)))
+
   )
-
-(defconst my/titlepage-command (concat
-                                "\\begin{figure}\n"
-                                "\\centering\n"
-                                "\\includegraphics[height=4cm]{~/projects/programming/latex/templates/logo.png}"
-                                "\\end{figure}\n"
-                                "\\begin{center}\n"
-                                "\\vfill\n"
-                                "{\\Huge\\bfseries %t \\par}\n"
-                                "{\\Large %a \\par}\n"
-                                "{\\large \\today \\par}\n"
-                                "\\vfill\n"
-                                "\\thispagestyle{empty}\n"
-                                "\\clearpage"
-                                "\\end{center}\n"
-                                ;; "\\restorepagestyle"
-                                ))
-
-(defconst my/maketitle-command (concat
-                                "\\begin{figure}\n"
-                                "\\centering\n"
-                                "\\includegraphics[height=4cm]{~/projects/programming/latex/templates/logo.png}"
-                                "\\end{figure}\n"
-                                "\\begin{center}\n"
-                                "{\\huge\\bfseries %t \\par}\n"
-                                "{\\Large %a \\par}\n"
-                                "{\\large stefano@marton.dev \\par}\n"
-                                "{\\large \\today \\par}\n"
-                                "\\thispagestyle{empty}\n"
-                                "\\end{center}\n"
-                                ;; "\\restorepagestyle"
-                                ))
-
-(defun my/org-latex-setup-commands-based-on-class (backend)
-  "Set `org-latex-toc-command` and `org-latex-title-command` based on LaTeX class used."
-  (when (eq backend 'latex)
-    (let* ((info (org-export-get-environment 'latex))
-           (class (plist-get info :latex-class)))
-      (cond
-       ((string= class "article")
-        (setq-local org-latex-toc-command "\\tableofcontents"
-                    org-latex-title-command "\\maketitle"))
-       ((string= class "marton")
-        (setq-local org-latex-toc-command "\\tableofcontents"
-                    ;; org-latex-title-command my/maketitle-command
-                    ;; org-latex-default-footnote-command "\\sidefootnote{%s}"
-                    ))
-       ((string= class "memoir")
-        (setq-local org-latex-toc-command "\\clearpage \\tableofcontents \\clearpage"
-                    org-latex-title-command my/titlepage-command
-                    ;; org-latex-default-footnote-command "\\sidefootnote{%s}"
-                    ))
-       (t
-        (setq-local org-latex-toc-command "\\tableofcontents"
-                    org-latex-title-command "\\maketitle"))))))
-
-(add-hook 'org-export-before-processing-hook #'my/org-latex-setup-commands-based-on-class)
 
 
 (provide 'org-export)
