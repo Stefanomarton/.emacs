@@ -4,6 +4,7 @@
 
 (require 'org)
 (require 'ox)
+(require 'ox-beamer)
 (require 'cl-lib)
 
 (add-to-list 'load-path "~/.config/emacs/lisp/org")
@@ -13,5 +14,6 @@
 (setq org-link-abbrev-alist
       `(("image-dir" . ,(format "file:%s%s" notes-folder "/.attachments/"))))
 
+(load "org-citations.el")
 (load "org-export.el")
-;; (load "org-attachments.el")
+(load "org-beamer.el")
