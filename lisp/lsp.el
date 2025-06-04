@@ -6,7 +6,14 @@
   (python-ts-mode . eglot-ensure)
   (LaTeX-mode . eglot-ensure)
   (nix-mode . eglot-ensure)
+  (typst-ts-mode . eglot-ensure)
+
   :config
+  (add-to-list 'eglot-server-programs
+               `((typst-ts-mode) .
+                 ,(eglot-alternatives `(,typst-ts-lsp-download-path
+                                        "tinymist"
+                                        "typst-lsp"))))
   (setq eglot-workspace-configuration
         '((pylsp
            (plugins
