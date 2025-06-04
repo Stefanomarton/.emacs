@@ -89,18 +89,25 @@ targets."
 
 ;; Nice auto formatting
 ;; Format-all
-(use-package format-all
-  :ensure t
-  :hook
-  (format-all-mode . format-all-ensure-formatter)
-  (prog-mode . format-all-mode)
-  (LaTeX-mode . format-all-mode)
-  (markdown-mode . format-all-mode)
-  :config
-  (setq-default format-all-formatters
-                '(("TOML" (taplo-fmt))))
-  (setq format-all-show-errors 'error))
+;; (use-package format-all
+;;   :ensure t
+;;   :hook ((prog-mode        . format-all-mode)      ; run on every code buffer
+;;          (LaTeX-mode       . format-all-mode)
+;;          (markdown-mode    . format-all-mode)
+;;          (format-all-mode  . format-all-ensure-formatter))
+;;   :config
+;;   ;; 3 ▸ make typstyle the default formatter for Typst files
+;;   (setq-default format-all-formatters
+;;                 '(("Typst" typstyle)           ; symbol, not (typstyle)
+;;                   ("TOML"  taplo-fmt)))
 
+;;   ;; show errors only when the formatter really fails
+;;   (setq format-all-show-errors 'error))
+
+(use-package apheleia
+  :ensure t
+  :config
+  (apheleia-global-mode))
 
 ;;Outline
 (use-package outline
