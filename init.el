@@ -139,6 +139,7 @@
 (load-module "org/org-attachments")
 
 (load-module "denote")
+(load-module "typst")
 (load-module "server")
 
 ;;; init.el ends here
