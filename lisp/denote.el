@@ -21,6 +21,7 @@
   ("<escape>do" . my/denote-open-or-create)
 
   ("<escape>dr" . denote-region)
+  ("<escape>dg" . consult-denote-grep)
   ("<escape>dt" . denote-type)
   ("<escape>dl" . denote-link)
   ("<escape>dL" . denote-find-link)
@@ -59,14 +60,14 @@
   ;; link configuration
   (defun my/denote-link-description-with-signature-and-title (file)
     "Return link description for FILE.
-   - If the region is active, use it as the description.
-   - If the region is not active, ask for a prompt and use the input.
-   - If the prompt is empty, check if FILE has a signature, then format the description
-     as a sequence of the signature text and the title with two spaces between them.
-   - If FILE does not have a signature, then use its title as the description.
+    - If the region is active, use it as the description.
+    - If the region is not active, ask for a prompt and use the input.
+    - If the prompt is empty, check if FILE has a signature, then format the description
+    as a sequence of the signature text and the title with two spaces between them.
+    - If FILE does not have a signature, then use its title as the description.
 
-   This is useful as the value of the user option
-   `denote-link-description-function`."
+    This is useful as the value of the user option
+    `denote-link-description-function`."
 
     (let* ((file-type (denote-filetype-heuristics file))
            (signature (denote-retrieve-filename-signature file))
