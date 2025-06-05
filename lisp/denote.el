@@ -1,7 +1,9 @@
 ;;; denote.el -*- lexical-binding: t; -*-;;;
+(setq custom-file (locate-user-emacs-file "custom.el"))
 
 (use-package denote-journal
-  :ensure (:host github :repo "protesilaos/denote-journal")
+  :vc (:url https://github.com/protesilaos/denote-journal
+            :branch "main")
   :bind
   ("<escape>dj" . denote-journal-new-or-existing-entry)
   :config
@@ -10,8 +12,8 @@
   )
 
 (use-package denote
+  :vc (:url "https://github.com/protesilaos/denote")
   :demand t
-  :ensure (:wait t)
   :init
   (setq denote-directory notes-folder)
 
@@ -46,7 +48,7 @@
 
   ;; Modify default command to use `denote-subdirectory' when creating TARGET
   (defun my/denote-open-or-create (target)
-    (interactive (list (denote-file-prompt nil nil :no-require-match)))
+    (interactive (list (denote-file-prompt nil nil :dno-require-match)))
     (if (and target (file-exists-p target))
         (find-file target)
       (denote--command-with-features #'denote-subdirectory :use-last-input-as-def-title nil nil nil)))

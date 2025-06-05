@@ -10,15 +10,9 @@
 
   :config
   (add-to-list 'eglot-server-programs
-               `((typst-ts-mode) .
-                 ,(eglot-alternatives `(,typst-ts-lsp-download-path
-                                        "tinymist"
-                                        "typst-lsp"))))
-  (setq eglot-workspace-configuration
-        '((pylsp
-           (plugins
-            (jedi_completion (fuzzy . t))
-            (pydocstyle (enabled . t)))))))
+
+               '((typst-ts-mode) . ("tinymist"))))
+
 
 (use-package eldoc
   :ensure nil)

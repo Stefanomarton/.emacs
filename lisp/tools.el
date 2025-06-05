@@ -50,7 +50,7 @@
 
 (use-package csv-mode
   :ensure t
-  :mode ("\\.csv\\'" . kbd-mode))
+  :mode ("\\.csv\\'" . csv-mode))
 
 (use-package pkg-info
   :ensure t
@@ -60,9 +60,9 @@
   :ensure t
   :defer t)
 
-(use-package explain-pause-mode
-  :ensure (:host github :repo "lastquestion/explain-pause-mode")
-  :defer t)
+;; (use-package explain-pause-mode
+;;   :ensure (:host github :repo "lastquestion/explain-pause-mode")
+;;   :defer t)
 
 (use-package winner
   :ensure nil
@@ -79,7 +79,7 @@
   :commands sudo-edit)
 
 (use-package term-toggle
-  :ensure (:host github :repo "amno1/emacs-term-toggle")
+  :vc (:url "https://github.com/amno1/emacs-term-toggle" :branch "master")
   :bind (("<escape>." . term-toggle-eshell)))
 
 (use-package eshell
@@ -111,17 +111,16 @@
               ("<escape>z" . zoxide-find-file)))
 
 (use-package visual-regexp
-  :ensure t
-  :bind (:map global-map
-              ;; ([remap isearch-forward] . vr/isearch-forward)
-              ;; ([remap isearch-backward] . vr/isearch-backward)
-              ("C-M-s" . vr/replace)
-              )
+  :vc (:url "https://github.com/benma/visual-regexp.el" :branch "master")
+  :bind (              ;; ([remap isearch-forward] . vr/isearch-forward)
+         ;; ([remap isearch-backward] . vr/isearch-backward)
+         ("C-M-s" . vr/replace)
+         )
   :config
   (setq vr/auto-show-help nil))
 
 (use-package visual-regexp-steroids
-  :ensure (:host github :repo "benma/visual-regexp-steroids.el"))
+  :vc (:url "https://github.com/benma/visual-regexp-steroids.el" :branch "master"))
 
 (use-package calc
   :ensure nil
@@ -158,6 +157,21 @@
   (defun diff-current-buffer-with-file ()
     (interactive)
     (diff-buffer-with-file (current-buffer))))
+
+;; (use-package compile-angel
+;;   :ensure t
+;;   :demand t
+;;   :config
+;;   ;; Set `compile-angel-verbose' to nil to disable compile-angel messages.
+;;   ;; (When set to nil, compile-angel won't show which file is being compiled.)
+;;   (setq compile-angel-verbose t)
+
+;;   ;; Uncomment the line below to compile automatically when an Elisp file is saved
+;;   ;; (add-hook 'emacs-lisp-mode-hook #'compile-angel-on-save-local-mode)
+
+;;   ;; A global mode that compiles .el files before they are loaded
+;;   ;; using `load' or `require'.
+;;   (compile-angel-on-load-mode))
 
 (provide 'tools)
 

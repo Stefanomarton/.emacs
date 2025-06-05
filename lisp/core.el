@@ -68,7 +68,7 @@
 ;; I don't use 'custom.el' to set variables, but a few of the packages I use do.
 ;; This snippet ensures that a massacre is not made of my init.el.
 
-(setq custom-file "/dev/null")
+;(setq custom-file "/dev/null")
 
 ;; Set default directory to home and abbreviate it
 (setq default-directory "~/")
@@ -194,14 +194,12 @@
 (setopt shift-select-mode 'permanent)
 
 ;; Fix clipboard in TTY
-(use-package xclip
-  :ensure t
-  :init
-  (add-hook 'after-init-hook 'xclip-mode)
-  :config
-  (setq xclip-program "wl-copy")
-  (setq xclip-select-enable-clipboard t)
-  (setq xclip-method (quote wl-copy)))
+;(use-package xclip
+;  :ensure t
+;  :config
+;  (setq xclip-program "wl-copy")
+;  (setq xclip-select-enable-clipboard t)
+;  (setq xclip-method (quote wl-copy)))
 
 ;; Save some key presses
 (use-package repeat

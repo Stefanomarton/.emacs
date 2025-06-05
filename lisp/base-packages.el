@@ -77,7 +77,8 @@ targets."
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
-  :ensure (:host github :repo "oantolin/embark" :files ("embark-consult.el"))
+  ;; :ensure (:host github :repo "oantolin/embark" :files ("embark-consult.el"))
+  ;; :ensure t
   :hook
   (embark-collect-mode . consult-preview-at-point-mode)
   :after (embark consult)
@@ -377,10 +378,10 @@ targets."
   (setq undo-fu-session-linear t)
   (undo-fu-session-global-mode))
 
-(use-package undo-tree
-  :ensure t
-  :config
-  (undo-tree-mode))
+;; (use-package undo-tree
+;;   :ensure t
+;;   :config
+;;   (undo-tree-mode))
 
 (use-package simple
   :ensure nil

@@ -8,7 +8,7 @@
               ("<escape> <" . org-demote-subtree)
               ("<escape> J" . my-fix-text-region))
   :hook
-  (org-mode . org-margin-mode)
+  ;; (org-mode . org-margin-mode)
   (org-mode . yas-minor-mode-on)
   (org-mode . er/add-latex-in-org-mode-expansions)
   (org-mode . my/org-header-outline-path-mode)

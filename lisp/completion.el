@@ -132,21 +132,28 @@
   :ensure t
   :after consult)
 
-(use-package consult-todo
-  :ensure (:host github :repo "liuyinz/consult-todo")
-  :after consult
-  :config
-  (setq consult-todo-narrow
-        '((?t . "TODO")
-          (?f . "FIX")
-          (?b . "BUG")
-          (?h . "ASK"))))
+                                        ;(use-package consult-todo
+                                        ;  :ensure (:host github :repo "liuyinz/consult-todo")
+                                        ;  :after consult
+                                        ;  :config
+                                        ;  (setq consult-todo-narrow
+                                        ;        '((?t . "TODO")
+                                        ;          (?f . "FIX")
+                                        ;          (?b . "BUG")
+                                        ;          (?h . "ASK"))))
 
 (use-package cape
   :ensure t
   :after corfu
   :config
   (setq cape-dict-file '("/usr/share/dict/italian" "/usr/share/dict/british-english")))
+
+(use-package yasnippet-capf
+  :ensure t
+  :after cape
+  :vc (:url "https://github.com/elken/yasnippet-capf" :branch "master")
+  :config
+  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
 (use-package corfu
   :defer 2
@@ -202,7 +209,8 @@
                 (list (cape-capf-super
                        #'eglot-completion-at-point
                        #'yasnippet-capf
-                       #'cape-file))))
+                       #'cape-file
+                       ))))
 
   (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
 

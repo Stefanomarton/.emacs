@@ -52,20 +52,8 @@
         markdown-enable-highlighting-syntax t))
 
 
-(use-package tex
-  :ensure
-  (auctex :pre-build ((or (executable-find "make") (error "No make executable found"))
-                      ("./autogen.sh")
-                      ("./configure" "--without-texmf-dir"
-                       "--with-packagelispdir=./"
-                       "--with-packagedatadir=./")
-                      ("make"))
-          :build (:not elpaca--compile-info) ; Make will take care of this step
-          :files ("*.el" "doc/*.info*" "etc" "images" "latex" "style")
-          :version (lambda (_) (require 'tex-site) AUCTeX-version)
-          :depth nil
-          )
-  :mode ("\\.tex?\\'" . LaTeX-mode)
+(use-package auctex
+  :ensure t
   :hook
   (LaTeX-mode-hook . prettify-symbols-mode)
   :config
@@ -78,9 +66,9 @@
 	    TeX-source-correlate-start-server t
 	    TeX-source-correlate-method 'synctex)
 
-  (TeX-source-correlate-mode 1)
-  (add-to-list 'TeX-view-program-selection
-	           '(output-pdf "Zathura"))
+  ;; (TeX-source-correlate-mode 1)
+  ;; (add-to-list 'TeX-view-program-selection
+  ;;              '(output-pdf "Zathura"))
 
   (defun my-export-to-pdf ()
     "Export the current LaTeX document to PDF using AUCTeX."
@@ -244,8 +232,7 @@
 	       (yas-expand-snippet "$$ \n $1 \n $$ \n \n $0"))))
 
 (use-package laas
-  :ensure (:host github :repo "tecosaur/LaTeX-auto-activating-snippets")
-  ;; :ensure t
+  :ensure t
   :hook
   (LaTeX-mode . laas-mode)
   (markdown-mode . laas-mode)
@@ -329,11 +316,10 @@
     ".v" (lambda () (interactive) (laas-wrap-previous-object "vec"))
     ".t" (lambda () (interactive) (laas-wrap-previous-object "text"))
     ".b" (lambda () (interactive) (laas-wrap-previous-object "mathbf")))
-  :init
-  (defvar AUCTeX-version "13.2")
   )
 
 (use-package cdlatex
+  :ensure t
   ;; :commands latex-mode
   :hook (LaTeX-mode . cdlatex-mode)
   :custom
@@ -343,6 +329,7 @@
   )
 
 (use-package jinx
+  :ensure t
   :hook
   (org-mode . jinx-mode)
   :bind
@@ -350,7 +337,6 @@
         ("M-$" . jinx-correct))
   (:map text-mode-map
         ("M-$" . jinx-correct))
-  :ensure (:host github :repo "minad/jinx")
   :init
   ;; must load it before starting jinx-mode
   (setq jinx-languages "it en_US"))

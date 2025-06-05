@@ -125,14 +125,8 @@ file corresponding to the current buffer file, then recompile the file."
 
 ;; Highlight kmonad files
 (use-package kbd-mode
-  :ensure (:host github
-                 :repo "kmonad/kbd-mode")
+  :vc (:url "https://github.com/kmonad/kbd-mode" :rev :newest)
   :mode ("\\.kbd\\'" . kbd-mode))
-
-(use-package yasnippet-capf
-  :after cape
-  :config
-  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
 (use-package yuck-mode
   :ensure t
@@ -202,11 +196,12 @@ file corresponding to the current buffer file, then recompile the file."
   :ensure t)
 
 (use-package hyprlang-ts-mode
-  :ensure (:host github :repo "Nathan-Melaku/hyprlang-ts-mode")
+  :vc (:url "https://github.com/Nathan-Melaku/hyprlang-ts-mode")
   :custom
   (hyprlang-ts-mode-indent-offset 4))
 
 (use-package nix-ts-mode
+  :ensure t
   :mode "\\.nix\\'")
 
 (provide 'programming)

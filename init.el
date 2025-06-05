@@ -3,54 +3,9 @@
   ;; 1MB in bytes, default 4096 bytes
   (setq read-process-output-max 1048576))
 
-(setq elpaca-core-date '(20241219))
-
-(defvar elpaca-installer-version 0.10)
-(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil :depth 1 :inherit ignore
-                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-       (build (expand-file-name "elpaca/" elpaca-builds-directory))
-       (order (cdr elpaca-order))
-       (default-directory repo))
-  (add-to-list 'load-path (if (file-exists-p build) build repo))
-  (unless (file-exists-p repo)
-    (make-directory repo t)
-    (when (< emacs-major-version 28) (require 'subr-x))
-    (condition-case-unless-debug err
-        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
-                                                  ,@(when-let* ((depth (plist-get order :depth)))
-                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
-                                                  ,(plist-get order :repo) ,repo))))
-                  ((zerop (call-process "git" nil buffer t "checkout"
-                                        (or (plist-get order :ref) "--"))))
-                  (emacs (concat invocation-directory invocation-name))
-                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-                  ((require 'elpaca))
-                  ((elpaca-generate-autoloads "elpaca" repo)))
-            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-          (error "%s" (with-current-buffer buffer (buffer-string))))
-      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-  (unless (require 'elpaca-autoloads nil t)
-    (require 'elpaca)
-    (elpaca-generate-autoloads "elpaca" repo)
-    (load "./elpaca-autoloads")))
-(add-hook 'after-init-hook #'elpaca-process-queues)
-(elpaca `(,@elpaca-order))
-
-(elpaca elpaca-use-package
-  (elpaca-use-package-mode)
-  (setq elpaca-use-package-by-default t))
-
 ;; Uncommented this sometimes for debugging
-;; (setq use-package-verbose t)
-;; (setq debug-on-message t)
+(setq use-package-verbose t)
+(setq debug-on-message t)
 
 ;; But we do want to reset the garbage collector settings eventually. When we
 ;; do, we'll use the GCMH [1] package to schedule the garbage collector to run
@@ -111,12 +66,15 @@
 (eval-when-compile
   (require 'use-package))
 
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
 (defvar drive-folder "~/.marton-drive/")
 (defvar notes-folder (concat drive-folder "notes"))
 
 (load-module "core")
 ;; ;; (load-module "evil")
 ;; ;; (load-module "keybindings")
+
 (load-module "file-management")
 (load-module "completion")
 (load-module "appearance")
@@ -144,3 +102,26 @@
 
 ;;; init.el ends here
 (put 'eshell 'disabled nil)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(aas altcaps apheleia auto-yasnippet avy base16-theme breadcrumb bug-hunter
+         cape casual consult consult-dir consult-projectile corfu csv-mode
+         dirvish ebuku ellama embark embark-consult embrace eros esup focus gcmh
+         git-gutter git-gutter-fringe gnuplot-mode goggles google-this goto-chg
+         gptel helpful hl-todo hydra lisp-extra-font-lock lua-mode magit
+         magit-delta marginalia markdown-mode mermaid-mode mermaid-ts-mode
+         mixed-pitch nerd-icons-corfu orderless org-anki org-download org-modern
+         org-transclusion pdf-tools pkg-info plantuml-mode projectile pyvenv
+         rainbow-delimiters rainbow-mode scratch selected sudo-edit tab-jump-out
+         undo-fu undo-fu-session undo-tree vertico vertico-posframe
+         visual-regexp wgrep yaml-pro yasnippet yuck-mode zoxide)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

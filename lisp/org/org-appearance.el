@@ -5,7 +5,6 @@
   :ensure t
   :hook
   (org-mode . org-modern-mode)
-  (org-modern-mode . org-margin-mode)
   :config
   (setq org-modern-todo nil
         org-modern-hide-stars nil
@@ -16,14 +15,16 @@
         org-modern-table nil)
   )
 
-;; Cool margin annotations
-(use-package org-margin
-  :hook (org-mode . org-margin-mode)
-  :ensure (:host github :repo "rougier/org-margin")
-  :requires svg-lib)
+;;Cool margin annotations
+;; (use-package org-margin
+;;   :ensure t
+;;   :hook (org-mode . org-margin-mode)
+;;   :vc (:url "https://github.com/rougier/org-margin")
+;;   :requires svg-lib)
 
 (use-package org-appear
-  :ensure (:type git :host github :repo "awth13/org-appear")
+  :ensure t
+  :vc (:url "https://github.com/awth13/org-appear")
   :hook (org-mode . org-appear-mode)
   :init
   (setq org-appear-autolinks t)
