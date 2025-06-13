@@ -4,8 +4,8 @@
   (setq read-process-output-max 1048576))
 
 ;; Uncommented this sometimes for debugging
-(setq use-package-verbose t)
-(setq debug-on-message t)
+;; (setq use-package-verbose t)
+;; (setq debug-on-message t)
 
 ;; But we do want to reset the garbage collector settings eventually. When we
 ;; do, we'll use the GCMH [1] package to schedule the garbage collector to run
@@ -91,6 +91,7 @@
 (load-module "org/org-config")
 (load-module "org/org-beamer")
 (load-module "org/org-navigation")
+(load-module "org/org-citations")
 (load-module "org/org-export")
 (load-module "org/org-appearance")
 (load-module "org/org-extensions")
@@ -125,3 +126,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+

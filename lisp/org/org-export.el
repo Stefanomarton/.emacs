@@ -1,7 +1,7 @@
 ;;; org-export.el --- org-mode configuration -*- lexical-binding: t; -*-
 
 (use-package org-src
-  :after org
+  :after denote
   :ensure nil
   :config
   (org-babel-do-load-languages
@@ -13,13 +13,16 @@
      (plantuml . t)
      ))
 
+  (add-to-list 'org-src-lang-modes '("typst" . typst-ts))
+
   (setq org-confirm-babel-evaluate nil)
 
   (setq org-plantuml-exec-mode 'plantuml)
   (setq org-src-fontify-natively t)
   (setq-default
    org-src-tab-acts-natively t
-   org-src-preserve-indentation t))
+   org-src-preserve-indentation t)
+  )
 
 (use-package ox
   :ensure nil
@@ -469,7 +472,6 @@ used as a communication channel."
       (org-ascii-export-to-ascii)))
 
   )
-
 
 (provide 'org-export)
 

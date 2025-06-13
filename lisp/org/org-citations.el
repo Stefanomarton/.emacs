@@ -34,6 +34,7 @@
   (citar-embark-mode))
 
 (use-package org-ref
+  :ensure t
   :after org)
 
 (provide 'org-citations)

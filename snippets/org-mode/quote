@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: quote
+# key: qte
+# --
+#+begin_quote
+${2:`(if (region-active-p) (yas-selected-text) (propertize "content" 'font-lock-face '(:inherit region)))`}
+#+end_quote
+$0

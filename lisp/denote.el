@@ -216,7 +216,7 @@
   (consult-denote-mode))
 
 (use-package citar-denote
-  :after citar
+  :after denote
   :ensure t
   :bind
   (:map global-map

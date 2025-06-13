@@ -121,6 +121,8 @@
 (use-package breadcrumb
   :ensure t
   :hook
+  (typst-ts-mode . breadcrumb-local-mode)
+  (Latex-Mode . breadcrumb-local-mode)
   (prog-mode . breadcrumb-local-mode)
   (conf-unix-mode . breadcrumb-local-mode))
 
