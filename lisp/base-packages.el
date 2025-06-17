@@ -18,7 +18,9 @@
   :demand t
   :bind
   (:map global-map
-        ("<escape> <escape>" . embark-minimal-act))
+        ("<escape> <escape>" . embark-minimal-act)
+        ("C-." . embark-minimal-act)
+        )
   :config
   ;; Which-key style indicator
   (defun embark-minimal-act (&optional arg)
