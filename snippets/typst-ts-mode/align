@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: align
+# key: align
+# --
+#align($1)[
+$2
+]$0

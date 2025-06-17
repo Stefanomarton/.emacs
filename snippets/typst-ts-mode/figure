@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: wideblock
+# key: wideblock
+# --
+#wideblock(
+$0
+double: true,
+)

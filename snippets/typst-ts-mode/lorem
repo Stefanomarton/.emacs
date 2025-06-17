@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: lorem
+# key: lorem
+# --
+#lorem($1)$0

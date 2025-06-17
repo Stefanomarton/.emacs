@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: quote
+# key: quote
+# --
+#quote(attribution: [$1])[
+$2
+]
+$0
