@@ -82,6 +82,7 @@
   )
 
 (use-package org-ipe
+  :after org
   :vc (:url "https://github.com/Stefanomarton/org-ipe" :branch "master")
   :config
   (defun my/org-ipe-insert-drawing ()
@@ -92,17 +93,21 @@
   )
 
 (use-package org-table-auto-align
+  :after org
   :hook
   (org-mode . org-table-auto-align-mode)
   :vc (:url "https://github.com/Stefanomarton/org-table-auto-align-mode" :branch "master"))
 
 (use-package plantuml-mode
+  :after org
   :ensure t)
 
 (use-package mermaid-mode
+  :after org
   :ensure t)
 
 (use-package mermaid-ts-mode
+  :after org
   :ensure t)
 
 (provide 'org-extensions)

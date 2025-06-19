@@ -1,4 +1,3 @@
-
 ;;; project-management.el --- Project management packages -*- lexical-binding: t; -*-
 
 (use-package projectile
@@ -74,21 +73,7 @@
   :hook ((prog-mode text-mode-hook LaTeX-mode) . git-gutter-mode)
   :config
   (git-gutter-mode)
-  (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
-                                        :hint nil)
-    ("n" git-gutter:next-hunk "next hunk")
-    ("p" git-gutter:previous-hunk "previous hunk")
-    ("h" (progn (goto-char (point-min)) (git-gutter:next-hunk 1)) "first hunk")
-    ("l" (progn (goto-char (point-min)) (git-gutter:previous-hunk 1)) "last hunk")
-    ("<SPC>" git-gutter:popup-hunk "popup hunk")
-    ("s" git-gutter:stage-hunk "stage hunk")
-    ("r" git-gutter:revert-hunk "revert hunk")
-    ("c" git-gutter+-commit "commit hunk")
-    ("C" git-gutter+-stage-and-commit "stange and commit hunk")
-    ("q" nil "quit"))
-  (setq git-gutter:update-interval 0.02)
-  :bind
-  (("<leader>gn" . hydra-git-gutter/body)))
+  (setq git-gutter:update-interval 0.02))
 
 (use-package git-gutter-fringe
   :ensure t

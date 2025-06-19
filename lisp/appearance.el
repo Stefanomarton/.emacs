@@ -1,6 +1,4 @@
 ;;; appearance.el -*- lexical-binding: t; -*-
-;;; Configuration for making Emacs look pretty.
-
 
 ;; I keep losing the curson
 (blink-cursor-mode 0)
@@ -9,18 +7,28 @@
 (global-prettify-symbols-mode t)
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 
-;; Display line number relative and absolute
-(setq display-line-numbers-grow-only t)
-(setq display-line-numbers-width-start 15)
-(setq display-line-numbers-type 'relative)
 
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
-(add-hook 'markdown-mode-hook 'display-line-numbers-mode)
-(add-hook 'latex-mode-hook 'display-line-numbers-mode)
+(use-package display-line-numbers
+  :ensure nil
+  :hook
+  (prog-mode-hook . display-line-numbers-mode)
+  (markdown-mode-hook . display-line-numbers-mode)
+  (latex-mode-hook . display-line-numbers-mode)
+  :config
+  ;; Display line number relative and absolute
+  (setq display-line-numbers-grow-only t)
+  (setq display-line-numbers-width-start 15)
+  (setq display-line-numbers-type 'relative)
+  )
+
 
 ;; Highlight the current line
-(add-hook 'prog-mode-hook 'hl-line-mode)
-(setq hl-line-sticky-flag nil)          ; Avoid seeing the bar in all windows
+(use-package hl-line
+  :ensure nil
+  :hook
+  (prog-mode . hl-line-mode)
+  :config
+  (setq hl-line-sticky-flag nil))
 
 ;; Line spacing
 (setq line-spacing 0.12)
@@ -28,6 +36,7 @@
 ;; I like icons
 (use-package nerd-icons
   :ensure t
+  :defer t
   )
 
 ;; Customize the divider beetween windows
@@ -41,7 +50,7 @@
     (setq-local line-spacing 0.12)
     ;; (set-window-margins nil 1 1)
     )
-  (add-to-list 'default-frame-alist '(alpha-background . 90))
+  ;; (add-to-list 'default-frame-alist '(alpha-background . 90))
 
   ;; (add-hook 'window-configuration-change-hook #'setup-margin)
   (add-hook 'text-mode-hook #'setup-margin)
@@ -73,13 +82,22 @@
 
 (use-package base16-theme
   :ensure t
+  :custom
+  (base16-theme-distinct-fringe-background nil)
+  (base16-theme-256-color-source 'colors)
   :config
-  (setq base16-theme-distinct-fringe-background nil)
-  ;; (add-to-list 'custom-theme-load-path "~/.config/emacs")
-  (setq base16-theme-256-color-source 'colors)
-  ;; (load-theme 'base16-mountain t)
   (load-theme 'base16-everforest-dark-hard t)
+
+  (set-face-attribute 'font-lock-comment-face nil :slant 'oblique)
+  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'oblique)
+  (set-face-attribute 'mode-line-active nil :height 1.2)
+  (set-face-attribute 'header-line nil :height 1.2)
   )
+
+;; (use-package mindre-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'mindre t))
 
 ;; Cool aspect
 (use-package mixed-pitch
@@ -103,22 +121,23 @@
   :config
   (set-face-attribute 'default nil
 		              :family "JuliaMono"
-		              :height 150
+		              :height 155
 		              :weight 'normal
 		              :width 'normal)
   (set-face-attribute 'variable-pitch nil
     	              :family "JuliaMono"
-    	              :height 150
+    	              :height 155
     	              :weight 'normal
     	              :width 'normal)
   (set-face-attribute 'fixed-pitch nil
 		              :family "JuliaMono"
-		              :height 150
+		              :height 155
 		              :weight 'normal
 		              :width 'normal)
   )
 
 (use-package breadcrumb
+  :defer t
   :ensure t
   :hook
   (typst-ts-mode . breadcrumb-local-mode)
@@ -127,10 +146,12 @@
   (conf-unix-mode . breadcrumb-local-mode))
 
 (use-package focus
+  :defer t
   :ensure t
   :commands (focus-mode))
 
 (use-package goggles
+  :defer t
   :ensure t
   :hook ((prog-mode text-mode) . goggles-mode)
   :config

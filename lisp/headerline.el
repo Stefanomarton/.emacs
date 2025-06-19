@@ -17,3 +17,5 @@
       (progn (setq my/org-header-old-header header-line-format)
              (setq header-line-format '((:eval (org-get-title 'current-buffer))(:eval (org-outline-path-headerline)))))
     (setq header-line-format my/org-header-old-header)))
+
+(provide 'headerline)

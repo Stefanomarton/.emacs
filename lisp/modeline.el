@@ -3,20 +3,26 @@
  mode-line-format
  '(
    (" ")
-   (:eval (symbol-name major-mode))
+   (:eval (propertize (concat "" (symbol-name major-mode) "") 'face 'bold))
    (" ")
-   (:eval (if (buffer-modified-p) "~  modified" "~ saved"))
+   (:eval
+    (if (buffer-modified-p)
+        (concat (propertize "~" 'face 'font-lock-keyword-face) " modified")
+      (concat (propertize "" 'face 'font-lock-keyword-face) ""))) 
 
    ;; right aligned stuff
    (:eval
-    (let* ((status-offset 10))
+    (let* ((status-offset 12))
       (concat
-       (concat
+       (concat 
 	    (propertize " " 'display `(space :align-to (- right ,status-offset)))
         )
-       (propertize (format-time-string " %H:%M") 'face 'font-lock-keyword-face)
+       (if (buffer-modified-p) 
+           (concat (propertize "" 'face 'font-lock-keyword-face) "[modified]")
+         (concat (propertize "" 'face 'font-lock-keyword-face) ""))
+       ;; (propertize (format-time-string " %H:%M") 'face 'font-lock-keyword-face)
+       
        )))))
-
 
 ;; read-only / changed
 ;; (propertize " " 'display `(space :align-to (- right ,status-offset)))
@@ -25,7 +31,6 @@
 ;;       ((buffer-modified-p)
 ;;        (propertize "* " 'face 'eshell-prompt))
 ;;       (t "  ")))
-
 
 ;; (setq-default mode-line-format nil)
 ;; (setq mode-line-format nil)

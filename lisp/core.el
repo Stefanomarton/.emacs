@@ -8,18 +8,6 @@
 (setq-default cursor-in-non-selected-windows nil)
 (setq highlight-nonselected-windows nil)
 
-;; Having Emacs open to `*scratch*' feels as though it's inviting me to punch
-;; out some Lisp forms and evaluate them. I like to pretend that my computers
-;; are Lisp machines.
-(setq inhibit-startup-message t
-      inhibit-startup-buffer-menu t
-      initial-scratch-message nil
-      initial-buffer-choice nil
-      inhibit-splash-screen t
-      inhibit-startup-echo-area-message t
-      inhibit-default-init t
-      initial-major-mode 'fundamental-mode)
-
 ;; favor vertical splits over horizontal ones?
 (setq split-width-threshold 140
       split-height-threshold 80)
@@ -67,8 +55,7 @@
 
 ;; I don't use 'custom.el' to set variables, but a few of the packages I use do.
 ;; This snippet ensures that a massacre is not made of my init.el.
-
-;(setq custom-file "/dev/null")
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; Set default directory to home and abbreviate it
 (setq default-directory "~/")
@@ -76,8 +63,7 @@
 ;; I care about having my history in minibuffers
 (use-package savehist
   :ensure nil
-  :hook after-init
-  :init
+  :config
   (savehist-mode))
 
 ;; Use a consistent confirmation dialog of "y or n".
@@ -163,13 +149,8 @@
 
 (use-package emacs
   :ensure nil
-  :hook
-  (after-make-frame-functions . my/new-frame-settings)
 
   :config
-  ;; Autobyte recompile init.elc when exiting emacs
-  (add-hook 'kill-emacs-hook (lambda () (byte-recompile-file user-init-file)))
-
   (setq server-client-instructions nil)
 
   (mapc
@@ -183,9 +164,7 @@
      (put command 'disabled t))
    '(eshell project-eshell overwrite-mode iconify-frame diary))
 
-  (defun my/new-frame-settings (frame)
-    (if (daemonp)
-        (setq evil-echo-state nil))))
+  )
 
 ;; I like standard sentence ending
 (setq sentence-end-double-space nil)
@@ -194,12 +173,12 @@
 (setopt shift-select-mode 'permanent)
 
 ;; Fix clipboard in TTY
-;(use-package xclip
-;  :ensure t
-;  :config
-;  (setq xclip-program "wl-copy")
-;  (setq xclip-select-enable-clipboard t)
-;  (setq xclip-method (quote wl-copy)))
+                                        ;(use-package xclip
+                                        ;  :ensure t
+                                        ;  :config
+                                        ;  (setq xclip-program "wl-copy")
+                                        ;  (setq xclip-select-enable-clipboard t)
+                                        ;  (setq xclip-method (quote wl-copy)))
 
 ;; Save some key presses
 (use-package repeat
@@ -234,7 +213,6 @@
   ;; Use which-key to show help
   (use-package which-key
     :defer 1
-    :diminish which-key-mode
     :custom
     (which-key-allow-evil-operators t)
     (which-key-show-remaining-keys t)
@@ -412,8 +390,5 @@
           (goto-char (mark))
           (isearch-repeat-forward)))
     ad-do-it))
-
-
-
 
 (provide 'core)

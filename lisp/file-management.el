@@ -10,23 +10,20 @@
   (setq dirvish-default-layout '(0 0.2 0.6))
   (setq dirvish-use-mode-line nil)
   :init
-  (dirvish-override-dired-mode))
+  (dirvish-override-dired-mode)
+  )
 
-;; (use-package dired-narrow
-;;   :defer 1
-;;   :ensure t
-;;   :after dirvish
-;;   :config
-;;   (defun dired-narrow-ex-ac ()
-;;     ;; Revert buffer and enter the directory after narrowing
-;;     (revert-buffer)
-;;     (dired-find-alternate-file))
-;;   (setq dired-narrow-exit-when-1-left t)
-;;   (setq dired-narrow-exit-action 'dired-narrow-ex-ac))
-
-(use-package transient
-  :ensure t)
-
+(use-package zoxide
+  :ensure t
+  :bind ("<escape> z" . zoxide-find-file)   ; your keybinding
+  :config
+  (defun my/zoxide-find-file (dir)
+    "Start the usual ‘find-file’ prompt rooted at DIR (a directory)."
+    ;; zoxide passes DIR as its one argument
+    (let ((default-directory (file-name-as-directory (expand-file-name dir))))
+      (call-interactively #'find-file)))
+  
+  (setq zoxide-find-file-function #'my/zoxide-find-file))
 
 (provide 'file-management)
 ;;; file-management.el ends here

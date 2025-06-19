@@ -85,25 +85,8 @@
 
 (use-package lisp-mode
   :ensure nil
-  :hook
-  (after-save-hook . auto-byte-recompile)
   :config
-  (defun auto-byte-recompile ()
-    "If the current buffer is in emacs-lisp-mode and there already exists an `.elc'
-file corresponding to the current buffer file, then recompile the file."
-    (interactive)
-    (when (and (eq major-mode 'emacs-lisp-mode)
-               (file-exists-p (byte-compile-dest-file buffer-file-name)))
-      (byte-compile-file buffer-file-name)))
-
-  (add-hook 'after-save-hook 'auto-byte-recompile)
-
-  (add-to-list 'display-buffer-alist
-               '("\\*Compile-Log\\*"
-                 (display-buffer-in-direction)
-                 (direction . down)
-                 (window-width . 0.1)
-                 (window-height . 0.2)))
+  
 
   (use-package lisp-extra-font-lock
     :ensure t
@@ -113,14 +96,7 @@ file corresponding to the current buffer file, then recompile the file."
   (use-package eros
     :ensure t
     :config
-    (eros-mode))
-
-  ;; (use-package lispy
-  ;;   :ensure t
-  ;;   :config
-  ;;   (lispy-mode)
-  ;;   )
-  )
+    (eros-mode)))
 
 
 ;; Highlight kmonad files

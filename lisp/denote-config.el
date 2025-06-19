@@ -12,8 +12,8 @@
   )
 
 (use-package denote
+  :defer 0.5
   :vc (:url "https://github.com/protesilaos/denote")
-  :demand t
   :init
   (setq denote-directory notes-folder)
 
@@ -161,4 +161,4 @@
   (setq citar-denote-subdir "/uni/papers")
   (citar-denote-mode))
 
-(provide 'denote)
+(provide 'denote-config)

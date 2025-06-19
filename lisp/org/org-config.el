@@ -172,6 +172,6 @@ point. "
            "** [[%^{Link}][%^{Description}]] :%^{Tag}:\nAdded: %U\nDescription:%^{Description}")))
   )
 
-(provide 'orgconfig)
+(provide 'org-config)
 
 ;;; org-config ends here

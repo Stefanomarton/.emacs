@@ -5,19 +5,10 @@
   :ensure t
   :bind
   (:map vertico-map
-	    ("C-e" . embark-minimal-act)
 	    ("C-k" . vertico-next)
 	    ("C-l" . vertico-previous)
 	    ("<escape>" . keyboard-escape-quit))
   :config
-
-  (add-to-list 'vertico-multiform-categories
-               '(jinx grid (vertico-grid-annotate . 20))
-               )
-
-  (setq vertico-multiform-commands
-        '((execute-extended-command posframe)
-          (consult-projectile posframe)))
 
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
@@ -42,10 +33,23 @@
   (setq vertico-count 10)
   (setq vertico-resize nil)
   (setq vertico-cycle t)
+  (vertico-mode)
+  )
 
-  :init
+(use-package vertico-multiform
+  :after vertico
+  :ensure nil
+  :config
   (vertico-multiform-mode)
-  (vertico-mode))
+
+  (add-to-list 'vertico-multiform-categories
+               '(jinx grid (vertico-grid-annotate . 20))
+               )
+
+  (setq vertico-multiform-commands
+        '((execute-extended-command posframe)
+          (consult-projectile posframe)))
+  )
 
 
 (use-package vertico-posframe
@@ -159,8 +163,6 @@
   :defer 2
   :ensure t
   :bind
-  (:map corfu-popupinfo-map
-        ("M-d" . corfu-popupinfo-toggle))
   :config
   (setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (setq corfu-auto t)                 ;; Enable auto completion
@@ -176,10 +178,6 @@
   (setq corfu-quit-no-match t)      ;; Never quit, even if there is no match
   (setq corfu-preview-current nil)    ;; Disable current candidate preview
   (setq corfu-preselect 'first)      ;; Preselect the prompt
-  (setq corfu-popupinfo-delay (cons nil 1.0)) ;; Autoupdate only after toggling
-
-  ;; Enable popuinfo
-  (corfu-popupinfo-mode)
 
   ;; Corfu for org mode setup
   (add-hook 'org-mode-hook
@@ -233,7 +231,6 @@
                 (bound-and-true-p vertico--input)
                 (eq (current-local-map) read-passwd-map))
       (setq-local corfu-echo-delay nil ;; Disable automatic echo and popup
-                  corfu-popupinfo-delay nil
                   corfu-auto-prefix 3
                   corfu-preselect 'valid
                   corfu-min-width 10
@@ -241,9 +238,9 @@
                   )
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
-
   :init
-  (global-corfu-mode))
+  (global-corfu-mode)
+  )
 
 (use-package nerd-icons-corfu
   :ensure t

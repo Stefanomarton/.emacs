@@ -13,29 +13,12 @@
 
                '((typst-ts-mode) . ("tinymist"))))
 
-
 (use-package eldoc
   :ensure nil)
 
 (use-package jsonrpc
   :ensure t
   :after eglot)
-
-;; (use-package eglot-booster
-;;   :ensure (:host github :repo "jdtsmith/eglot-booster")
-;;   :after eglot
-;;   :config
-;;   (eglot-booster-mode)
-;;   )
-
-;; (use-package lsp-bridge
-;;   :ensure '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
-;;                        :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
-;;                        :build (:not compile))
-;;   :config
-;;   (setq lsp-bridge-tex-lsp-server "digestif")
-;;   (global-lsp-bridge-mode)
-;;   (acm-mode))
 
 (provide 'lsp)
 

@@ -1,11 +1,27 @@
-(defconst emacs-start-time (current-time))
+(setq frame-resize-pixelwise t
+      frame-inhibit-implied-resize 'force
+      frame-title-format '("%b")
+      ring-bell-function 'ignore
+      use-dialog-box t ; only for mouse events, which I seldom use
+      use-file-dialog nil
+      use-short-answers t
+      inhibit-splash-screen t
+      inhibit-startup-screen t
+      inhibit-startup-message t
+      initial-buffer-choice nil
+      inhibit-x-resources t
+      inhibit-default-init t
+      initial-scratch-message nil
+      inhibit-startup-echo-area-message user-login-name ; read the docstring
+      inhibit-startup-buffer-menu t
+      initial-major-mode 'fundamental-mode)
+
 ;; More than half of the packages I use regularly produce compile warnings. It
 ;; gets to be quite annoying when the `*Warnings*' window pops up while I'm
 ;; trying to do work, so we will disable native-comp reporting.
 (setq native-comp-async-report-warnings-errors nil)
-
-;; (setq native-comp-jit-compilation t)
-;; (setq native-compile-prune-cache t)
+(setq native-comp-jit-compilation t)
+(setq native-compile-prune-cache t)
 
 (defvar me/gc-cons-threshold 100000000)
 
@@ -40,24 +56,18 @@
 (setq frame-resize-pixelwise t
       window-resize-pixelwise t)
 
-;; ;; Resizing the Emacs frame can be a terribly expensive part of changing the
-;; ;; font. By inhibiting this, we easily halve startup times with fonts that are
-;; ;; larger than the system default.
-(setq frame-inhibit-implied-resize t)
-
-(push '(menu-bar-lines . 0) default-frame-alist)
-(push '(tool-bar-lines . 0) default-frame-alist)
-(push '(vertical-scroll-bars) default-frame-alist)
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(dolist (variable '(initial-frame-alist default-frame-alist))
+  (set variable `((width . (text-pixels . 800))
+                  (height . (text-pixels . 900))
+                  (horizontal-scroll-bars . nil)
+                  (vertical-scroll-bars . nil)
+                  (menu-bar-lines . 0) ; alternative to disabling `menu-bar-mode'
+                  (tool-bar-lines . 0)))) ; alternative to disabling `tool-bar-mode'
 
 (setq inhibit-compacting-font-caches t)
 
 ;; Enable packages at startup
-;; (setq package-enable-at-startup nil)
+(setq package-enable-at-startup t)
 
 ;; fix delay in pgtk build
 (setq-default pgtk-wait-for-event-timeout 0)
-
-;; Set scratch buffer mode
-(customize-set-variable 'initial-major-mode 'fundamental-mode)
