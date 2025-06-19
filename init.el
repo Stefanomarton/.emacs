@@ -108,18 +108,21 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(aas altcaps apheleia auto-yasnippet avy base16-theme breadcrumb bug-hunter
-         cape casual consult consult-dir consult-projectile corfu csv-mode
-         dirvish ebuku ellama embark embark-consult embrace eros esup focus gcmh
-         git-gutter git-gutter-fringe gnuplot-mode goggles google-this goto-chg
-         gptel helpful hl-todo hydra lisp-extra-font-lock lua-mode magit
-         magit-delta marginalia markdown-mode mermaid-mode mermaid-ts-mode
-         mixed-pitch nerd-icons-corfu orderless org-anki org-download org-modern
-         org-transclusion pdf-tools pkg-info plantuml-mode projectile pyvenv
-         rainbow-delimiters rainbow-mode scratch selected sudo-edit tab-jump-out
-         undo-fu undo-fu-session undo-tree vertico vertico-posframe
-         visual-regexp wgrep yaml-pro yasnippet yuck-mode zoxide)))
+ '(org-fold-catch-invisible-edits 'show nil nil "Customized with use-package org")
+ '(package-vc-selected-packages
+   '((org-table-auto-align :url
+                           "https://github.com/Stefanomarton/org-table-auto-align-mode"
+                           :branch "master")
+     (org-ipe :url "https://github.com/Stefanomarton/org-ipe" :branch
+              "master")
+     (kbd-mode :url "https://github.com/kmonad/kbd-mode")
+     (visual-regexp-steroids :url
+                             "https://github.com/benma/visual-regexp-steroids.el"
+                             :branch "master")
+     (term-toggle :url "https://github.com/amno1/emacs-term-toggle"
+                  :branch "master")
+     (yasnippet-capf :url "https://github.com/elken/yasnippet-capf"
+                     :branch "master"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
