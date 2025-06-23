@@ -80,6 +80,7 @@
         (",t" . surround-region-with-text)
         (",r" . surround-region-with-mathrm)
 
+
         ;; ("{" . surround-region-newline-with-curly-brackets)
 
         ;; Environments
@@ -112,9 +113,23 @@
         ("q" . er/mark-inside-quotes)
         ("\(" . er/mark-outside-pairs))
 
+  (:map selected-typst-ts-mode-map
+        ("c" . surround-region-with-curly-brackets)
+        ("p" . surround-region-with-parethesis)
+        ("s" . surround-region-with-square-brackets)
+        ("C" . surround-region-newline-with-curly-brackets)
+        ("i" . surround-region-with-underscore)
+        ("b" . surround-region-with-asterisk)
+        ("f" . surround-region-with-function)
+        ("u" . surround-region-with-upperscript)
+        ("d" . surround-region-with-subscript)
+        ("a" . surround-region-with-typst-align)
+        )
+
   :config
 
-
+  (setq selected-typst-ts-mode-map (make-sparse-keymap))
+  
   (setq selected-text-mode-map (make-sparse-keymap))
 
   (defun fix-pasted-text ()
@@ -136,6 +151,13 @@
           (goto-char (+ end (length closing-delimiter)))
 	      (insert closing-delimiter)))))
 
+  (defun surround-region-with-typst-align (align)
+    "Surround the region with Typst align block: align(<style>)[ ... ]"
+    (interactive
+     (list (completing-read "Align style: " '("center" "left" "right" "justify") nil t nil)))
+    (yas-expand-snippet (format "align(%s)[`(yas-selected-text)`]" align)))
+
+
   (defun surround-region-with-parethesis ()
     "Surround the active region with hard-coded strings"
     (interactive)
@@ -150,6 +172,16 @@
     "Surround the active region with hard-coded strings"
     (interactive)
     (surround-region--surround "{" "}"))
+
+  (defun surround-region-with-underscore ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (surround-region--surround "_" "_"))
+
+  (defun surround-region-with-asterisk ()
+    "Surround the active region with hard-coded strings"
+    (interactive)
+    (surround-region--surround "*" "*"))
 
   (defun surround-region-newline-with-curly-brackets ()
     "Surround the active region with hard-coded strings"
@@ -177,6 +209,11 @@
     "Surround the active region with hard-coded strings"
     (interactive "sCommand: ")
 	(yas-expand-snippet (concat "\\" command "{" "`(yas-selected-text)`}")))
+
+  (defun surround-region-with-function (fn)
+    "Surround the active region with hard-coded strings"
+    (interactive "sFunction: ")
+	(yas-expand-snippet (concat "#" fn "()[" "`(yas-selected-text)`]")))
 
   (defun surround-region-with-cancel ()
     "Surround the active region with hard-coded strings"
