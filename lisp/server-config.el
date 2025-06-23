@@ -27,4 +27,4 @@
                           (message "[Pre-loaded packages in %.3fs]" elapsed)))))))))
 
 
-(provide 'server)
+(provide 'server-config)

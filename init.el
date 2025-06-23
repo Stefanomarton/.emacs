@@ -74,4 +74,4 @@
 
 (require 'denote-config)
 (require 'typst)
-(require 'server)
+(require 'server-config)
