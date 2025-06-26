@@ -17,6 +17,9 @@
 
   (setq typst-ts-output-directory "/tmp/pdf")
   (setq typst-ts-compile-options "--root=$HOME/.marton-drive/notes/ --pdf-standard=a-2b")
+  (setq typst-ts-watch-options (list (concat "--root=" (expand-file-name "~/.marton-drive/notes/")) "--open"))
+
+  ;; (setq typst-ts-watch-options '("--open"))
 
   (defvar-keymap my/cycle-repeat-map
     :repeat (:enter (outline-cycle-buffer outline-next-heading outline-previous-heading) :exit (consult-outline))
@@ -27,7 +30,20 @@
     "<up>" #'outline-move-subtree-up
     ">" #'outline-demote
     "<" #'outline-promote
-    "o" #'consult-outline)
+    "o" #'consult-outline
+    "q" #'repeat-exit
+    )
+
+  (which-key-add-keymap-based-replacements
+    my/cycle-repeat-map
+    "<tab>"  "cycle/vis toggle"
+    "n"      "next heading"
+    "p"      "prev heading"
+    "<down>" "move subtree ↓"
+    "<up>"   "move subtree ↑"
+    ">"      "demote subtree"
+    "<"      "promote subtree"
+    "o"      "outline")
 
   ;; ── Typst support for citar ───────────────────────────────────────────
   (with-eval-after-load 'citar             ; run only after citar is loaded
@@ -69,8 +85,6 @@
                      (and (listp (car e))      ; only touch proper mode lists
                           (member 'typst-ts-mode (car e))))
                    citar-major-mode-functions)))))
-
-  
   )
 
 (use-package outline-indent-mode
