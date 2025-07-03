@@ -47,24 +47,6 @@
 
 
 (with-eval-after-load 'typst-ts-mode
-  (defun typst-generate-table-snippet (columns &optional rows)
-    "Insert a Typst #table snippet with COLUMNS and ROWS, using snippet fields."
-    (interactive "nNumber of columns: ")
-    (let* ((rows (or rows 3))
-           (col-names (cl-loop for i from 1 to columns collect (format "[${%d}]" i)))
-           (header (string-join col-names ", "))
-           (body "")
-           (counter (+ 1 columns)))
-      ;; Generate body rows
-      (dotimes (_ rows)
-        (let ((row (cl-loop for j from 0 below columns
-                            collect (format "[${%d}]" (+ counter j)))))
-          (setq counter (+ counter columns))
-          (setq body (concat body "  " (string-join row ", ") ",\n"))))
-      ;; Insert full snippet
-      (yas-expand-snippet
-       (format "#table(\n  stroke: none,\n  columns: %d,\n  table.header(%s),\n%s)" 
-               columns header body))))
 
   ;; --- Select current node ---
   (defun sm/treesit-select-node (type)
