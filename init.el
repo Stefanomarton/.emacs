@@ -47,6 +47,7 @@
 
 (add-to-list 'load-path "~/.config/emacs/lisp/")
 (add-to-list 'load-path "~/.config/emacs/lisp/org")
+(add-to-list 'load-path "~/.config/emacs/lisp/typst")
 
 (require 'core)
 (require 'file-management)
@@ -73,5 +74,15 @@
 (require 'org-attachments)
 
 (require 'denote-config)
-(require 'typst)
+
+(require 'typst-config)
+(require 'typst-citar)
+(require 'typst-extensions)
+(require 'typst-movement)
+(require 'typst-select)
+(require 'typst-consult)
+(require 'typst-snippets)
+
+
+
 (require 'server-config)

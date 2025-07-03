@@ -7,6 +7,7 @@
   (:map global-map
         ("C-," . embrace-commander)
         )
+  
   :config
   (defun embrace-with-latex-environment ()
     (let ((block-type (completing-read
@@ -30,6 +31,13 @@
                                        (embrace-build-help "\\begin{}" "\\end{}") t)
               )
             )
+  
+  (add-hook 'typst-ts-mode-hook
+            (lambda ()
+              (embrace-add-pair ?m "$" "$" t t)
+              (embrace-add-pair ?f "#figure(" ")" t t)
+
+              ))
   )
 
 (use-package selected
@@ -123,7 +131,7 @@
         ("f" . surround-region-with-function)
         ("u" . surround-region-with-upperscript)
         ("d" . surround-region-with-subscript)
-        ("a" . surround-region-with-typst-align)
+        ("A" . surround-region-with-typst-align)
         )
 
   :config
@@ -155,7 +163,7 @@
     "Surround the region with Typst align block: align(<style>)[ ... ]"
     (interactive
      (list (completing-read "Align style: " '("center" "left" "right" "justify") nil t nil)))
-    (yas-expand-snippet (format "align(%s)[`(yas-selected-text)`]" align)))
+    (yas-expand-snippet (format "#align(%s)[`(yas-selected-text)`]" align)))
 
 
   (defun surround-region-with-parethesis ()
