@@ -1,6 +1,18 @@
 (with-eval-after-load 'typst-ts-mode
 
   (require 'aas)
+
+  (add-hook 'typst-ts-mode-hook #'aas-activate-for-major-mode)
+  
+  (defun typst-inside-math-p ()
+    "Return t if point is inside a math-related Tree-sitter node."
+    (let ((node (treesit-node-at (point))))
+      (while (and node
+                  (not (member (treesit-node-type node)
+                               '("math" "math_block" "inline_math" "equation"))))
+        (setq node (treesit-node-parent node)))
+      (when node t)))
+  
   
   (defun typst-generate-table-snippet (columns &optional rows)
     "Insert a Typst #table snippet with COLUMNS and ROWS, using snippet fields."
