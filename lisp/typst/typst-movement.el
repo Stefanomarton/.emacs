@@ -38,103 +38,11 @@
       (message "Formula copied to kill ring.")))
 
   (defvar-keymap my/typst-math-repeat-map
-    :repeat (:enter (sm/treesit-select-nearest-math-after sm/treesit-select-nearest-math-before) :exit (copy-formula-and-pop-mark))
-    "m" #'sm/treesit-select-nearest-math-after
-    "M" #'sm/treesit-select-nearest-math-before
+    :repeat (:enter (typst-select-math-after typst-select-math-before) :exit (copy-formula-and-pop-mark))
+    "m" #'typst-select-math-after
+    "M" #'typst-select-math-before
     "k" #'copy-formula-and-pop-mark
     )
   )
-
-
-(with-eval-after-load 'typst-ts-mode
-
-  ;; --- Select current node ---
-  (defun sm/treesit-select-node (type)
-    "Select (mark) the closest ancestor node of TYPE at point."
-    (interactive "sNode type: ")
-    (let ((node (treesit-node-at (point))))
-      (while (and node (not (string= (treesit-node-type node) type)))
-        (setq node (treesit-node-parent node)))
-      (if node
-          (progn
-            (goto-char (treesit-node-start node))
-            (push-mark (treesit-node-end node) nil t)
-            (message "Selected %s node" type))
-        (message "No node of type '%s' found" type))))
-
-  (define-key typst-ts-mode-map (kbd "C-c rs")
-              (lambda () (interactive) (sm/treesit-select-node "section")))
-
-  (define-key typst-ts-mode-map (kbd "C-c rm")
-              (lambda () (interactive) (sm/treesit-select-node "math")))
-
-  (define-key typst-ts-mode-map (kbd "C-c c")
-              (lambda () (interactive) (sm/treesit-select-node "code")))
-
-  (defun sm/treesit-select-nearest-math-after ()
-    "Select the nearest 'math' node *after* point."
-    (interactive)
-    (let ((node (treesit-node-at (point))))
-      (if (string= (treesit-node-type node) "math")
-          (progn
-            (goto-char (treesit-node-start node))
-            (push-mark (treesit-node-end node) nil t)
-            (message "Selected current math node"))
-        (let* ((root (treesit-buffer-root-node))
-               (candidates
-                (treesit-query-capture
-                 root
-                 '((math) @math))))
-          (let ((nearest
-                 (seq-find
-                  (lambda (match)
-                    (> (treesit-node-start (cdr match)) (point)))
-                  (sort candidates
-                        (lambda (a b)
-                          (< (treesit-node-start (cdr a))
-                             (treesit-node-start (cdr b))))))))
-            (if nearest
-                (let ((math-node (cdr nearest)))
-                  (goto-char (treesit-node-start math-node))
-                  (push-mark (treesit-node-end math-node) nil t)
-                  (message "Selected nearest math node after point"))
-              (message "No math node found after point")))))))
-
-  (defun sm/treesit-select-nearest-math-before ()
-    "Select the nearest 'math' node *before* point."
-    (interactive)
-    (let ((node (treesit-node-at (point))))
-      (if (string= (treesit-node-type node) "math")
-          (progn
-            (goto-char (treesit-node-start node))
-            (push-mark (treesit-node-end node) nil t)
-            (message "Selected current math node"))
-        (let* ((root (treesit-buffer-root-node))
-               (candidates
-                (treesit-query-capture
-                 root
-                 '((math) @math))))
-          (let ((nearest
-                 (seq-find
-                  (lambda (match)
-                    (< (treesit-node-start (cdr match)) (point)))
-                  (reverse
-                   (sort candidates
-                         (lambda (a b)
-                           (< (treesit-node-start (cdr a))
-                              (treesit-node-start (cdr b)))))))))
-            (if nearest
-                (let ((math-node (cdr nearest)))
-                  (goto-char (treesit-node-start math-node))
-                  (push-mark (treesit-node-end math-node) nil t)
-                  (message "Selected nearest math node before point"))
-              (message "No math node found before point")))))))
-  
-  (define-key typst-ts-mode-map (kbd "C-c m") #'sm/treesit-select-nearest-math-after)
-  (define-key typst-ts-mode-map (kbd "C-c M") #'sm/treesit-select-nearest-math-before)
-  )
-
-
-
 
 (provide 'typst-movement)

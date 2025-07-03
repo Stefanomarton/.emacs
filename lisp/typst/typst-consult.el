@@ -21,7 +21,7 @@ by Consult and BEG/END delimit the node."
        (treesit-query-capture root '((math) @node)))))
 
 ;;;  ── 1 · jump version ──────────────────────────────────────────────────────
-  (defun sm/consult-typst-equations-jump ()
+  (defun typst-consult-equations-jump ()
     "Let Consult pick a math block, then jump there and pulse it."
     (interactive)
     (let* ((alist (sm/typst--equation-alist)))
@@ -71,7 +71,7 @@ by Consult and BEG/END delimit the node."
     :lighter " EqEdit")
 
 ;;;; ── 1 · jump command ────────────────────────────────────────────────────
-  (defun sm/consult-typst-equations-jump ()
+  (defun typst-consult-equations-jump ()
     "Fuzzy-pick a Typst math block and jump to it."
     (interactive)
     (let* ((alist (sm/typst--equation-alist)))
@@ -88,7 +88,7 @@ by Consult and BEG/END delimit the node."
 
 ;;;; ── 2 · insert / edit command ───────────────────────────────────────────
 ;;; ── 1 · temp-buffer set-up  ──────────────────────────────────────────────
-  (defun sm/consult-typst-equations-insert (edit)
+  (defun typst-consult-equations-insert (edit)
     "Insert immediately, or (with C-u) open an editable Typst equation buffer.
 The editable buffer now keeps the original `$ … $` delimiters."
     (interactive "P")
@@ -118,11 +118,6 @@ The editable buffer now keeps the original `$ … $` delimiters."
             ;; ── plain call: insert immediately ────────────────────────
             (insert txt))))))
 
-;;;; ── suggested keys in Typst mode ────────────────────────────────────────
-
-  (define-key typst-ts-mode-map (kbd "C-c e") #'sm/consult-typst-equations-jump)
-  (define-key typst-ts-mode-map (kbd "C-c E") #'sm/consult-typst-equations-insert)
-
 
 ;;;;;;; references
   
@@ -142,12 +137,6 @@ by Consult and BEG/END delimit the node."
                 (lab  (format "%4d: %s" (line-number-at-pos beg) txt)))
            (cons lab (list beg end))))        ; value is a *list* → no cdr traps
        (treesit-query-capture root '((label) @node)))))
-
-
-
-
-
-
 
 ;;; ───────────────────────── helpers ────────────────────────────────────────
   (defun sm/typst--label-alist ()
@@ -192,7 +181,7 @@ e.g. `#sidecite(<id>)`)."
           (recenter)))))
 
 ;;; ───────────────────── command 1: jump to label ──────────────────────────
-  (defun sm/consult-typst-labels-jump ()
+  (defun typst-consult-labels-jump ()
     "Consult list of labels → live preview → jump to chosen label."
     (interactive)
     (let* ((alist (sm/typst--label-alist)))
@@ -209,7 +198,7 @@ e.g. `#sidecite(<id>)`)."
           (pulse-momentary-highlight-region beg end)))))
 
 ;;; ─────────────────── command 2: insert #ref(label) ────────────────────────
-  (defun sm/consult-typst-labels-insert-ref ()
+  (defun typst-consult-insert-ref ()
     "Consult list of labels → live preview → insert `@label` at point
 (without the enclosing angle brackets)."
     (interactive)
@@ -228,11 +217,6 @@ e.g. `#sidecite(<id>)`)."
              (id     (replace-regexp-in-string "^<\\|>$" "" id-raw)))
         (goto-char origin)
         (insert (format "@%s" id)))))
-
-
-;;; ───────────── optional bindings in typst-ts-mode ────────────────────────
-  (define-key typst-ts-mode-map (kbd "C-c l") #'sm/consult-typst-labels-insert-ref)
-  (define-key typst-ts-mode-map (kbd "C-c L") #'sm/consult-typst-labels-jump)
   )
 
 (provide 'typst-consult)

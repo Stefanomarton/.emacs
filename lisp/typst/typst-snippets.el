@@ -14,7 +14,7 @@
       (when node t)))
   
   
-  (defun typst-generate-table-snippet (columns &optional rows)
+  (defun typst-snippets-table (columns &optional rows)
     "Insert a Typst #table snippet with COLUMNS and ROWS, using snippet fields."
     (interactive "nNumber of columns: ")
     (let* ((rows (or rows 3))
