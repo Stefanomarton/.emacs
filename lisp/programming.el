@@ -49,6 +49,7 @@
     (add-to-list 'major-mode-remap-alist mapping))
 
   :config
+  (setq treesit-font-lock-level 4)
   (mp-setup-install-grammars))
 
 ;; (use-package macrursors
