@@ -414,4 +414,24 @@
           (isearch-repeat-forward)))
     ad-do-it))
 
+(defun my/mark-paragraph ()
+  "Mark the current paragraph, without including surrounding empty lines."
+  (interactive)
+  (let ((start (save-excursion
+                 (skip-chars-backward " \t\n")
+                 (backward-paragraph)
+                 (skip-chars-forward " \t\n")
+                 (point)))
+        (end (save-excursion
+               (skip-chars-forward " \t\n")
+               (forward-paragraph)
+               (skip-chars-backward " \t\n")
+               (point))))
+    (goto-char start)
+    (set-mark (point))
+    (goto-char end)))
+
+
+(global-set-key [remap mark-paragraph] #'my/mark-paragraph)
+
 (provide 'core)
