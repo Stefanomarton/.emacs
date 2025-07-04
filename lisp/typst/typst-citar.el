@@ -1,12 +1,15 @@
 ;;; typst.el --- Programming languages configuration  -*- lexical-binding: t; -*-
 
 (with-eval-after-load 'typst-ts-mode
+
+  (defvar typst-citar-citation-style "#sidecite(<%s>)")
+  
   ;; ── Typst support for citar ───────────────────────────────────────────
   (with-eval-after-load 'citar             ; run only after citar is loaded
     ;; 1 ─ Helpers --------------------------------------------------------
     (defun citar-typst-insert-citation (keys _context)
       "Insert Typst `#cite[...]` for KEYS (a list of cite keys)."
-      (insert (format "#cite(<%s>)" (string-join keys ","))))
+      (insert (format typst-citar-citation-style (string-join keys ","))))
 
     (defun citar-typst-key-at-point ()
       "Return cite keys if point is inside a `#cite[...]`."

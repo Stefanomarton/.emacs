@@ -33,6 +33,36 @@
        (format "#table(\n  stroke: none,\n  columns: %d,\n  table.header(%s),\n%s)" 
                columns header body))))
 
+  (defun typst-snippets-matrix (columns &optional rows)
+    "Insert a Typst `mat( … )` snippet with COLUMNS × ROWS fields.
+
+Interactively:
+  • Prompts for number of COLUMNS and ROWS (default 3).
+  • Expands a yasnippet so each matrix cell is a numbered field: ${1}, ${2}, …
+
+Example call → 2×3 matrix:
+mat(
+  ${1}, ${2};
+  ${3}, ${4};
+  ${5}, ${6};
+)"
+    (interactive
+     (let* ((cols (read-number "Number of columns: "))
+            (rows (read-number "Number of rows: ")))
+       (list cols rows)))
+    (let ((counter 1)
+          (body ""))
+      ;; Build the matrix row by row
+      (dotimes (_ rows)
+        (setq body (concat body "  "))      ; indent
+        (dotimes (c columns)
+          (setq body (concat body (format "${%d}" counter)))
+          (setq counter (1+ counter))
+          (unless (= c (1- columns))
+            (setq body (concat body ", ")))) ; field separator
+        (setq body (concat body ";\n")))     ; row separator
+      ;; Insert full snippet
+      (yas-expand-snippet (concat "mat(\n" body ")"))))
 
   (defun typst-wrap-prev-node (left right)
     "Wrap the previous node or text with LEFT and RIGHT strings.
@@ -66,57 +96,74 @@ Preserves quotes in string nodes."
 
   (aas-set-snippets 'typst-ts-mode
 
-                    "kd" (lambda () (interactive)
-	                       (yas-expand-snippet "$\n$1\n$\n$0"))
+    "kd" (lambda () (interactive)
+	       (yas-expand-snippet "$\n$1\n$\n$0"))
 
-                    "jf" (lambda () (interactive)
-	                       (yas-expand-snippet "$ $1 $ $0"))
+    "jf" (lambda () (interactive)
+	       (yas-expand-snippet "$ $1 $ $0"))
 
-                    ;; math (guarded)
-                    :cond #'typst-inside-math-p
-                    ";a" "alpha "
-                    ";A" "Alpha "
-                    ";b" "beta "
-                    ";B" "Beta "
-                    ";d" "delta "
-                    ";D" "Delta "
-                    ";e" "epsilon "
-                    ";g" "gamma "
-                    ";G" "Gamma "
+    "jc" (lambda () (interactive)
+	       (yas-expand-snippet "#ce(\"$1\")$0"))
 
-                    "qq" "quad"
-                    
-                    ";i" "integral"
+    "jq" (lambda () (interactive)
+	       (yas-expand-snippet "$\n#ce(\"$1\")\n$\n$0"))
 
-                    ";I" (lambda () (interactive)
-	                       (yas-expand-snippet "integral_($1)^($2) $0"))
-                    
-                    ".b"     (lambda () (interactive)
-                               (typst-wrap-prev-node "bold(" ")"))
+    ;; math (guarded)
+    :cond #'typst-inside-math-p
+    ";a" "alpha "
+    ";A" "Alpha "
+    ";b" "beta "
+    ";B" "Beta "
+    ";d" "delta "
+    ";D" "Delta "
+    ";e" "epsilon "
+    ";g" "gamma "
+    ";G" "Gamma "
 
-                    ".q"     (lambda () (interactive)
-                               (typst-wrap-prev-node "bold(" ")"))
+    "qq" "quad"
+    
+    ";i" "integral"
 
-                    ".s"     (lambda () (interactive)
-                               (typst-wrap-prev-node "\"" "\""))
+    ";;m" #'typst-snippets-matrix
 
-                    ".l"     (lambda () (interactive)
-                               (typst-wrap-prev-node "(" ")"))
+    ";I" (lambda () (interactive)
+	       (yas-expand-snippet "integral_($1)^($2) $0"))
+    
+    ".b"     (lambda () (interactive)
+               (typst-wrap-prev-node "bold(" ")"))
+    
+    ".v"     (lambda () (interactive)
+               (typst-wrap-prev-node "vec(" ")"))
 
-                    ".ub"     (lambda () (interactive)
-                                (typst-wrap-prev-node "underbrace(" ")"))
-                    
-                    ".ul"     (lambda () (interactive)
-                                (typst-wrap-prev-node "underline(" ")"))
-                    
-                    ".up"     (lambda () (interactive)
-                                (typst-wrap-prev-node "underparen(" ")"))
+    ".q"     (lambda () (interactive)
+               (typst-wrap-prev-node "sqrt(" ")"))
 
-                    ".us"     (lambda () (interactive)
-                                (typst-wrap-prev-node "undershell(" ")"))
+    ".s"     (lambda () (interactive)
+               (typst-wrap-prev-node "\"" "\""))
 
-                    
-                    )
+    ".c"     (lambda () (interactive)
+               (typst-wrap-prev-node "cancel(" ")"))
+
+    ".a"     (lambda () (interactive)
+               (typst-wrap-prev-node "abs(" ")"))
+
+    ".l"     (lambda () (interactive)
+               (typst-wrap-prev-node "(" ")"))
+
+    ".ub"     (lambda () (interactive)
+                (typst-wrap-prev-node "underbrace(" ")"))
+    
+    ".ul"     (lambda () (interactive)
+                (typst-wrap-prev-node "underline(" ")"))
+    
+    ".up"     (lambda () (interactive)
+                (typst-wrap-prev-node "underparen(" ")"))
+
+    ".us"     (lambda () (interactive)
+                (typst-wrap-prev-node "undershell(" ")"))
+
+    
+    )
   )
 
 (provide 'typst-snippets)

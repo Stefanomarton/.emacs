@@ -43,6 +43,13 @@
     "M" #'typst-select-math-before
     "k" #'copy-formula-and-pop-mark
     )
+
+  (which-key-add-keymap-based-replacements
+    my/cycle-repeat-map
+    "m"  "math after"
+    "M"      "math before"
+    "k"      "yank formula"
+    )
   )
 
 (provide 'typst-movement)

@@ -21,7 +21,13 @@
               ("C-c L" . typst-consult-labels-jump)
               
               ("C-c m" . typst-select-math-after)
-              ("C-c M" . typst-select-math-before))
+              ("C-c M" . typst-select-math-before)
+
+              ("C-c c" . citar-insert-citation)
+
+              )
+
+  
 
   :hook
   (typst-ts-mode . outline-indent-mode)
