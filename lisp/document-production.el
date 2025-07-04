@@ -151,6 +151,7 @@
   (org-mode . yas-minor-mode)
   (yas-minor-mode . yas-reload-all)
   (snippet-mode . disable-final-newline)
+
   :preface
   (defun make-silent (func &rest args)
     (cl-letf (((symbol-function 'message)
@@ -158,7 +159,16 @@
       (apply func args)))
   (advice-add 'yas-reload-all :around #'make-silent)
   (add-hook 'org-mode '(lambda () (setq-local yas-indent-line 'fixed)))
+  
   :config
+
+  ;; disable `highlight' to avoid confusing with region
+  (custom-set-faces
+   '(yas-field-highlight-face         ; the face you’re changing
+     ((t (:underline t)))             ; the spec: apply to all “t” display classes
+     "Face used to highlight active snippet fields."))
+
+  
   (defun disable-final-newline ()
     (interactive)
     (set (make-local-variable 'require-final-newline) nil))
@@ -211,27 +221,27 @@
 
 
   (aas-set-snippets 'LaTeX-mode
-                    "jf" (lambda () (interactive)
-	                       (yas-expand-snippet "\\\\($1\\\\) $0"))
-                    "jc" (lambda () (interactive)
-	                       (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
-                    "kd  " (lambda () (interactive)
-	                         (yas-expand-snippet "\\[ \n $1 \n \\] \n \n $0")))
+    "jf" (lambda () (interactive)
+	       (yas-expand-snippet "\\\\($1\\\\) $0"))
+    "jc" (lambda () (interactive)
+	       (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
+    "kd  " (lambda () (interactive)
+	         (yas-expand-snippet "\\[ \n $1 \n \\] \n \n $0")))
   (aas-set-snippets 'org-mode
-                    "jf" (lambda () (interactive)
-	                       (yas-expand-snippet "\\\\( $1 \\\\) $0"))
-                    "jc" (lambda () (interactive)
-	                       (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
-                    "kd" (lambda () (interactive)
-                           (setq-local yas-indent-line 'auto)
-	                       (yas-expand-snippet "\\[ \n $1 \n \\]\n $0")))
+    "jf" (lambda () (interactive)
+	       (yas-expand-snippet "\\\\( $1 \\\\) $0"))
+    "jc" (lambda () (interactive)
+	       (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
+    "kd" (lambda () (interactive)
+           (setq-local yas-indent-line 'auto)
+	       (yas-expand-snippet "\\[ \n $1 \n \\]\n $0")))
   (aas-set-snippets 'markdown-mode
-                    "jf" (lambda () (interactive)
-	                       (yas-expand-snippet "$ $1$ $0 $"))
-                    "jc" (lambda () (interactive)
-	                       (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
-                    "kd" (lambda () (interactive)
-	                       (yas-expand-snippet "$$ \n $1 \n $$ \n \n $0"))))
+    "jf" (lambda () (interactive)
+	       (yas-expand-snippet "$ $1$ $0 $"))
+    "jc" (lambda () (interactive)
+	       (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
+    "kd" (lambda () (interactive)
+	       (yas-expand-snippet "$$ \n $1 \n $$ \n \n $0"))))
 
 
 (use-package laas
@@ -242,83 +252,83 @@
   (org-mode . laas-mode)
   :config
   (aas-set-snippets 'laas-mode
-                    ;; set condition!
-                    :cond #'texmathp ; expand only while in math
+    ;; set condition!
+    :cond #'texmathp ; expand only while in math
 
-                    ",t" (lambda () (interactive)
-	                       (yas-expand-snippet "\\int"))
+    ",t" (lambda () (interactive)
+	       (yas-expand-snippet "\\int"))
 
-                    ".." (lambda () (interactive)
-	                       (yas-expand-snippet "_{$1}$0"))
-                    "ds" (lambda () (interactive)
-	                       (yas-expand-snippet "\\Delta S $0"))
-                    "dh" (lambda () (interactive)
-	                       (yas-expand-snippet "\\Delta H $0"))
-                    "dg" (lambda () (interactive)
-	                       (yas-expand-snippet "\\Delta G $0"))
+    ".." (lambda () (interactive)
+	       (yas-expand-snippet "_{$1}$0"))
+    "ds" (lambda () (interactive)
+	       (yas-expand-snippet "\\Delta S $0"))
+    "dh" (lambda () (interactive)
+	       (yas-expand-snippet "\\Delta H $0"))
+    "dg" (lambda () (interactive)
+	       (yas-expand-snippet "\\Delta G $0"))
 
-                    ;; positive apices
-                    ",," (lambda () (interactive)
-	                       (yas-expand-snippet "^{$1}$0"))
-                    ",x" (lambda () (interactive)
-	                       (yas-expand-snippet "^{1}$0"))
-                    ",c" (lambda () (interactive)
-	                       (yas-expand-snippet "^{2}$0"))
-                    ",v" (lambda () (interactive)
-	                       (yas-expand-snippet "^{3}$0"))
-                    ",s" (lambda () (interactive)
-	                       (yas-expand-snippet "^{4}$0"))
-                    ",d" (lambda () (interactive)
-	                       (yas-expand-snippet "^{5}}$0"))
-                    ",f" (lambda () (interactive)
-	                       (yas-expand-snippet "^{6}$0"))
-                    ",w" (lambda () (interactive)
-	                       (yas-expand-snippet "^{7}$0"))
-                    ",e" (lambda () (interactive)
-	                       (yas-expand-snippet "^{8}$0"))
-                    ",r" (lambda () (interactive)
-	                       (yas-expand-snippet "^{9}$0"))
+    ;; positive apices
+    ",," (lambda () (interactive)
+	       (yas-expand-snippet "^{$1}$0"))
+    ",x" (lambda () (interactive)
+	       (yas-expand-snippet "^{1}$0"))
+    ",c" (lambda () (interactive)
+	       (yas-expand-snippet "^{2}$0"))
+    ",v" (lambda () (interactive)
+	       (yas-expand-snippet "^{3}$0"))
+    ",s" (lambda () (interactive)
+	       (yas-expand-snippet "^{4}$0"))
+    ",d" (lambda () (interactive)
+	       (yas-expand-snippet "^{5}}$0"))
+    ",f" (lambda () (interactive)
+	       (yas-expand-snippet "^{6}$0"))
+    ",w" (lambda () (interactive)
+	       (yas-expand-snippet "^{7}$0"))
+    ",e" (lambda () (interactive)
+	       (yas-expand-snippet "^{8}$0"))
+    ",r" (lambda () (interactive)
+	       (yas-expand-snippet "^{9}$0"))
 
-                    ;; negative apices
-                    ".." (lambda () (interactive)
-	                       (yas-expand-snippet "^{-$1}$0"))
-                    ".x" (lambda () (interactive)
-	                       (yas-expand-snippet "^{-1}$0"))
-                    ".c" (lambda () (interactive)
-	                       (yas-expand-snippet "^{-2}$0"))
-                    ".v" (lambda () (interactive)
-	                       (yas-expand-snippet "^{-3}$0"))
-                    ".s" (lambda () (interactive)
-	                       (yas-expand-snippet "^{-4}$0"))
-                    ".d" (lambda () (interactive)
-	                       (yas-expand-snippet "^{-5}$0"))
-                    ".f" (lambda () (interactive)
-	                       (yas-expand-snippet "^{-6}$0"))
-                    ".w" (lambda () (interactive)
-	                       (yas-expand-snippet "^{-7}$0"))
-                    ".e" (lambda () (interactive)
-	                       (yas-expand-snippet "^{-8}$0"))
-                    ".r" (lambda () (interactive)
-	                       (yas-expand-snippet "^{-9}$0"))
+    ;; negative apices
+    ".." (lambda () (interactive)
+	       (yas-expand-snippet "^{-$1}$0"))
+    ".x" (lambda () (interactive)
+	       (yas-expand-snippet "^{-1}$0"))
+    ".c" (lambda () (interactive)
+	       (yas-expand-snippet "^{-2}$0"))
+    ".v" (lambda () (interactive)
+	       (yas-expand-snippet "^{-3}$0"))
+    ".s" (lambda () (interactive)
+	       (yas-expand-snippet "^{-4}$0"))
+    ".d" (lambda () (interactive)
+	       (yas-expand-snippet "^{-5}$0"))
+    ".f" (lambda () (interactive)
+	       (yas-expand-snippet "^{-6}$0"))
+    ".w" (lambda () (interactive)
+	       (yas-expand-snippet "^{-7}$0"))
+    ".e" (lambda () (interactive)
+	       (yas-expand-snippet "^{-8}$0"))
+    ".r" (lambda () (interactive)
+	       (yas-expand-snippet "^{-9}$0"))
 
-                    ".," (lambda () (interactive)
-	                       (yas-expand-snippet "^{$1}_{$0}"))
+    ".," (lambda () (interactive)
+	       (yas-expand-snippet "^{$1}_{$0}"))
 
-                    "kk" (lambda () (interactive)
-	                       (yas-expand-snippet "_{$1}$0"))
+    "kk" (lambda () (interactive)
+	       (yas-expand-snippet "_{$1}$0"))
 
-                    "++" (lambda () (interactive)
-	                       (yas-expand-snippet "^+ $0"))
+    "++" (lambda () (interactive)
+	       (yas-expand-snippet "^+ $0"))
 
-                    "--" (lambda () (interactive)
-	                       (yas-expand-snippet "^- $0"))
+    "--" (lambda () (interactive)
+	       (yas-expand-snippet "^- $0"))
 
-                    ;; add accent snippets
-                    :cond #'laas-object-on-left-condition
-                    ".q" (lambda () (interactive) (laas-wrap-previous-object "sqrt"))
-                    ".v" (lambda () (interactive) (laas-wrap-previous-object "vec"))
-                    ".t" (lambda () (interactive) (laas-wrap-previous-object "text"))
-                    ".b" (lambda () (interactive) (laas-wrap-previous-object "mathbf")))
+    ;; add accent snippets
+    :cond #'laas-object-on-left-condition
+    ".q" (lambda () (interactive) (laas-wrap-previous-object "sqrt"))
+    ".v" (lambda () (interactive) (laas-wrap-previous-object "vec"))
+    ".t" (lambda () (interactive) (laas-wrap-previous-object "text"))
+    ".b" (lambda () (interactive) (laas-wrap-previous-object "mathbf")))
   )
 
 (use-package cdlatex
