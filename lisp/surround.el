@@ -31,13 +31,6 @@
                                        (embrace-build-help "\\begin{}" "\\end{}") t)
               )
             )
-  
-  (add-hook 'typst-ts-mode-hook
-            (lambda ()
-              (embrace-add-pair ?m "$" "$" t t)
-              (embrace-add-pair ?f "#figure(" ")" t t)
-
-              ))
   )
 
 (use-package selected
