@@ -82,7 +82,6 @@
 (require 'typst-select)
 (require 'typst-consult)
 (require 'typst-snippets)
-
-
+(require 'typst-surround)
 
 (require 'server-config)

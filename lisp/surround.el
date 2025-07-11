@@ -33,6 +33,13 @@
             )
   )
 
+(defun mark-backward-paragraph ()
+  (interactive)
+  (exchange-point-and-mark)
+  (mark-paragraph)
+  (backward-paragraph)
+  )
+
 (use-package selected
   :ensure t
   :bind (:map selected-keymap
@@ -48,8 +55,10 @@
 
               ("{" . surround-region-newline-with-curly-brackets)
 
-              (";" . comment-dwim)
+              ("h" . mark-paragraph)
+              ("H" . mark-backward-paragraph)
 
+              (";" . comment-dwim)
 
               ("a" . embrace-add)
               ("d" . embrace-delete)
@@ -59,6 +68,7 @@
 
               ("q" . er/mark-inside-quotes)
               ("\(" . er/mark-outside-pairs)
+              
               )
 
   (:map selected-text-mode-map
@@ -132,7 +142,7 @@
   (setq selected-typst-ts-mode-map (make-sparse-keymap))
   
   (setq selected-text-mode-map (make-sparse-keymap))
-
+  
   (defun fix-pasted-text ()
     (interactive)
     (join-line)

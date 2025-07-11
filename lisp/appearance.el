@@ -86,7 +86,7 @@
   (base16-theme-distinct-fringe-background nil)
   (base16-theme-256-color-source 'colors)
   :config
-  (load-theme 'base16-everforest-dark-hard t)
+  (load-theme 'base16-black-metal-nile t)
 
   (set-face-attribute 'font-lock-comment-face nil :slant 'oblique)
   (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'oblique)
