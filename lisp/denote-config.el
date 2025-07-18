@@ -37,15 +37,15 @@
   :config
   (setq-default denote-directory (concat drive-folder "notes"))
 
-  (setq denote-templates
-        `((journal . ,(concat "* Score giornaliero (0-10)\n\n"
-                              "Serenità: \n"
-                              "Energia: \n"
-                              "\n\n"
-                              "* Commento generale giornata"
-                              "\n\n"
-                              "* Riflessione del giorno\n"
-                              ))))
+  ;; (setq denote-templates
+  ;;       `((journal . ,(concat "* Score giornaliero (0-10)\n\n"
+  ;;                             "Serenità: \n"
+  ;;                             "Energia: \n"
+  ;;                             "\n\n"
+  ;;                             "* Commento generale giornata"
+  ;;                             "\n\n"
+  ;;                             "* Riflessione del giorno\n"
+  ;;                             ))))
 
   ;; Modify default command to use `denote-subdirectory' when creating TARGET
   (defun my/denote-open-or-create (target)
