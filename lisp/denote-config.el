@@ -35,7 +35,7 @@
   (text-mode-hook . denote-fontify-links-mode-maybe)
 
   :config
-  (setq-default denote-directory (concat drive-folder "notes"))
+  (setq-default denote-directory notes-folder)
 
   ;; (setq denote-templates
   ;;       `((journal . ,(concat "* Score giornaliero (0-10)\n\n"
@@ -54,7 +54,7 @@
         (find-file target)
       (denote--command-with-features #'denote-subdirectory :use-last-input-as-def-title nil nil nil)))
 
-  (setq denote-excluded-directories-regexp ".output")
+  (setq denote-excluded-directories-regexp "\\(music\\|photos\\|.git\\|qmk_firmware\\|.env\\|.mypy_cache\\|.ltximg\\)")
   (setq denote-backlinks-show-context t)
 
   ;; link configuration

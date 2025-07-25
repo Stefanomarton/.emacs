@@ -42,8 +42,7 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(defvar drive-folder "~/.marton-drive/")
-(defvar notes-folder (concat drive-folder "notes"))
+(defvar notes-folder "~/.marton-drive/")
 
 (add-to-list 'load-path "~/.config/emacs/lisp/")
 (add-to-list 'load-path "~/.config/emacs/lisp/org")

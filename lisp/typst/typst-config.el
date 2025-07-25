@@ -34,9 +34,9 @@
   
   :config
   (setq typst-ts-output-directory "/tmp/pdf")
-  (setq typst-ts-compile-options "--root=$HOME/.marton-drive/notes/ --pdf-standard=a-2b")
+  (setq typst-ts-compile-options "--root=$HOME/.marton-drive/ --pdf-standard=a-2b")
   (setq typst-ts-watch-options
-        (list (concat "--root=" (expand-file-name "~/.marton-drive/notes/")) "--open"))
+        (list (concat "--root=" (expand-file-name "~/.marton-drive/")) "--open"))
   )
 
 (provide 'typst-config)
