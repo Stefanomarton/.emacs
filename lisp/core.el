@@ -172,35 +172,43 @@
 ;; Make me able to continue selection without keep the finger on the shift key
 (setopt shift-select-mode 'permanent)
 
-(use-package emacs-solo-clipboard
-  :ensure nil
-  :no-require t
-  :defer t
-  :init
-  (cond
-   ;; Linux with wl-copy/wl-paste (Wayland)
-   ((and (eq system-type 'gnu/linux) (executable-find "wl-copy"))
-	(setq interprogram-cut-function
-		  (lambda (text &optional _)
-			(let ((process-connection-type nil))
-			  (let ((proc (start-process "wl-copy" "*Messages*" "wl-copy")))
-				(process-send-string proc text)
-				(process-send-eof proc)))))
-	(setq interprogram-paste-function
-		  (lambda ()
-			(shell-command-to-string "wl-paste -n"))))
+(use-package xclip
+  :ensure
+  :config
+  (setq xclip-program "wl-copy")
+  (setq xclip-select-enable-clipboard t)
+  (setq xclip-mode t)
+  (setq xclip-method (quote wl-copy)))
 
-   ;; Linux with xclip (X11)
-   ((and (eq system-type 'gnu/linux) (executable-find "xclip"))
-	(setq interprogram-cut-function
-		  (lambda (text &optional _)
-			(let ((process-connection-type nil))
-			  (let ((proc (start-process "xclip" "*Messages*" "xclip" "-selection" "clipboard")))
-				(process-send-string proc text)
-				(process-send-eof proc)))))
-	(setq interprogram-paste-function
-		  (lambda ()
-			(shell-command-to-string "xclip -selection clipboard -o"))))))
+;; (use-package emacs-solo-clipboard
+;;   :ensure nil
+;;   :no-require t
+;;   :defer t
+;;   :init
+;;   (cond
+;;    ;; Linux with wl-copy/wl-paste (Wayland)
+;;    ((and (eq system-type 'gnu/linux) (executable-find "wl-copy"))
+;; 	(setq interprogram-cut-function
+;; 		  (lambda (text &optional _)
+;; 			(let ((process-connection-type nil))
+;; 			  (let ((proc (start-process "wl-copy" "*Messages*" "wl-copy")))
+;; 				(process-send-string proc text)
+;; 				(process-send-eof proc)))))
+;; 	(setq interprogram-paste-function
+;; 		  (lambda ()
+;; 			(shell-command-to-string "wl-paste -n"))))
+
+;;    ;; Linux with xclip (X11)
+;;    ((and (eq system-type 'gnu/linux) (executable-find "xclip"))
+;; 	(setq interprogram-cut-function
+;; 		  (lambda (text &optional _)
+;; 			(let ((process-connection-type nil))
+;; 			  (let ((proc (start-process "xclip" "*Messages*" "xclip" "-selection" "clipboard")))
+;; 				(process-send-string proc text)
+;; 				(process-send-eof proc)))))
+;; 	(setq interprogram-paste-function
+;; 		  (lambda ()
+;; 			(shell-command-to-string "xclip -selection clipboard -o"))))))
 
 
 ;; Save some key presses
