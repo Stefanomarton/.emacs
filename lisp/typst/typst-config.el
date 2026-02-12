@@ -25,6 +25,8 @@
 
               ("C-c c" . citar-insert-citation)
 
+              ("C-c x" . sm/typst-extract-region-to-file)
+
               )
 
   
