@@ -11,9 +11,9 @@
 (use-package display-line-numbers
   :ensure nil
   :hook
-  (prog-mode-hook . display-line-numbers-mode)
-  (markdown-mode-hook . display-line-numbers-mode)
-  (latex-mode-hook . display-line-numbers-mode)
+  (prog-mode . display-line-numbers-mode)
+  (markdown-mode . display-line-numbers-mode)
+  (latex-mode . display-line-numbers-mode)
   :config
   ;; Display line number relative and absolute
   (setq display-line-numbers-grow-only t)

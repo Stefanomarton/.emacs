@@ -12,30 +12,16 @@
 (add-hook 'before-save-hook
 	      (lambda ()
 	        (unless (derived-mode-p 'markdown-mode)
-		      (lambda() (delete-trailing-whitespace))
-		      )))
+		      (delete-trailing-whitespace))))
 
 (add-hook 'before-save-hook
 	      (lambda ()
 	        (unless (derived-mode-p 'markdown-mode)
-		      'whitespace-cleanup
-		      )))
+		      (whitespace-cleanup))))
 
 ;; Do not remove white spaces in markdown
 (unless (derived-mode-p 'markdown-mode)
   (setq nuke-trailing-whitespace-p t))
-
-(add-hook 'before-save-hook
-	      (lambda ()
-	        (unless (derived-mode-p 'markdown-mode)
-		      (lambda() (delete-trailing-whitespace))
-		      )))
-
-(add-hook 'before-save-hook
-	      (lambda ()
-	        (unless (derived-mode-p 'markdown-mode)
-		      'whitespace-cleanup
-		      )))
 
 
 ;; Autopair parenthesis
@@ -86,7 +72,7 @@
   :ensure t
   :commands rainbow-mode
   :config
-  (add-hook 'prog-mode #'rainbow-mode)
+  (add-hook 'prog-mode-hook #'rainbow-mode)
   )
 
 (use-package avy

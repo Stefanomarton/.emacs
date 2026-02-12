@@ -85,8 +85,8 @@
     (interactive)
     (sm/treesit-select-node "fraction"))
 
-  (defun er/treesit-fraction ()
-    "Expand-Region: select current Typst `text` node."
+  (defun er/treesit-group ()
+    "Expand-Region: select current Typst `group` node."
     (interactive)
     (sm/treesit-select-node "group"))
 

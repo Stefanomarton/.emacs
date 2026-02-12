@@ -200,7 +200,7 @@
   ;;				      parenthesized_expression subscript)))
   :hook ((python-base-mode yaml-mode) . indent-bars-mode))
 
-6(use-package direnv
+(use-package direnv
    :ensure t
    :config
    (direnv-mode))

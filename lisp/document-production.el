@@ -158,7 +158,7 @@
                (lambda (&rest args) nil)))
       (apply func args)))
   (advice-add 'yas-reload-all :around #'make-silent)
-  (add-hook 'org-mode '(lambda () (setq-local yas-indent-line 'fixed)))
+  (add-hook 'org-mode-hook (lambda () (setq-local yas-indent-line 'fixed)))
   
   :config
 
