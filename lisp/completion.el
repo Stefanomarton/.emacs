@@ -162,7 +162,6 @@
 (use-package corfu
   :defer 2
   :ensure t
-  :bind
   :config
   (setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (setq corfu-auto t)                 ;; Enable auto completion
@@ -178,6 +177,7 @@
   (setq corfu-quit-no-match t)      ;; Never quit, even if there is no match
   (setq corfu-preview-current nil)    ;; Disable current candidate preview
   (setq corfu-preselect 'first)      ;; Preselect the prompt
+
 
   ;; Corfu for org mode setup
   (add-hook 'org-mode-hook
@@ -200,17 +200,16 @@
                            (cape-capf-prefix-length #'cape-dabbrev 5)
                            ))))
 
-  ;; Eglot and corfu setup
-
   (defun my/eglot-capf ()
     (setq-local completion-at-point-functions
-                (list (cape-capf-super
-                       #'eglot-completion-at-point
-                       #'yasnippet-capf
-                       #'cape-file
-                       ))))
-
+                (list
+                 (cape-capf-super
+                  #'cape-file
+                  (cape-capf-nonexclusive #'eglot-completion-at-point)
+                  (cape-capf-nonexclusive #'yasnippet-capf)))))
   (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
+
+
 
 
   ;; Setup for emacs lisp-mode
@@ -240,6 +239,7 @@
   (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
   :init
   (global-corfu-mode)
+  
   )
 
 (use-package nerd-icons-corfu
