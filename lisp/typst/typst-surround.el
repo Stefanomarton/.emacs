@@ -14,6 +14,7 @@
   (embrace-add-pair ?p "(" ")" "(" t)
   (embrace-add-pair ?s "[" "]" "[" t)
   (embrace-add-pair ?c "{" "}" "{" t)
+  (embrace-add-pair ?g "grid.cell(" ")" "grid-cell" nil)
   (embrace-add-pair-regexp
    ?c
    "#[A-Za-z0-9_]+("

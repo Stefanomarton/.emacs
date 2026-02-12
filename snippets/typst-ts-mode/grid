@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: grid
+# key: grid
+# --
+#grid(
+columns:(50%,50%),
+$0
+)
