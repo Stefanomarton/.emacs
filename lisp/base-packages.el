@@ -79,6 +79,8 @@ targets."
 (use-package apheleia
   :ensure t
   :config
+  (setf (alist-get 'typstyle apheleia-formatters)
+        '("typstyle" "--wrap-text" "-l" "75"))
   (apheleia-global-mode))
 
                                         ;Outline
