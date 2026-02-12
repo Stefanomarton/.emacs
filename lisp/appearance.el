@@ -121,17 +121,17 @@
   :config
   (set-face-attribute 'default nil
 		              :family "JuliaMono"
-		              :height 155
+		              :height 190
 		              :weight 'normal
 		              :width 'normal)
   (set-face-attribute 'variable-pitch nil
     	              :family "JuliaMono"
-    	              :height 155
+    	              :height 190
     	              :weight 'normal
     	              :width 'normal)
   (set-face-attribute 'fixed-pitch nil
 		              :family "JuliaMono"
-		              :height 155
+		              :height 190
 		              :weight 'normal
 		              :width 'normal)
   )
