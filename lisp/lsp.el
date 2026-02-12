@@ -11,7 +11,17 @@
   :config
   (add-to-list 'eglot-server-programs
 
-               '((typst-ts-mode) . ("tinymist"))))
+               '((typst-ts-mode) . ("tinymist")))
+  
+  (setq-default eglot-workspace-configuration
+                '(:tinymist (:exportPdf "onSave")))
+  )
+
+(use-package eglot-booster
+  :ensure t
+  :vc (:url "https://github.com/jdtsmith/eglot-booster" :branch "master")
+  :after eglot
+  :config (eglot-booster-mode))
 
 (use-package eldoc
   :ensure nil)
