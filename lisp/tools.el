@@ -15,29 +15,57 @@
   :ensure t
   )
 
-(use-package ellama
-  :ensure t
-  :bind (("<escape>ec" . ellama-chat)
-         ("<escape>eiw" . ellama-improve-wording)
-         ("<escape>eig" . ellama-improve-grammar)
-         ("<escape>eic" . ellama-improve-conciseness)
-         ("<escape>ea" . ellama-ask-about)
-         )
-  :init
-  (setopt ellama-language "Italian")
-  (require 'llm-ollama)
-  (setopt ellama-provider
-		  (make-llm-ollama
-		   :chat-model "deepseek-r1:14b" :embedding-model "deepseek-r1:14b ")))
+(use-package eat
+  :ensure t)
 
-(use-package gptel
-  :ensure t
-  :config
-  (setq gptel-default-mode 'org-mode)
-
-  ;; scroll automatically
-  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+(use-package claudemacs
+  :vc (:url "https://github.com/cpoile/claudemacs")
+  :bind (("<escape>ac" . claudemacs-transient-menu))
   )
+
+(use-package acp
+  :vc (:url "https://github.com/xenodium/acp.el")
+
+  (setq client (acp-make-client :command "gemini"
+                                :command-params '("--experimental-acp")
+                                :environment-variables (when api-key
+                                                         (list (format "GEMINI_API_KEY=%s" "your-api-key")))))
+
+  (acp-send-request
+   :client client
+   :request (acp-make-initialize-request :protocol-version 1)
+   :on-success (lambda (response)
+                 (message "Initialize success: %s" response))
+   :on-failure (lambda (error)
+                 (message "Initialize failed: %s" error)))
+
+  )
+
+
+
+;; (use-package ellama
+;;   :ensure t
+;;   :bind (("<escape>ec" . ellama-chat)
+;;          ("<escape>eiw" . ellama-improve-wording)
+;;          ("<escape>eig" . ellama-improve-grammar)
+;;          ("<escape>eic" . ellama-improve-conciseness)
+;;          ("<escape>ea" . ellama-ask-about)
+;;          )
+;;   :init
+;;   (setopt ellama-language "Italian")
+;;   (require 'llm-ollama)
+;;   (setopt ellama-provider
+;;           (make-llm-ollama
+;;            :chat-model "deepseek-r1:14b" :embedding-model "deepseek-r1:14b ")))
+
+;; (use-package gptel
+;;   :ensure t
+;;   :config
+;;   (setq gptel-default-mode 'org-mode)
+
+;;   ;; scroll automatically
+;;   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+;;   )
 
 (use-package google-this
   :ensure t
