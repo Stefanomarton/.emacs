@@ -5,14 +5,14 @@
   :ensure t
   :bind
   (:map vertico-map
-	    ("C-k" . vertico-next)
-	    ("C-l" . vertico-previous)
-	    ("<escape>" . keyboard-escape-quit))
+        ("C-k" . vertico-next)
+        ("C-l" . vertico-previous)
+        ("<escape>" . keyboard-escape-quit))
   :config
 
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
-	    '(read-only t cursor-intangible t face minibuffer-prompt))
+        '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
   ;; Enable recursive minibuffers
@@ -20,7 +20,7 @@
 
   ;; Indicated in the documentation
   (setq fast-but-imprecise-scrolling t
-	    jit-lock-defer-time 0)
+        jit-lock-defer-time 0)
 
   ;; Ignore case when completing
   (setq read-buffer-completion-ignore-case t)
@@ -33,34 +33,35 @@
   (setq vertico-count 10)
   (setq vertico-resize nil)
   (setq vertico-cycle t)
+  :init
   (vertico-mode)
   )
 
-(use-package vertico-multiform
-  :after vertico
-  :ensure nil
-  :config
-  (vertico-multiform-mode)
+;; (use-package vertico-multiform
+;;   :after vertico
+;;   :ensure nil
+;;   :config
+;;   (vertico-multiform-mode)
 
-  (add-to-list 'vertico-multiform-categories
-               '(jinx grid (vertico-grid-annotate . 20))
-               )
+;;   (add-to-list 'vertico-multiform-categories
+;;                '(jinx grid (vertico-grid-annotate . 20))
+;;                )
 
-  (setq vertico-multiform-commands
-        '((execute-extended-command posframe)
-          (consult-projectile posframe)))
-  )
+;;   (setq vertico-multiform-commands
+;;         '((execute-extended-command posframe)
+;;           (consult-projectile posframe)))
+;;   )
 
 
-(use-package vertico-posframe
-  :ensure t
-  :config
-  ;; (setq vertico-posframe-width 120)
-  (setq vertico-posframe-border-width 3)
-  (setq vertico-posframe-parameters
-        '((left-fringe . 15)
-          (right-fringe . 20)))
-  )
+;; (use-package vertico-posframe
+;;   :ensure t
+;;   :config
+;;   ;; (setq vertico-posframe-width 120)
+;;   (setq vertico-posframe-border-width 3)
+;;   (setq vertico-posframe-parameters
+;;         '((left-fringe . 15)
+;;           (right-fringe . 20)))
+;;   )
 
 ;; orderless completion method
 (use-package orderless
@@ -68,8 +69,8 @@
   :config
   (setq orderless-affix-dispatch-alist nil)
   (setq completion-styles '(orderless basic)
-	    completion-category-defaults nil
-	    completion-category-overrides '((file (styles partial-completion)))))
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 
 ;; i like some help while searching
 (use-package marginalia
@@ -239,7 +240,7 @@
   (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
   :init
   (global-corfu-mode)
-  
+
   )
 
 (use-package nerd-icons-corfu
