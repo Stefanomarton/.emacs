@@ -29,11 +29,11 @@
 (use-package gcmh :ensure t :defer t)
 
 (add-hook 'emacs-startup-hook
-	      (lambda ()
-	        (setq gc-cons-threshold 33554432) ; 16mb
-	        (setq gc-cons-percentage 0.1)
-	        (require 'gcmh)
-	        (gcmh-mode 1)))
+          (lambda ()
+            (setq gc-cons-threshold 33554432) ; 16mb
+            (setq gc-cons-percentage 0.1)
+            (require 'gcmh)
+            (gcmh-mode 1)))
 
 
 ;; ;; As stated https://github.com/jwiegley/use-package?tab=readme-ov-file#use-packageel-is-no-longer-needed-at-runtime
@@ -63,15 +63,6 @@
 (require 'lsp)
 (require 'document-production)
 
-(require 'org-config)
-(require 'org-beamer)
-(require 'org-navigation)
-(require 'org-citations)
-(require 'org-export)
-(require 'org-appearance)
-(require 'org-extensions)
-(require 'org-attachments)
-
 (require 'denote-config)
 
 (require 'typst-config)
@@ -82,5 +73,3 @@
 (require 'typst-consult)
 (require 'typst-snippets)
 (require 'typst-surround)
-
-(require 'server-config)

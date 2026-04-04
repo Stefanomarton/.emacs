@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: \begin{gather}
-# key: gather
-# condition: (and (not (texmathp)))
-# --
-\begin{gather}
-${1:`(if (region-active-p) (yas-selected-text) (propertize "content" 'font-lock-face '(:inherit region)))`} \\\\
-\end{gather}
