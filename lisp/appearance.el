@@ -12,8 +12,6 @@
   :ensure nil
   :hook
   (prog-mode . display-line-numbers-mode)
-  (markdown-mode . display-line-numbers-mode)
-  (latex-mode . display-line-numbers-mode)
   :config
   ;; Display line number relative and absolute
   (setq display-line-numbers-grow-only t)
@@ -48,37 +46,11 @@
     (set-frame-parameter nil 'internal-border-width 15)
     (set-frame-parameter nil 'external-border-width 5)
     (setq-local line-spacing 0.12)
-    ;; (set-window-margins nil 1 1)
     )
-  ;; (add-to-list 'default-frame-alist '(alpha-background . 90))
-
-  ;; (add-hook 'window-configuration-change-hook #'setup-margin)
   (add-hook 'text-mode-hook #'setup-margin)
   (add-hook 'prog-mode-hook #'setup-margin)
 
   (setq window-divider-default-places nil))
-
-;; (use-package ewal
-;;   :ensure (:host github :repo "cyruseuros/ewal")
-;;   :init
-;;   (setq ewal-use-built-in-always-p nil
-;;         ewal-use-built-in-on-failure-p t
-;;         ewal-built-in-palette "sexy-material")
-;;   :config
-;;   ;; Suppose all custom themes are safe
-;;   (setq ewal-shade-percent-difference 10)
-;;   (setq custom-safe-themes t)
-;;   (add-to-list 'custom-theme-load-path "~/.config/emacs")
-;;   (load-theme 'pywal))
-
-;; (use-package mindre-theme
-;;   :ensure t
-;;   :config
-;;   (setq mindre-use-more-bold t
-;;         mindre-use-more-fading t
-;;         mindre-use-faded-lisp-parens t
-;;         mindre-faded-lisp-parens-modes '(emacs-lisp-mode lisp-mode scheme-mode racket-mode))
-;;   (load-theme 'mindre t))
 
 (use-package base16-theme
   :ensure t
@@ -93,11 +65,6 @@
   (set-face-attribute 'mode-line-active nil :height 1.2)
   (set-face-attribute 'header-line nil :height 1.2)
   )
-
-;; (use-package mindre-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'mindre t))
 
 ;; Cool aspect
 (use-package mixed-pitch
@@ -120,20 +87,20 @@
   (text-mode . variable-pitch-mode)
   :config
   (set-face-attribute 'default nil
-		              :family "JuliaMono"
-		              :height 190
-		              :weight 'normal
-		              :width 'normal)
+                      :family "JuliaMono"
+                      :height 190
+                      :weight 'normal
+                      :width 'normal)
   (set-face-attribute 'variable-pitch nil
-    	              :family "JuliaMono"
-    	              :height 190
-    	              :weight 'normal
-    	              :width 'normal)
+                      :family "JuliaMono"
+                      :height 190
+                      :weight 'normal
+                      :width 'normal)
   (set-face-attribute 'fixed-pitch nil
-		              :family "JuliaMono"
-		              :height 190
-		              :weight 'normal
-		              :width 'normal)
+                      :family "JuliaMono"
+                      :height 190
+                      :weight 'normal
+                      :width 'normal)
   )
 
 (use-package breadcrumb

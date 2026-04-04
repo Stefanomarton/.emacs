@@ -6,9 +6,6 @@
   (projectile-mode)
   (setq projectile-track-known-projects-automatically nil)
   (setq projectile-completion-system 'consult)
-
-
-
   (setq projectile-indexing-method 'alien)
 
   :init

@@ -5,17 +5,13 @@
   :hook
   (python-ts-mode . eglot-ensure)
   (LaTeX-mode . eglot-ensure)
-  (nix-mode . eglot-ensure)
+  (nix-ts-mode . eglot-ensure)
   (typst-ts-mode . eglot-ensure)
 
   :config
   (add-to-list 'eglot-server-programs
 
-               '((typst-ts-mode) . ("tinymist")))
-  
-  (setq-default eglot-workspace-configuration
-                '(:tinymist (:exportPdf "onSave")))
-  )
+               '((typst-ts-mode) . ("tinymist"))))
 
 (use-package eglot-booster
   :ensure t

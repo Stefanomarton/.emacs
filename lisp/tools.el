@@ -9,7 +9,6 @@
   ([remap describe-variable] . helpful-variable)
   ([remap describe-function] . helpful-function))
 
-
 (use-package google-this
   :ensure t
   :commands google-this)

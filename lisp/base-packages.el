@@ -84,15 +84,6 @@ targets."
         '("typstyle" "--wrap-text" "-l" "75"))
   (apheleia-global-mode))
 
-                                        ;Outline
-(use-package outline
-  :ensure nil
-  :hook
-  (emacs-lisp-mode . outline-minor-mode)
-  (python-ts-mode . outline-minor-mode)
-  (typst-ts-mode . (lambda () (setq-local outline-default-state 1)))
-  )
-
 ;;Scratchbuffer
 (use-package scratch
   :ensure t

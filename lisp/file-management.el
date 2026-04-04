@@ -17,12 +17,14 @@
   :ensure t
   :bind ("<escape> z" . zoxide-find-file)   ; your keybinding
   :config
+
+  ;; Function to bypass file selection menu and explore file directly
   (defun my/zoxide-find-file (dir)
     "Start the usual ‘find-file’ prompt rooted at DIR (a directory)."
     ;; zoxide passes DIR as its one argument
     (let ((default-directory (file-name-as-directory (expand-file-name dir))))
       (call-interactively #'find-file)))
-  
+
   (setq zoxide-find-file-function #'my/zoxide-find-file))
 
 (provide 'file-management)

@@ -27,4 +27,5 @@
 
 (add-hook 'typst-ts-mode-hook 'typst-surround-setup)
 
+
 (provide 'typst-surround)
