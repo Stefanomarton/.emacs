@@ -36,6 +36,7 @@
 
   :config
   (setq-default denote-directory notes-folder)
+  (setq denote-file-type 'markdown-yaml)
 
   ;; (setq denote-templates
   ;;       `((journal . ,(concat "* Score giornaliero (0-10)\n\n"
@@ -132,6 +133,27 @@
                                    :date-value-reverse-function denote-extract-date-from-front-matter
                                    :link denote-org-link-format
                                    :link-in-context-regexp denote-org-link-in-context-regexp)
+                            (markdown-yaml
+                             :extension ".md"
+                             :front-matter denote-yaml-front-matter
+                             :title-key-regexp "^title\\s-*:"
+                             :title-value-function denote-format-string-for-md-front-matter
+                             :title-value-reverse-function denote-trim-whitespace-then-quotes
+                             :keywords-key-regexp "^tags\\s-*:"
+                             :keywords-value-function denote-format-keywords-for-md-front-matter
+                             :keywords-value-reverse-function denote-extract-keywords-from-front-matter
+                             :signature-key-regexp "^signature\\s-*:"
+                             :signature-value-function denote-format-string-for-md-front-matter
+                             :signature-value-reverse-function denote-trim-whitespace-then-quotes
+                             :identifier-key-regexp "^identifier\\s-*:"
+                             :identifier-value-function denote-format-string-for-md-front-matter
+                             :identifier-value-reverse-function denote-trim-whitespace-then-quotes
+                             :date-key-regexp "^date\\s-*:"
+                             :date-value-function denote-date-rfc3339
+                             :date-value-reverse-function denote-extract-date-from-front-matter
+                             :link-retrieval-format "(denote:%VALUE%)"
+                             :link denote-md-link-format
+                             :link-in-context-regexp denote-md-link-in-context-regexp)
                             )))
 
 (use-package consult-denote

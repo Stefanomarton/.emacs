@@ -17,7 +17,7 @@
                (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
                (json . ("https://github.com/tree-sitter/tree-sitter-json"))
                (make . ("https://github.com/alemuller/tree-sitter-make"))
-               (markdown . ("https://github.com/ikatyang/tree-sitter-markdown"))
+               ;; (markdown . ("https://github.com/ikatyang/tree-sitter-markdown"))
                (python . ("https://github.com/tree-sitter/tree-sitter-python"))
                (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
                (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
@@ -87,7 +87,7 @@
 (use-package lisp-mode
   :ensure nil
   :config
-  
+
 
   (use-package lisp-extra-font-lock
     :ensure t
@@ -192,18 +192,18 @@
   (indent-bars-treesit-ignore-blank-lines-types '("module"))
   ;; Add other languages as needed
   (indent-bars-treesit-scope '((python function_definition class_definition for_statement
-	                                   if_statement with_statement while_statement)))
+                                       if_statement with_statement while_statement)))
   ;; Note: wrap may not be needed if no-descend-list is enough
   ;;(indent-bars-treesit-wrap '((python argument_list parameters ; for python, as an example
-  ;;				      list list_comprehension
-  ;;				      dictionary dictionary_comprehension
-  ;;				      parenthesized_expression subscript)))
+  ;;                      list list_comprehension
+  ;;                      dictionary dictionary_comprehension
+  ;;                      parenthesized_expression subscript)))
   :hook ((python-base-mode yaml-mode) . indent-bars-mode))
 
 (use-package direnv
-   :ensure t
-   :config
-   (direnv-mode))
+  :ensure t
+  :config
+  (direnv-mode))
 
 (provide 'programming)
 

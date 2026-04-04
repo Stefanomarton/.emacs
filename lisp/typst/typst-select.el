@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (with-eval-after-load 'typst-ts-mode
   ;; --- Select current node ---
   (defun sm/treesit-select-node (type)

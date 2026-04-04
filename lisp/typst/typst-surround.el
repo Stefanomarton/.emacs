@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun embrace-with-typst-command ()
   "Return a (#command( . )) cons for Embrace, prompting for the command name."
   (let ((cmd (read-string "Typst command: ")))   ; no completion/annotation
@@ -27,4 +28,3 @@
 (add-hook 'typst-ts-mode-hook 'typst-surround-setup)
 
 (provide 'typst-surround)
-

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (setq frame-resize-pixelwise t
       frame-inhibit-implied-resize 'force
       frame-title-format '("%b")

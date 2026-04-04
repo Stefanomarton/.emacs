@@ -1,7 +1,8 @@
+;; -*- lexical-binding: t; -*-
 (with-eval-after-load 'typst-ts-mode
 
   (require 'consult)
-  
+
 ;;;  ──  helper: collect math blocks ──────────────────────────────────────────
   (defun sm/typst--equation-alist ()
     "Return an alist of all Typst `math` nodes in the current buffer.
@@ -120,7 +121,7 @@ The editable buffer now keeps the original `$ … $` delimiters."
 
 
 ;;;;;;; references
-  
+
   (defun sm/typst--label-alist ()
     "Return an alist of all Typst `label` nodes in the current buffer.
 Each element is (DISPLAY . (BEG END)), where DISPLAY is the string shown

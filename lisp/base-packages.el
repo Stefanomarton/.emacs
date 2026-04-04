@@ -6,8 +6,8 @@
   (add-hook 'emacs-startup-hook 'recentf-mode)
   (add-hook 'after-init-hook
             (lambda ()
-	          (setq inhibit-message t)
-	          (run-with-idle-timer 0 nil (lambda () (setq inhibit-message nil)))))
+              (setq inhibit-message t)
+              (run-with-idle-timer 0 nil (lambda () (setq inhibit-message nil)))))
   (setq recentf-auto-cleanup 'never)
   (setq recentf-max-saved-items 25))
 
@@ -18,15 +18,15 @@
         ("<escape> <escape>" . embark-minimal-act)
         ("C-." . embark-minimal-act))
   (:map vertico-map
-	    ("C-." . embark-minimal-act))
+        ("C-." . embark-minimal-act))
   :config
   ;; Which-key style indicator
   (defun embark-minimal-act (&optional arg)
     (interactive "P")
     (let ((embark-indicators
-	       '(embark-which-key-indicator
-	         embark-highlight-indicator
-	         embark-isearch-highlight-indicator)))
+           '(embark-which-key-indicator
+             embark-highlight-indicator
+             embark-isearch-highlight-indicator)))
       (embark-act arg)))
 
   (defun embark-minimal-act-noexit ()
@@ -34,9 +34,9 @@
     (embark-minimal-act 4))
   ;; Hide the mode line of the Embark live/completions buffers
   (add-to-list 'display-buffer-alist
-	           '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-		         nil
-		         (window-parameters (mode-line-format . none))))
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
   (add-to-list 'embark-indicators #'embark-which-key-indicator)
   (defun embark-which-key-indicator ()
     "An embark indicator that displays keymaps using which-key.
@@ -45,20 +45,20 @@ current target followed by an ellipsis if there are further
 targets."
     (lambda (&optional keymap targets prefix)
       (if (null keymap)
-	      (which-key--hide-popup-ignore-command)
-	    (which-key--show-keymap
-	     (if (eq (caar targets) 'embark-become)
-	         "Become"
-	       (format "Act on %s '%s'%s"
-		           (plist-get (car targets) :type)
-		           (embark--truncate-target (plist-get (car targets) :target))
-		           (if (cdr targets) "…" "")))
-	     (if prefix
-	         (pcase (lookup-key keymap prefix 'accept-default)
-	           ((and (pred keymapp) km) km)
-	           (_ (key-binding prefix 'accept-default)))
-	       keymap)
-	     nil nil t))))
+          (which-key--hide-popup-ignore-command)
+        (which-key--show-keymap
+         (if (eq (caar targets) 'embark-become)
+             "Become"
+           (format "Act on %s '%s'%s"
+                   (plist-get (car targets) :type)
+                   (embark--truncate-target (plist-get (car targets) :target))
+                   (if (cdr targets) "…" "")))
+         (if prefix
+             (pcase (lookup-key keymap prefix 'accept-default)
+               ((and (pred keymapp) km) km)
+               (_ (key-binding prefix 'accept-default)))
+           keymap)
+         nil nil t))))
 
   (setq embark-cycle-key "SPC")
   (setq embark-quit-after-action t)
@@ -68,13 +68,14 @@ targets."
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
+  :ensure t
   :hook
   (embark-collect-mode . consult-preview-at-point-mode)
   :after (embark consult)
   :bind (:map embark-become-file+buffer-map
-	          ("m" . consult-bookmark)
-	          ("b" . consult-buffer)
-	          ("j" . consult-find)))
+              ("m" . consult-bookmark)
+              ("b" . consult-buffer)
+              ("j" . consult-find)))
 
 (use-package apheleia
   :ensure t
