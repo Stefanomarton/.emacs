@@ -1,5 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 (setq frame-resize-pixelwise t
+      window-resize-pixelwise t
       frame-inhibit-implied-resize 'force
       frame-title-format '("%b")
       ring-bell-function 'ignore
@@ -24,28 +25,8 @@
 (setq native-comp-jit-compilation t)
 (setq native-compile-prune-cache t)
 
-(defvar me/gc-cons-threshold 100000000)
-
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
-
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold me/gc-cons-threshold
-                  gc-cons-percentage 0.1)))
-
-;; max memory available for gc when opening minibuffer
-(defun me/defer-garbage-collection-h ()
-  (setq gc-cons-threshold most-positive-fixnum))
-
-(defun me/restore-garbage-collection-h ()
-  ;; Defer it so that commands launched immediately after will enjoy the
-  ;; benefits.
-  (run-at-time
-   1 nil (lambda () (setq gc-cons-threshold me/gc-cons-threshold))))
-
-(add-hook 'minibuffer-setup-hook #'me/defer-garbage-collection-h)
-(add-hook 'minibuffer-exit-hook #'me/restore-garbage-collection-h)
 
 (defvar me/-file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
@@ -53,9 +34,6 @@
           (lambda ()
             (setq file-name-handler-alist me/-file-name-handler-alist)))
 
-;; Fill whatever space the window manager has given us.
-(setq frame-resize-pixelwise t
-      window-resize-pixelwise t)
 
 (dolist (variable '(initial-frame-alist default-frame-alist))
   (set variable `((width . (text-pixels . 800))

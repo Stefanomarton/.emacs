@@ -1,5 +1,4 @@
 ;; init.el -*- lexical-binding: t; -*-
-
 ;; Startup time
 (defun efs/display-startup-time ()
   (message
@@ -13,32 +12,23 @@
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 
 (when (boundp 'read-process-output-max)
-  ;; 1MB in bytes, default 4096 bytes
+  ;; Massively increase the chunk size for reading data from external
+  ;; processes. Essential for preventing lag when using LSP servers
+  ;; (like Typst/Eglot), which send massive JSON payloads. 1MB in
+  ;; bytes, default is 4096 bytes.
   (setq read-process-output-max 1048576))
 
 ;; Uncommented this sometimes for debugging
 ;; (setq use-package-verbose t)
 (setq debug-on-error t)
 
-;; But we do want to reset the garbage collector settings eventually. When we
-;; do, we'll use the GCMH [1] package to schedule the garbage collector to run
-;; during idle time, rather than the haphazard "whenever some threshold is
-;; reached".
-;; [1]: https://gitlab.com/koral/gcmh/
+(use-package gcmh
+  :ensure t
+  :init
+  ;; GCMH si attiva all'avvio e gestisce lui la memoria dinamicamente.
+  ;; Di default abbassa il threshold a 16MB quando Emacs è a riposo.
+  (gcmh-mode 1))
 
-(use-package gcmh :ensure t :defer t)
-
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold 33554432) ; 16mb
-            (setq gc-cons-percentage 0.1)
-            (require 'gcmh)
-            (gcmh-mode 1)))
-
-
-;; ;; As stated https://github.com/jwiegley/use-package?tab=readme-ov-file#use-packageel-is-no-longer-needed-at-runtime
-(eval-when-compile
-  (require 'use-package))
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
