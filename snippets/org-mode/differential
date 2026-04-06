@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: dx/dt
-# condition: (and (texmathp) 'auto)
-# key: ddd
-# --
-\\frac{\\mathrm{d}$1}{\\mathrm{d}$2}$0

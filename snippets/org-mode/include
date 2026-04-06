@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: #+INCLUDE
-# condition: (and (not (texmathp)))
-# key: icl
-# binding: <escape> s i
-# --
-#+INCLUDE: ${1: $(yas-choose-value '("./" "../"))}

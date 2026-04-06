@@ -5,32 +5,7 @@
   :demand t
   :bind
   (:map global-map
-        ("C-," . embrace-commander)
-        )
-  
-  :config
-  (defun embrace-with-latex-environment ()
-    (let ((block-type (completing-read
-                       "Enviroment: "
-                       '(center equation))))
-      (setq block-type (downcase block-type))
-      (cons (format "\\begin{%s}" block-type)
-            (format "\\end{%s}" block-type))))
-
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (embrace-add-pair ?M "\\[" "\\]" t t)
-              (embrace-add-pair ?m "\\\(" "\\\)" t nil)
-              (embrace-add-pair ?P "\\left\(" "\\right\)" t nil)
-              (embrace-add-pair ?p "\(" "\)" t nil)
-              (embrace-add-pair ?S "\\left[" "\\right]" t nil)
-              (embrace-add-pair ?s "[" "]" t nil)
-              (embrace-add-pair ?t "\\text{" "}" t nil)
-
-              (embrace-add-pair-regexp ?e "^[ \t]*\\\\begin{.+}.*$" "^[ \t]*\\\\end{.+}.*$" 'embrace-with-latex-environment
-                                       (embrace-build-help "\\begin{}" "\\end{}") t)
-              )
-            )
+        ("C-," . embrace-commander))
   )
 
 (defun mark-backward-paragraph ()
@@ -68,7 +43,7 @@
 
               ("q" . er/mark-inside-quotes)
               ("\(" . er/mark-outside-pairs)
-              
+
               )
 
   (:map selected-text-mode-map
@@ -140,9 +115,9 @@
   :config
 
   (setq selected-typst-ts-mode-map (make-sparse-keymap))
-  
+
   (setq selected-text-mode-map (make-sparse-keymap))
-  
+
   (defun fix-pasted-text ()
     (interactive)
     (join-line)
@@ -160,7 +135,7 @@
           (insert opening-delimiter)
 
           (goto-char (+ end (length closing-delimiter)))
-	      (insert closing-delimiter)))))
+          (insert closing-delimiter)))))
 
   (defun surround-region-with-typst-align (align)
     "Surround the region with Typst align block: align(<style>)[ ... ]"
@@ -212,29 +187,29 @@
   (defun surround-region-with-chem ()
     "Surround the active region with hard-coded strings"
     (interactive)
-	(yas-expand-snippet "\\ce{`(yas-selected-text)`}")
+    (yas-expand-snippet "\\ce{`(yas-selected-text)`}")
     (previous-line)
     (end-of-line))
 
   (defun surround-region-with-command (command)
     "Surround the active region with hard-coded strings"
     (interactive "sCommand: ")
-	(yas-expand-snippet (concat "\\" command "{" "`(yas-selected-text)`}")))
+    (yas-expand-snippet (concat "\\" command "{" "`(yas-selected-text)`}")))
 
   (defun surround-region-with-function (fn)
     "Surround the active region with hard-coded strings"
     (interactive "sFunction: ")
-	(yas-expand-snippet (concat "#" fn "()[" "`(yas-selected-text)`]")))
+    (yas-expand-snippet (concat "#" fn "()[" "`(yas-selected-text)`]")))
 
   (defun surround-region-with-cancel ()
     "Surround the active region with hard-coded strings"
     (interactive)
-	(yas-expand-snippet "\\cancel{`(yas-selected-text)`}"))
+    (yas-expand-snippet "\\cancel{`(yas-selected-text)`}"))
 
   (defun surround-region-with-text ()
     "Surround the active region with hard-coded strings"
     (interactive)
-	(yas-expand-snippet "\\text{`(yas-selected-text)`}"))
+    (yas-expand-snippet "\\text{`(yas-selected-text)`}"))
 
   (defun surround-region-with-math-and-chem ()
     "Surround the active region with hard-coded strings"

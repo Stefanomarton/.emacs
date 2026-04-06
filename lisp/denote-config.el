@@ -55,39 +55,8 @@
         (find-file target)
       (denote--command-with-features #'denote-subdirectory :use-last-input-as-def-title nil nil nil)))
 
-  (setq denote-excluded-directories-regexp "\\(music\\|photos\\|.git\\|qmk_firmware\\|.env\\|.mypy_cache\\|.ltximg\\)")
+  (setq denote-excluded-directories-regexp "\\(music\\|photos\\|.git\\|qmk_firmware\\|.env\\|.mypy_cache\\|.ltximg|.direnv|.archived\\)")
   (setq denote-backlinks-show-context t)
-
-  ;; link configuration
-  (defun my/denote-link-description-with-signature-and-title (file)
-    "Return link description for FILE.
-    - If the region is active, use it as the description.
-    - If the region is not active, ask for a prompt and use the input.
-    - If the prompt is empty, check if FILE has a signature, then format the description
-    as a sequence of the signature text and the title with two spaces between them.
-    - If FILE does not have a signature, then use its title as the description.
-
-    This is useful as the value of the user option
-    `denote-link-description-function`."
-
-    (let* ((file-type (denote-filetype-heuristics file))
-           (signature (denote-retrieve-filename-signature file))
-           (title (denote-retrieve-title-or-filename file file-type))
-           (region-text (denote--get-active-region-content))
-           (prompt-text (if (string-empty-p region-text)
-                            (read-string "Enter description (leave blank for default): ")
-                          nil)))  ; Don't ask for prompt if region is active
-      (cond
-       (region-text region-text)
-       ((not (string-empty-p prompt-text)) prompt-text)
-       ((and signature title) (format "%s  %s" signature title))
-       (title (format "%s" title))
-       (signature (format "%s" signature))
-       (t ""))))
-
-
-
-  (setq denote-link-description-format #'my/denote-link-description-with-signature-and-title)
 
   (defvar my-denote-typst-front-matter
     "#let title =      \"%s\"\n#let date=      \"%s\"\n#let tags=       \"%s\"\n#let identifier= \"%s\"\n")

@@ -1,15 +1,11 @@
 ;;; completion.el --- Useful Tools -*- lexical-binding: t; -*-
-
 ;; Enable vertico for the best vertical completion experience
 (use-package vertico
   :ensure t
   :bind
   (:map vertico-map
-        ("C-k" . vertico-next)
-        ("C-l" . vertico-previous)
         ("<escape>" . keyboard-escape-quit))
   :config
-
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
@@ -36,32 +32,6 @@
   :init
   (vertico-mode)
   )
-
-;; (use-package vertico-multiform
-;;   :after vertico
-;;   :ensure nil
-;;   :config
-;;   (vertico-multiform-mode)
-
-;;   (add-to-list 'vertico-multiform-categories
-;;                '(jinx grid (vertico-grid-annotate . 20))
-;;                )
-
-;;   (setq vertico-multiform-commands
-;;         '((execute-extended-command posframe)
-;;           (consult-projectile posframe)))
-;;   )
-
-
-;; (use-package vertico-posframe
-;;   :ensure t
-;;   :config
-;;   ;; (setq vertico-posframe-width 120)
-;;   (setq vertico-posframe-border-width 3)
-;;   (setq vertico-posframe-parameters
-;;         '((left-fringe . 15)
-;;           (right-fringe . 20)))
-;;   )
 
 ;; orderless completion method
 (use-package orderless
@@ -113,7 +83,6 @@
   ("<escape> g" . my/consult-ripgrep)
   ("<escape> G" . magit)
   ("<escape> c x" . consult-complex-command)
-  ("<escape> t t" . consult-todo)
   ("<escape> t k" . consult-keep-lines)
   ("<escape> t f" . consult-focus-lines)
   ("<escape> o o" . my/consult-outline)
@@ -136,16 +105,6 @@
 (use-package consult-dir
   :ensure t
   :after consult)
-
-                                        ;(use-package consult-todo
-                                        ;  :ensure (:host github :repo "liuyinz/consult-todo")
-                                        ;  :after consult
-                                        ;  :config
-                                        ;  (setq consult-todo-narrow
-                                        ;        '((?t . "TODO")
-                                        ;          (?f . "FIX")
-                                        ;          (?b . "BUG")
-                                        ;          (?h . "ASK"))))
 
 (use-package cape
   :ensure t
@@ -179,7 +138,6 @@
   (setq corfu-preview-current nil)    ;; Disable current candidate preview
   (setq corfu-preselect 'first)      ;; Preselect the prompt
 
-
   ;; Corfu for org mode setup
   (add-hook 'org-mode-hook
             (lambda ()
@@ -210,9 +168,6 @@
                   (cape-capf-nonexclusive #'yasnippet-capf)))))
   (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
 
-
-
-
   ;; Setup for emacs lisp-mode
   (add-hook 'emacs-lisp-mode-hook
             (lambda ()
@@ -239,9 +194,7 @@
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
   :init
-  (global-corfu-mode)
-
-  )
+  (global-corfu-mode))
 
 (use-package nerd-icons-corfu
   :ensure t
@@ -250,5 +203,4 @@
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 (provide 'completion)
-
 ;;; completion.el ends here

@@ -4,7 +4,8 @@
   :ensure t
   :vc (:url "https://codeberg.org/meow_king/typst-ts-mode"
             :branch "main")
-
+  :hook
+  (typst-ts-mode . display-line-numbers-mode)
   :bind (:map typst-ts-mode-map
 
               ("C-c <tab>" . outline-cycle-buffer)
@@ -26,9 +27,7 @@
               ("C-c c" . citar-insert-citation)
 
               ("C-c x" . sm/typst-extract-region-to-file)
-
               )
-
 
 
   :hook
@@ -36,9 +35,9 @@
 
   :config
   ;; (setq typst-ts-output-directory "/tmp/pdf")
+  (setenv "TYPST_PROJECT_ROOT" denote-directory)
   (setq typst-ts-compile-options "--root=$TYPST_PROJECT_ROOT --pdf-standard=a-2b")
-  (setq typst-ts-watch-options
-        (list (concat "--root=" (expand-file-name "~/.marton-drive/")) "--open"))
+  (setq typst-ts-watch-options (list "--root=/home/sm/.marton-drive/work/its/courses/chimica-dei-metalli"))
   )
 
 (provide 'typst-config)
