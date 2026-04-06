@@ -44,9 +44,11 @@
 
 (defvar notes-folder "~/.marton-drive/")
 
-(add-to-list 'load-path "~/.config/emacs/lisp/")
-(add-to-list 'load-path "~/.config/emacs/lisp/org")
-(add-to-list 'load-path "~/.config/emacs/lisp/typst")
+(let ((default-directory "~/.config/emacs/lisp/"))
+  ;; This adds the main folder to the load-path
+  (add-to-list 'load-path default-directory)
+  ;; This automatically finds all subfolders and adds them too
+  (normal-top-level-add-subdirs-to-load-path))
 
 (require 'core)
 (require 'file-management)
@@ -64,12 +66,4 @@
 (require 'document-production)
 
 (require 'denote-config)
-
 (require 'typst-config)
-(require 'typst-citar)
-(require 'typst-extensions)
-(require 'typst-movement)
-(require 'typst-select)
-(require 'typst-consult)
-(require 'typst-snippets)
-(require 'typst-surround)
