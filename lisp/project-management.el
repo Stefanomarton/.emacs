@@ -60,10 +60,10 @@
     (setq magit-git-global-arguments (remove dotfiles-work-tree magit-git-global-arguments))
     (call-interactively 'magit-status)))
 
-(use-package magit-delta
-  :ensure t
-  :after magit
-  :hook (magit-mode . magit-delta-mode))
+;; (use-package magit-delta
+;;   :ensure t
+;;   :after magit
+;;   :hook (magit-mode . magit-delta-mode))
 
 (use-package git-gutter
   :ensure t
