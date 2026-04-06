@@ -18,7 +18,7 @@
 
 ;; Uncommented this sometimes for debugging
 ;; (setq use-package-verbose t)
-(setq debug-on-message t)
+(setq debug-on-error t)
 
 ;; But we do want to reset the garbage collector settings eventually. When we
 ;; do, we'll use the GCMH [1] package to schedule the garbage collector to run
