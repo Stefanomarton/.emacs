@@ -12,10 +12,14 @@
   
   (defun my/typst-download-clipboard ()
     (interactive)
-    (org-set-attachments-folder)
-    (setq-local typst-download-image-dir org-attachments-folder)
-    (typst-download-clipboard)
-    )
+    (let ((project-root (getenv "TYPST_PROJECT_ROOT")))
+      (if project-root
+          ;; Safely combine the root path with the .attachments directory
+          (setq-local typst-download-image-dir (expand-file-name ".attachments" project-root))
+        ;; Throw a helpful error if the environment variable isn't found
+        (user-error "The shell variable TYPST_PROJECT_ROOT is not set"))
+      
+      (typst-download-clipboard)))
 
   :bind
   (:map typst-ts-mode-map

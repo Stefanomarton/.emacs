@@ -9,10 +9,6 @@
   ([remap describe-variable] . helpful-variable)
   ([remap describe-function] . helpful-function))
 
-(use-package google-this
-  :ensure t
-  :commands google-this)
-
 (use-package csv-mode
   :ensure t
   :mode ("\\.csv\\'" . csv-mode))
@@ -31,6 +27,7 @@
   :bind (("<escape>." . term-toggle-eshell)))
 
 (use-package eshell
+  :commands eshell
   :ensure nil
   :config
   (add-hook 'eshell-mode-hook (lambda () (setenv "TERM" "xterm-256color")))
@@ -60,11 +57,13 @@
          ("C-M-s" . vr/replace)
          )
   :config
-  (setq vr/auto-show-help nil))
+  (setq vr/auto-show-help nil)
 
-(use-package visual-regexp-steroids
-  :after visual-regexp
-  :vc (:url "https://github.com/benma/visual-regexp-steroids.el" :branch "master"))
+  (use-package visual-regexp-steroids
+    :after visual-regexp
+    :vc (:url "https://github.com/benma/visual-regexp-steroids.el" :branch "master"))
+  )
+
 
 (use-package calc
   :ensure nil
@@ -91,6 +90,12 @@
   (defun diff-current-buffer-with-file ()
     (interactive)
     (diff-buffer-with-file (current-buffer))))
+
+
+(use-package esup
+  :ensure t
+  :config
+  (setq esup-depth 0))
 
 (provide 'tools)
 

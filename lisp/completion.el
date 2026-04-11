@@ -1,6 +1,7 @@
 ;;; completion.el --- Useful Tools -*- lexical-binding: t; -*-
 ;; Enable vertico for the best vertical completion experience
 (use-package vertico
+  :demand t
   :ensure t
   :bind
   (:map vertico-map
@@ -29,7 +30,6 @@
   (setq vertico-count 10)
   (setq vertico-resize nil)
   (setq vertico-cycle t)
-  :init
   (vertico-mode)
   )
 
@@ -81,7 +81,6 @@
   ("<escape> c l" . consult-line)
   ("<escape> R" . consult-recent-file)
   ("<escape> g" . my/consult-ripgrep)
-  ("<escape> G" . magit)
   ("<escape> c x" . consult-complex-command)
   ("<escape> t k" . consult-keep-lines)
   ("<escape> t f" . consult-focus-lines)
@@ -120,7 +119,7 @@
   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
 (use-package corfu
-  :defer 2
+  :demand t
   :ensure t
   :config
   (setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
@@ -193,7 +192,7 @@
                   )
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
-  :init
+  ;; :init
   (global-corfu-mode))
 
 (use-package nerd-icons-corfu

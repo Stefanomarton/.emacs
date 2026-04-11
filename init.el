@@ -19,18 +19,18 @@
   (setq read-process-output-max 1048576))
 
 ;; Uncommented this sometimes for debugging
-;; (setq use-package-verbose t)
+(setq use-package-verbose t)
 (setq debug-on-error t)
 
-(use-package gcmh
-  :ensure t
-  :init
-  ;; GCMH si attiva all'avvio e gestisce lui la memoria dinamicamente.
-  ;; Di default abbassa il threshold a 16MB quando Emacs è a riposo.
-  (gcmh-mode 1))
-
-
+(require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
+(use-package gcmh
+    :ensure t
+    :config
+    ;; GCMH si attiva all'avvio e gestisce lui la memoria dinamicamente.
+    ;; Di default abbassa il threshold a 16MB quando Emacs è a riposo.
+    (gcmh-mode 1))
 
 (defvar notes-folder "~/.marton-drive/")
 
@@ -54,6 +54,8 @@
 (require 'programming)
 (require 'lsp)
 (require 'document-production)
+(require 'markdown)
+(require 'config-latex)
 
 (require 'denote-config)
 (require 'typst-config)

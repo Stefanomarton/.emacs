@@ -1,23 +1,21 @@
 ;;; file-management.el -*- lexical-binding: t; -*-
-
 ;; Better dired
 (use-package dirvish
+  :demand t
   :ensure t
+  :commands (dirvish dirvish-side)
   :bind
   (:map global-map
         ("C-x C-j" . dirvish-dwim))
   :config
   (setq dirvish-default-layout '(0 0.2 0.6))
   (setq dirvish-use-mode-line nil)
-  :init
-  (dirvish-override-dired-mode)
-  )
+  (dirvish-override-dired-mode))
 
 (use-package zoxide
   :ensure t
   :bind ("<escape> z" . zoxide-find-file)   ; your keybinding
   :config
-
   ;; Function to bypass file selection menu and explore file directly
   (defun my/zoxide-find-file (dir)
     "Start the usual ‘find-file’ prompt rooted at DIR (a directory)."
