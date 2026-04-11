@@ -1,15 +1,15 @@
 ;;; base-packages.el -*- lexical-binding: t; -*-
-;; Recent file list
-(use-package recentf
-  :ensure nil
-  :config
-  (add-hook 'emacs-startup-hook 'recentf-mode)
-  (add-hook 'after-init-hook
-            (lambda ()
-              (setq inhibit-message t)
-              (run-with-idle-timer 0 nil (lambda () (setq inhibit-message nil)))))
-  (setq recentf-auto-cleanup 'never)
-  (setq recentf-max-saved-items 25))
+;; ;; Recent file list
+;; (use-package recentf
+;;   :ensure nil
+;;   :config
+;;   (add-hook 'emacs-startup-hook 'recentf-mode)
+;;   (add-hook 'after-init-hook
+;;             (lambda ()
+;;               (setq inhibit-message t)
+;;               (run-with-idle-timer 0 nil (lambda () (setq inhibit-message nil)))))
+;;   (setq recentf-auto-cleanup 'never)
+;;   (setq recentf-max-saved-items 25))
 
 ;; Embark
 (use-package embark
@@ -78,6 +78,7 @@ targets."
               ("j" . consult-find)))
 
 (use-package apheleia
+  :hook  ((prog-mode text-mode) . apheleia-mode)
   :ensure t
   :config
   (setf (alist-get 'typstyle apheleia-formatters)
@@ -106,9 +107,11 @@ targets."
   (undo-fu-session-global-mode))
 
 (use-package vundo
+  :bind ("C-x U" . vundo)
   :ensure t)
 
 (use-package simple
+  :defer 1
   :ensure nil
   :config
   (setq save-interprogram-paste-before-kill t)

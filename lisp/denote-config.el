@@ -1,16 +1,4 @@
 ;;; denote.el -*- lexical-binding: t; -*-;;;
-(setq custom-file (locate-user-emacs-file "custom.el"))
-
-(use-package denote-journal
-  :vc (:url https://github.com/protesilaos/denote-journal
-            :branch "main")
-  :bind
-  ("<escape>dj" . denote-journal-new-or-existing-entry)
-  :config
-  (setq denote-journal-directory (expand-file-name "personal/journal" denote-directory))
-  (setq denote-journal-title-format "%Y %m %d")
-  )
-
 (use-package denote
   :defer 0.5
   :vc (:url "https://github.com/protesilaos/denote")
@@ -19,7 +7,6 @@
 
   :bind
   ("<escape>do" . my/denote-open-or-create)
-
   ("<escape>dr" . denote-region)
   ("<escape>dg" . consult-denote-grep)
   ("<escape>dt" . denote-type)
@@ -37,16 +24,6 @@
   :config
   (setq-default denote-directory notes-folder)
   (setq denote-file-type 'markdown-yaml)
-
-  ;; (setq denote-templates
-  ;;       `((journal . ,(concat "* Score giornaliero (0-10)\n\n"
-  ;;                             "Serenità: \n"
-  ;;                             "Energia: \n"
-  ;;                             "\n\n"
-  ;;                             "* Commento generale giornata"
-  ;;                             "\n\n"
-  ;;                             "* Riflessione del giorno\n"
-  ;;                             ))))
 
   ;; Modify default command to use `denote-subdirectory' when creating TARGET
   (defun my/denote-open-or-create (target)
@@ -123,33 +100,43 @@
                              :link-retrieval-format "(denote:%VALUE%)"
                              :link denote-md-link-format
                              :link-in-context-regexp denote-md-link-in-context-regexp)
-                            )))
+                            ))
 
-(use-package consult-denote
-  :requires (denote consult)
-  :ensure t
-  :bind
-  ("<escape>dg" . consult-denote-grep)
-  :config
-  (setq consult-denote-grep-command #'consult-ripgrep) ; use ripgrep
-  (consult-denote-mode))
+  (use-package denote-journal
+    :vc (:url https://github.com/protesilaos/denote-journal
+              :branch "main")
+    :bind
+    ("<escape>dj" . denote-journal-new-or-existing-entry)
+    :config
+    (setq denote-journal-directory (expand-file-name "personal/journal" denote-directory))
+    (setq denote-journal-title-format "%Y %m %d")
+    )
 
-(use-package citar-denote
-  :after denote
-  :ensure t
-  :bind
-  (:map global-map
-        ("<escape>dpc" . citar-create-note)
-        ("<escape>dpo" . citar-denote-open-note)
-        ("<escape>dpn" . citar-denote-nocite))
-  (:map org-mode-map
-        ("<escape>dpk" . citar-denote-add-citekey)
-        ("<escape>dpK" . citar-denote-remove-citekey)
-        ("<escape>dpd" . citar-denote-dwim)
-        ("<escape>dpe" . citar-denote-open-reference-entry))
-  :config
-  (setq citar-open-always-create-notes t)
-  (setq citar-denote-subdir "/uni/papers")
-  (citar-denote-mode))
+  (use-package consult-denote
+    :requires (denote consult)
+    :ensure t
+    :bind
+    ("<escape>dg" . consult-denote-grep)
+    :config
+    (setq consult-denote-grep-command #'consult-ripgrep) ; use ripgrep
+    (consult-denote-mode))
+
+  (use-package citar-denote
+    :after denote
+    :ensure t
+    :bind
+    (:map global-map
+          ("<escape>dpc" . citar-create-note)
+          ("<escape>dpo" . citar-denote-open-note)
+          ("<escape>dpn" . citar-denote-nocite))
+    (:map org-mode-map
+          ("<escape>dpk" . citar-denote-add-citekey)
+          ("<escape>dpK" . citar-denote-remove-citekey)
+          ("<escape>dpd" . citar-denote-dwim)
+          ("<escape>dpe" . citar-denote-open-reference-entry))
+    :config
+    (setq citar-open-always-create-notes t)
+    (setq citar-denote-subdir "/uni/papers")
+    (citar-denote-mode)))
 
 (provide 'denote-config)

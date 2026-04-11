@@ -16,6 +16,7 @@
   )
 
 (use-package selected
+  :demand t
   :ensure t
   :bind (:map selected-keymap
               ("U" . upcase-region)
@@ -46,7 +47,7 @@
 
               )
 
-  (:map selected-text-mode-map
+  (:map selected-latex-mode-map
         ("U" . upcase-region)
         ("D" . downcase-region)
         ("C" . capitalize-region)
@@ -117,6 +118,7 @@
   (setq selected-typst-ts-mode-map (make-sparse-keymap))
 
   (setq selected-text-mode-map (make-sparse-keymap))
+  (setq selected-latex-mode-map (make-sparse-keymap))
 
   (defun fix-pasted-text ()
     (interactive)
@@ -242,7 +244,7 @@
     (yas-expand-snippet "\\[\n`(yas-selected-text)`\n\\]")
     (previous-line)
     (end-of-line))
-  :init
+  ;; :init
   (selected-global-mode))
 
 (provide 'surround)

@@ -38,6 +38,14 @@
   (setenv "TYPST_PROJECT_ROOT" denote-directory)
   (setq typst-ts-compile-options "--root=$TYPST_PROJECT_ROOT --pdf-standard=a-2b")
   (setq typst-ts-watch-options (list "--root=/home/sm/.marton-drive/work/its/courses/chimica-dei-metalli"))
+
+  (require 'typst-citar)
+  (require 'typst-extensions)
+  (require 'typst-movement)
+  (require 'typst-select)
+  (require 'typst-consult)
+  (require 'typst-snippets)
+  (require 'typst-surround)
   )
 
 (provide 'typst-config)

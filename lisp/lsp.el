@@ -1,30 +1,32 @@
 ;;; lsp.el --- LSP configuration -*- lexical-binding: t; -*-
 (use-package eglot
-  :ensure t
-  :commands (eglot eglot-ensure)
-  :hook
-  (python-ts-mode . eglot-ensure)
-  (LaTeX-mode . eglot-ensure)
-  (nix-ts-mode . eglot-ensure)
-  (typst-ts-mode . eglot-ensure)
+    :ensure t
+    :commands (eglot eglot-ensure)
+    :hook
+    (python-ts-mode . eglot-ensure)
+    (LaTeX-mode . eglot-ensure)
+    (nix-ts-mode . eglot-ensure)
+    (typst-ts-mode . eglot-ensure)
 
-  :config
-  (add-to-list 'eglot-server-programs
+    :config
 
-               '((typst-ts-mode) . ("tinymist"))))
+    (use-package eglot-booster
+        :ensure t
+        :vc (:url "https://github.com/jdtsmith/eglot-booster" :branch "master")
+        :after eglot
+        :config (eglot-booster-mode))
 
-(use-package eglot-booster
-  :ensure t
-  :vc (:url "https://github.com/jdtsmith/eglot-booster" :branch "master")
-  :after eglot
-  :config (eglot-booster-mode))
+    
+    (add-to-list 'eglot-server-programs
+
+                 '((typst-ts-mode) . ("tinymist"))))
 
 (use-package eldoc
-  :ensure nil)
+    :ensure nil)
 
 (use-package jsonrpc
-  :ensure t
-  :after eglot)
+    :ensure t
+    :after eglot)
 
 (provide 'lsp)
 

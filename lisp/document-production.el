@@ -1,24 +1,4 @@
 ;;; document-production.el --- document production configuration -*- lexical-binding: t; -*-
-
-(use-package md-ts-mode
-  :ensure t
-  :hook
-  (md-ts-mode . display-line-numbers-mode))
-
-(use-package auctex
-  :ensure t
-  :hook
-  (latex-mode . display-line-numbers-mode)
-  (LaTeX-mode-hook . prettify-symbols-mode)
-  :config
-  (add-to-list 'major-mode-remap-alist '(latex-mode . LaTeX-mode))
-
-  (setq TeX-save-query nil
-        TeX-clean-confirm nil
-        TeX-command-extra-options "--shell-escape"
-        TeX-source-correlate-start-server t
-        TeX-source-correlate-method 'synctex))
-
 (use-package yasnippet
   :ensure t
   :commands (yas-minor-mode)
@@ -90,45 +70,9 @@
     (recenter-top-bottom)
     ))
 
-(use-package aas
-  :ensure t
-  :hook
-  (org-mode . aas-activate-for-major-mode)
-  (markdown-mode . aas-activate-for-major-mode)
-  (LaTeX-mode . aas-activate-for-major-mode)
-  :config
-
-
-  (aas-set-snippets 'LaTeX-mode
-                    "jf" (lambda () (interactive)
-                           (yas-expand-snippet "\\\\($1\\\\) $0"))
-                    "jc" (lambda () (interactive)
-                           (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
-                    "kd  " (lambda () (interactive)
-                             (yas-expand-snippet "\\[ \n $1 \n \\] \n \n $0")))
-  (aas-set-snippets 'org-mode
-                    "jf" (lambda () (interactive)
-                           (yas-expand-snippet "\\\\( $1 \\\\) $0"))
-                    "jc" (lambda () (interactive)
-                           (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
-                    "kd" (lambda () (interactive)
-                           (setq-local yas-indent-line 'auto)
-                           (yas-expand-snippet "\\[ \n $1 \n \\]\n $0")))
-  (aas-set-snippets 'markdown-mode
-                    "jf" (lambda () (interactive)
-                           (yas-expand-snippet "$ $1$ $0 $"))
-                    "jc" (lambda () (interactive)
-                           (yas-expand-snippet "\\\\(\\ce{ $1 }\\\\) $0"))
-                    "kd" (lambda () (interactive)
-                           (yas-expand-snippet "$$ \n $1 \n $$ \n \n $0"))))
-
-
 (use-package laas
+  :defer t
   :ensure t
-  :hook
-  (LaTeX-mode . laas-mode)
-  (markdown-mode . laas-mode)
-  (org-mode . laas-mode)
   :config
   (aas-set-snippets 'laas-mode
                     ;; set condition!
@@ -211,18 +155,10 @@
   )
 
 (use-package jinx
+  :defer t
   :ensure t
-  :hook
-  (org-mode . jinx-mode)
-  :bind
-  (:map org-mode-map
-        ("M-$" . jinx-correct))
-  (:map text-mode-map
-        ("M-$" . jinx-correct))
   :init
-  ;; must load it before starting jinx-mode
   (setq jinx-languages "it en_US"))
-
 
 (provide 'document-production)
 
