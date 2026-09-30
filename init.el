@@ -19,18 +19,18 @@
   (setq read-process-output-max 1048576))
 
 ;; Uncommented this sometimes for debugging
-(setq use-package-verbose t)
-(setq debug-on-error t)
+;; (setq use-package-verbose t)
+;; (setq debug-on-error t)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (use-package gcmh
-    :ensure t
-    :config
-    ;; GCMH si attiva all'avvio e gestisce lui la memoria dinamicamente.
-    ;; Di default abbassa il threshold a 16MB quando Emacs è a riposo.
-    (gcmh-mode 1))
+  :ensure t
+  :config
+  ;; GCMH si attiva all'avvio e gestisce lui la memoria dinamicamente.
+  ;; Di default abbassa il threshold a 16MB quando Emacs è a riposo.
+  (gcmh-mode 1))
 
 (defvar notes-folder "~/.marton-drive/")
 
@@ -59,3 +59,14 @@
 
 (require 'denote-config)
 (require 'typst-config)
+
+(add-to-list 'load-path "~/inbox/finsnip/")
+
+(require 'finsnip)
+
+(use-package finsnip
+  :ensure nil
+  :hook (text-mode . finsnip-mode)
+  :config
+  (finsnip-load-json-file "~/inbox/finsnip/typst_snippets.json")
+  (add-to-list 'completion-at-point-functions #'finsnip-capf))

@@ -33,11 +33,40 @@
   :hook
   (typst-ts-mode . outline-indent-mode)
 
+  ;; Dynamically set roots for BOTH watch and compile when launching typst-ts-mode.
+  ;; Forces a synchronous shell check for direnv before falling back to denote.
+  (typst-ts-mode . (lambda ()
+                     (let* ((direnv-root
+                             (with-temp-buffer
+                               ;; 1. Run direnv allow
+                               ;; 2. Wait for it, then execute printenv
+                               ;; 3. Return 0 (success) only if the variable exists
+                               (when (eq 0 (call-process-shell-command 
+                                            "direnv allow . && direnv exec . printenv TYPST_PROJECT_ROOT" 
+                                            nil t nil))
+                                 (string-trim (buffer-string)))))
+                            
+                            ;; 4. Check if we got a valid path, otherwise fallback
+                            (active-root (if (and direnv-root (not (string-empty-p direnv-root)))
+                                             direnv-root
+                                           (expand-file-name denote-directory))))
+                       
+                       ;; Watch Options: List format for start-process (no shell)
+                       (setq-local typst-ts-watch-options 
+                                   (list "--root" active-root))
+                       
+                       ;; Compile Options: String format for shell process
+                       (setq-local typst-ts-compile-options 
+                                   (format "--root=%s --pdf-standard=a-2b" (shell-quote-argument active-root))))))
+
   :config
-  ;; (setq typst-ts-output-directory "/tmp/pdf")
-  (setenv "TYPST_PROJECT_ROOT" denote-directory)
-  (setq typst-ts-compile-options "--root=$TYPST_PROJECT_ROOT --pdf-standard=a-2b")
-  (setq typst-ts-watch-options (list "--root=/home/sm/.marton-drive/work/its/courses/chimica-dei-metalli"))
+  ;; ;; (setq typst-ts-output-directory "/tmp/pdf")
+  ;; (setenv "TYPST_PROJECT_ROOT" denote-directory)
+
+  ;; (setq typst-ts-compile-options "--root=$TYPST_PROJECT_ROOT --pdf-standard=a-2b")
+  ;; (setq typst-ts-watch-options (list "--root" (getenv "TYPST_PROJECT_ROOT")))
+
+
 
   (require 'typst-citar)
   (require 'typst-extensions)

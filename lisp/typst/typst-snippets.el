@@ -95,76 +95,76 @@ Preserves quotes in string nodes."
            (concat left text right "$0")
          (concat left "$1" right "$0")))))
 
-  (aas-set-snippets 'typst-ts-mode
+  ;; (aas-set-snippets 'typst-ts-mode
 
-                    "kd" (lambda () (interactive)
-                           (yas-expand-snippet "$\n$1\n$\n$0"))
+  ;;                   "kd" (lambda () (interactive)
+  ;;                          (yas-expand-snippet "$\n$1\n$\n$0"))
 
-                    "jf" (lambda () (interactive)
-                           (yas-expand-snippet "$ $1 $ $0"))
+  ;;                   "jf" (lambda () (interactive)
+  ;;                          (yas-expand-snippet "$ $1 $ $0"))
 
-                    "jc" (lambda () (interactive)
-                           (yas-expand-snippet "#ce(\"$1\")$0"))
+  ;;                   "jc" (lambda () (interactive)
+  ;;                          (yas-expand-snippet "#ce(\"$1\")$0"))
 
-                    "jq" (lambda () (interactive)
-                           (yas-expand-snippet "$\n#ce(\"$1\")\n$\n$0"))
+  ;;                   "jq" (lambda () (interactive)
+  ;;                          (yas-expand-snippet "$\n#ce(\"$1\")\n$\n$0"))
 
-                    ;; math (guarded)
-                    :cond #'typst-inside-math-p
-                    ";a" "alpha "
-                    ";A" "Alpha "
-                    ";b" "beta "
-                    ";B" "Beta "
-                    ";d" "delta "
-                    ";D" "Delta "
-                    ";e" "epsilon "
-                    ";g" "gamma "
-                    ";G" "Gamma "
+  ;;                   ;; math (guarded)
+  ;;                   :cond #'typst-inside-math-p
+  ;;                   ";a" "alpha "
+  ;;                   ";A" "Alpha "
+  ;;                   ";b" "beta "
+  ;;                   ";B" "Beta "
+  ;;                   ";d" "delta "
+  ;;                   ";D" "Delta "
+  ;;                   ";e" "epsilon "
+  ;;                   ";g" "gamma "
+  ;;                   ";G" "Gamma "
 
-                    "qq" "quad"
+  ;;                   "qq" "quad"
 
-                    ";i" "integral"
+  ;;                   ";i" "integral"
 
-                    ";;m" #'typst-snippets-matrix
+  ;;                   ";;m" #'typst-snippets-matrix
 
-                    ";I" (lambda () (interactive)
-                           (yas-expand-snippet "integral_($1)^($2) $0"))
+  ;;                   ";I" (lambda () (interactive)
+  ;;                          (yas-expand-snippet "integral_($1)^($2) $0"))
 
-                    ".b"     (lambda () (interactive)
-                               (typst-wrap-prev-node "bold(" ")"))
+  ;;                   ".b"     (lambda () (interactive)
+  ;;                              (typst-wrap-prev-node "bold(" ")"))
 
-                    ".v"     (lambda () (interactive)
-                               (typst-wrap-prev-node "vec(" ")"))
+  ;;                   ".v"     (lambda () (interactive)
+  ;;                              (typst-wrap-prev-node "vec(" ")"))
 
-                    ".q"     (lambda () (interactive)
-                               (typst-wrap-prev-node "sqrt(" ")"))
+  ;;                   ".q"     (lambda () (interactive)
+  ;;                              (typst-wrap-prev-node "sqrt(" ")"))
 
-                    ".s"     (lambda () (interactive)
-                               (typst-wrap-prev-node "\"" "\""))
+  ;;                   ".s"     (lambda () (interactive)
+  ;;                              (typst-wrap-prev-node "\"" "\""))
 
-                    ".c"     (lambda () (interactive)
-                               (typst-wrap-prev-node "cancel(" ")"))
+  ;;                   ".c"     (lambda () (interactive)
+  ;;                              (typst-wrap-prev-node "cancel(" ")"))
 
-                    ".a"     (lambda () (interactive)
-                               (typst-wrap-prev-node "abs(" ")"))
+  ;;                   ".a"     (lambda () (interactive)
+  ;;                              (typst-wrap-prev-node "abs(" ")"))
 
-                    ".l"     (lambda () (interactive)
-                               (typst-wrap-prev-node "(" ")"))
+  ;;                   ".l"     (lambda () (interactive)
+  ;;                              (typst-wrap-prev-node "(" ")"))
 
-                    ".ub"     (lambda () (interactive)
-                                (typst-wrap-prev-node "underbrace(" ")"))
+  ;;                   ".ub"     (lambda () (interactive)
+  ;;                               (typst-wrap-prev-node "underbrace(" ")"))
 
-                    ".ul"     (lambda () (interactive)
-                                (typst-wrap-prev-node "underline(" ")"))
+  ;;                   ".ul"     (lambda () (interactive)
+  ;;                               (typst-wrap-prev-node "underline(" ")"))
 
-                    ".up"     (lambda () (interactive)
-                                (typst-wrap-prev-node "underparen(" ")"))
+  ;;                   ".up"     (lambda () (interactive)
+  ;;                               (typst-wrap-prev-node "underparen(" ")"))
 
-                    ".us"     (lambda () (interactive)
-                                (typst-wrap-prev-node "undershell(" ")"))
+  ;;                   ".us"     (lambda () (interactive)
+  ;;                               (typst-wrap-prev-node "undershell(" ")"))
 
 
-                    )
+  ;;                   )
   )
 
 (provide 'typst-snippets)

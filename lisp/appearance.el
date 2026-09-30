@@ -124,4 +124,11 @@
   :config
   (setq-default goggles-pulse t))
 
+(use-package winpulse
+  :vc (:url "https://github.com/xenodium/winpulse"
+            :rev :newest)
+  :config
+  (winpulse-mode +1))
+
 (provide 'appearance)
+

@@ -111,12 +111,12 @@
   :config
   (setq cape-dict-file '("/usr/share/dict/italian" "/usr/share/dict/british-english")))
 
-(use-package yasnippet-capf
-  :ensure t
-  :after cape
-  :vc (:url "https://github.com/elken/yasnippet-capf" :branch "master")
-  :config
-  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+;; (use-package yasnippet-capf
+;;   :ensure t
+;;   :after cape
+;;   :vc (:url "https://github.com/elken/yasnippet-capf" :branch "master")
+;;   :config
+;;   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
 (use-package corfu
   :demand t
@@ -164,7 +164,7 @@
                  (cape-capf-super
                   #'cape-file
                   (cape-capf-nonexclusive #'eglot-completion-at-point)
-                  (cape-capf-nonexclusive #'yasnippet-capf)))))
+                  (cape-capf-nonexclusive #'finsnip-capf)))))
   (add-hook 'eglot-managed-mode-hook #'my/eglot-capf)
 
   ;; Setup for emacs lisp-mode
