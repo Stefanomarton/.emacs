@@ -17,7 +17,7 @@
                   (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
                   (json . ("https://github.com/tree-sitter/tree-sitter-json"))
                   (make . ("https://github.com/alemuller/tree-sitter-make"))
-                  (markdown . ("https://github.com/ikatyang/tree-sitter-markdown"))
+                  (markdown . ("https://github.com/tree-sitter-grammars/tree-sitter-markdown" "v0.4.1" "tree-sitter-markdown/src"))
                   (python . ("https://github.com/tree-sitter/tree-sitter-python"))
                   (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
                   (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
