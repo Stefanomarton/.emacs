@@ -60,13 +60,10 @@
 (require 'denote-config)
 (require 'typst-config)
 
-(add-to-list 'load-path "~/inbox/finsnip/")
-
-(require 'finsnip)
-
+;; Snippet engine (lisp/finsnip/), snippets in lisp/finsnip/typst.json
 (use-package finsnip
   :ensure nil
   :hook (text-mode . finsnip-mode)
   :config
-  (finsnip-load-json-file "~/inbox/finsnip/typst_snippets.json")
+  (finsnip-load-json-file "~/.config/emacs/lisp/finsnip/typst.json")
   (add-to-list 'completion-at-point-functions #'finsnip-capf))

@@ -97,6 +97,36 @@
   :config
   (setq esup-depth 0))
 
+(use-package gptel
+  :vc (:url "https://github.com/karthink/gptel" :rev :newest)
+  :bind ("C-c r" . gptel-rewrite)
+  :config
+  (setq gptel-backend
+        (gptel-make-openai "homelab"
+          :host "192.168.1.220:8080"
+          :protocol "http"
+          :stream t
+          :key (lambda ()
+                 (string-trim
+                  (with-temp-buffer
+                    (insert-file-contents (expand-file-name "~/.secrets/llama-swap-key"))
+                    (buffer-string))))
+          :models '(gemma-moe:nothink qwen38:nothink))
+        gptel-model 'gemma-moe:nothink
+        gptel-include-reasoning nil
+        gptel-rewrite-default-action 'diff)
+
+  (defun my/gptel-typst-directive ()
+    (when (derived-mode-p 'typst-ts-mode 'typst-mode)
+      "You edit Typst markup. Rules:
+- Output ONLY the rewritten region. No code fences, no explanations.
+- Never change text, numbers, units or references inside cells or content blocks.
+- Only change structure, alignment and whitespace, unless the instruction says otherwise.
+- Use idiomatic current Typst: table.header, table.cell, columns as tuples or auto.
+- Keep the code compilable."))
+
+  (add-hook 'gptel-rewrite-directives-hook #'my/gptel-typst-directive))
+
 (provide 'tools)
 
 ;;; tools.el ends here
