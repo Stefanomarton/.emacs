@@ -178,9 +178,18 @@ Before answering, check:
         (goto-char beg)
         (when (looking-at "What is the required change\\?.*\n+") (replace-match ""))
         (while (re-search-forward "\\$[^$]+\\$" end t)
-          (replace-match (replace-regexp-in-string
-                          "\\\\\\([[:alpha:]]\\)" "\\1" (match-string 0) t)
-                         t t))))))
+          (let ((math (match-string 0)))
+            (pcase-dolist (`(,re . ,rep) my/gptel-typst-math-fixes)
+              (setq math (replace-regexp-in-string re rep math t)))
+            (replace-match math t t))))))
+
+  ;; LaTeX leftovers the local model still writes inside $...$, in order.
+  (defconst my/gptel-typst-math-fixes
+    '(("\\\\?\\(?:text\\|mathrm\\|rm\\){\\([^{}]*\\)}" . "\"\\1\"") ; \text{m} -> "m"
+      ("\\(\"\\(?:\\^[0-9]+\\)?\\)/\"" . "\\1\"/")                     ; "m"^2/"s" -> "m"^2"/s"
+      ("\\([_^]\\){\\([[:alpha:]][[:alpha:]]+\\)}" . "\\1\"\\2\"")      ; C_{tap} -> C_"tap"
+      ("\\([_^]\\){\\([^{}]*\\)}" . "\\1(\\2)")                          ; x^{n+1} -> x^(n+1)
+      ("\\\\\\([[:alpha:]]\\)" . "\\1"))))                               ; \log -> log
 
 (provide 'tools)
 
