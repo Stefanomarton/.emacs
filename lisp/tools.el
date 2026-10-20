@@ -97,6 +97,12 @@
   :config
   (setq esup-depth 0))
 
+;; Markdown with LaTeX math (claude.ai "Copy") -> Typst, no LLM involved.
+(defun my/md-to-typst (beg end)
+  (interactive "r")
+  (shell-command-on-region beg end "pandoc -f markdown -t typst --wrap=none" nil t))
+(keymap-global-set "C-c R" #'my/md-to-typst)
+
 (use-package gptel
   :vc (:url "https://github.com/karthink/gptel" :rev :newest)
   :bind ("C-c r" . gptel-rewrite)
