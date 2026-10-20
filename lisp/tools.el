@@ -114,16 +114,45 @@
           :models '(gemma-moe:nothink qwen38:nothink))
         gptel-model 'gemma-moe:nothink
         gptel-include-reasoning nil
-        gptel-rewrite-default-action 'diff)
+        gptel-rewrite-default-action nil)
 
   (defun my/gptel-typst-directive ()
     (when (derived-mode-p 'typst-ts-mode 'typst-mode)
-      "You edit Typst markup. Rules:
-- Output ONLY the rewritten region. No code fences, no explanations.
-- Never change text, numbers, units or references inside cells or content blocks.
-- Only change structure, alignment and whitespace, unless the instruction says otherwise.
-- Use idiomatic current Typst: table.header, table.cell, columns as tuples or auto.
-- Keep the code compilable."))
+      "You edit Typst (NOT LaTeX, NOT Markdown). By default, unless the instruction says otherwise:
+fix errors and return the region as clean, idiomatic, compilable Typst, math included.
+
+Output:
+- ONLY the rewritten region. No code fences, no explanations, no preamble.
+- Keep language, meaning, numbers, units, labels <...> and references @... unchanged.
+- Fix typos, grammar, broken Typst syntax, and any LaTeX or Markdown leftovers.
+
+Markup:
+- Headings `= `, `== `. Bold *x*, italic _x_. Lists `- `, numbered `+ `, terms `/ Term: desc`.
+- Link #link(\"url\")[text]. Footnote #footnote[...]. Cite/ref @key. Comments //.
+- Literal # $ * _ @ < in text: escape with \\.
+- Every symbol or variable in prose goes inside dollars, even one letter: the angle $theta$, $gamma_(l v)$.
+- Chemistry in text: H#sub[2]O, CO#sub[2], 10#super[3]. Never H_2O outside math (_ starts italic).
+- Tables: table(columns: (auto, 1fr), table.header[*A*][*B*], [a], [b]); table.cell(colspan: 2)[...].
+
+Math (no backslash commands EVER; \\ in math is only a line break):
+- Inline $x$, display $ x $ (spaces inside the dollars).
+- Greek: alpha beta gamma Gamma delta Delta epsilon theta lambda mu pi rho sigma phi omega.
+  Never \\alpha.
+- Multi-letter text: \"text\". Products need spaces: a b, not ab.
+- Grouping uses parentheses, not braces: x_(i j), x^(n+1), sum_(i=1)^n, integral_0^oo f(x) dif x, lim_(x -> 0).
+- Fractions: a/b, (a+b)/(c+d), frac(a, b). Roots: sqrt(x), root(3, x).
+- Align with & and break lines with \\:  $ a &= b + c \\
+  &= d $
+- LaTeX -> Typst:
+  \\frac{a}{b} -> (a)/(b) | \\cdot -> dot | \\times -> times | \\pm -> plus.minus
+  \\leq \\geq \\neq -> <= >= != | \\approx -> approx | \\to -> -> | \\Rightarrow -> =>
+  \\infty -> oo | \\partial -> partial | \\nabla -> nabla | \\in -> in | \\cup \\cap -> union inter
+  \\mathbb{R} -> RR | \\text{x} -> \"x\" | \\mathrm{d}x -> dif x | \\operatorname{tr} -> op(\"tr\")
+  \\vec{v} -> arrow(v) | \\hat{x} -> hat(x) | \\bar{x} -> overline(x) | |x| -> abs(x)
+  \\left( \\right) -> ( ) (auto-sized) | pmatrix -> mat(1, 2; 3, 4) | cases -> cases(x \"if\" x > 0, 0 \"else\")
+  $$...$$ or \\[...\\] -> $ ... $ (display, spaces inside) | align -> $ ... & ... \\ ... $
+  \\ce{H2O} or H2O in prose -> H#sub[2]O (not \"H\"_2\"O\") | units: 9.81 \"m/s\"^2, 25 °C in prose
+- Built-in functions stay plain: sin x, cos x, log x, ln x, exp(x)."))
 
   (add-hook 'gptel-rewrite-directives-hook #'my/gptel-typst-directive))
 
