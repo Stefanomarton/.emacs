@@ -114,7 +114,7 @@
           :models '(gemma-moe:nothink qwen38:nothink))
         gptel-model 'gemma-moe:nothink
         gptel-include-reasoning nil
-        gptel-rewrite-default-action nil)
+        gptel-rewrite-default-action 'accept)
 
   (defun my/gptel-typst-directive ()
     (when (derived-mode-p 'typst-ts-mode 'typst-mode)
