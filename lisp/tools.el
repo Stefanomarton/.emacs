@@ -100,6 +100,10 @@
 (use-package gptel
   :vc (:url "https://github.com/karthink/gptel" :rev :newest)
   :bind ("C-c r" . gptel-rewrite)
+  :init
+  ;; In :init so Typst buffers opened before gptel loads get it too.
+  (add-hook 'typst-ts-mode-hook
+            (lambda () (add-hook 'gptel-post-rewrite-functions #'my/gptel-typst-postfix nil t)))
   :config
   (setq gptel-backend
         (gptel-make-openai "homelab"
@@ -176,10 +180,7 @@ Before answering, check:
         (while (re-search-forward "\\$[^$]+\\$" end t)
           (replace-match (replace-regexp-in-string
                           "\\\\\\([[:alpha:]]\\)" "\\1" (match-string 0) t)
-                         t t)))))
-
-  (add-hook 'typst-ts-mode-hook
-            (lambda () (add-hook 'gptel-post-rewrite-functions #'my/gptel-typst-postfix nil t))))
+                         t t))))))
 
 (provide 'tools)
 
