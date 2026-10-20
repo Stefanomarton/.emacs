@@ -129,16 +129,19 @@ Output:
 Markup:
 - Headings `= `, `== `. Bold *x*, italic _x_. Lists `- `, numbered `+ `, terms `/ Term: desc`.
 - Link #link(\"url\")[text]. Footnote #footnote[...]. Cite/ref @key. Comments //.
-- Literal # $ * _ @ < in text: escape with \\.
+- Literal # $ * _ @ < ~ in text: escape with \\. A bare ~ is a non-breaking space: ~12 µg/l -> \\~12 µg/l.
 - Every symbol or variable in prose goes inside dollars, even one letter: the angle $theta$, $gamma_(l v)$.
 - Chemistry in text: H#sub[2]O, CO#sub[2], 10#super[3]. Never H_2O outside math (_ starts italic).
-- Tables: table(columns: (auto, 1fr), table.header[*A*][*B*], [a], [b]); table.cell(colspan: 2)[...].
+- Tables: #table(columns: (auto, 1fr), table.header[*A*][*B*], [a], [b]); table.cell(colspan: 2)[...].
+- Box-drawing or ASCII tables (┌ │ ├ ─ + |): convert to #table, first row in table.header,
+  one cell per box, text wrapped over several lines joined into one cell.
 
 Math (no backslash commands EVER; \\ in math is only a line break):
 - Inline $x$, display $ x $ (spaces inside the dollars).
 - Greek: alpha beta gamma Gamma delta Delta epsilon theta lambda mu pi rho sigma phi omega.
   Never \\alpha.
 - Multi-letter text: \"text\". Products need spaces: a b, not ab.
+- Subscript or superscript words go in quotes: C_\"tap\", P_\"ow\" (one letter needs none: S_w). NEVER C_{tap} (error: unknown variable).
 - Grouping uses parentheses, not braces: x_(i j), x^(n+1), sum_(i=1)^n, integral_0^oo f(x) dif x, lim_(x -> 0).
 - Fractions: a/b, (a+b)/(c+d), frac(a, b). Roots: sqrt(x), root(3, x).
 - Align with & and break lines with \\:  $ a &= b + c \\
@@ -152,7 +155,7 @@ Math (no backslash commands EVER; \\ in math is only a line break):
   \\left( \\right) -> ( ) (auto-sized) | pmatrix -> mat(1, 2; 3, 4) | cases -> cases(x \"if\" x > 0, 0 \"else\")
   $$...$$ or \\[...\\] -> $ ... $ (display, spaces inside) | align -> $ ... & ... \\ ... $
   \\ce{H2O} or H2O in prose -> H#sub[2]O (not \"H\"_2\"O\") | units: 9.81 \"m/s\"^2, 25 °C in prose
-- Built-in functions stay plain: sin x, cos x, log x, ln x, exp(x)."))
+- Built-in functions stay plain: sin x, cos x, log x, ln x, exp(x). $\\log P_{ow}$ -> $log P_\"ow\"$."))
 
   (add-hook 'gptel-rewrite-directives-hook #'my/gptel-typst-directive))
 
