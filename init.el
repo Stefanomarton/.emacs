@@ -50,6 +50,7 @@
 (require 'surround)
 (require 'editor-config)
 (require 'tools)
+(require 'dettatura)
 (require 'project-management)
 (require 'programming)
 (require 'lsp)
