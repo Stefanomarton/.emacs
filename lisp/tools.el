@@ -23,7 +23,11 @@
   :commands sudo-edit)
 
 (use-package term-toggle
-  :vc (:url "https://github.com/amno1/emacs-term-toggle" :branch "master")
+  ;; Solo term-toggle.el: helm-term-toggle.el tira dentro helm (che rompe package-vc) e
+  ;; term-toggle-animate.el richiede term-toggle stesso (dipendenza circolare)
+  :vc (:url "https://github.com/amno1/emacs-term-toggle" :branch "master"
+       :main-file "term-toggle.el"
+       :ignored-files ("helm-term-toggle.el" "term-toggle-animate.el"))
   :bind (("<escape>." . term-toggle-eshell)))
 
 (use-package eshell
