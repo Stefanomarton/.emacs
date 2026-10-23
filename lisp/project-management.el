@@ -1,26 +1,5 @@
 ;;; project-management.el --- Project management packages -*- lexical-binding: t; -*-
 
-;; (use-package projectile
-;;     :ensure t
-;;     :config
-;;     (projectile-mode)
-;;     (setq projectile-track-known-projects-automatically nil)
-;;     (setq projectile-completion-system 'consult)
-;;     (setq projectile-indexing-method 'alien)
-
-;;     (use-package consult-projectile
-;;         :ensure t
-;;         :bind
-;;         ("C-x p p" . consult-projectile)
-;;         ("C-x p f" . consult-projectile-find-file)
-;;         ("C-x p t" . projectile-run-vterm-other-window)
-;;         ("C-x p s" . consult-projectile-switch-project)
-;;         ("C-x p a" . projectile-add-known-project))
-
-;;     :init
-;;     (add-hook 'after-init-hook 'projectile-mode)
-;;     )
-
 (use-package project
   :ensure nil
   :config
@@ -67,14 +46,13 @@
   :ensure t
   :hook ((prog-mode text-mode) . git-gutter-mode)
   :config
-  (git-gutter-mode)
-  (setq git-gutter:update-interval 0.02)
+  ;; seconds of idle before a diff (it runs git each time): 0.02 ran it on every pause
+  (setq git-gutter:update-interval 1)
   (setq-default left-margin-width 1)
 
   (use-package git-gutter-fringe
     :ensure t
     :config
-    (setq git-gutter:update-interval 0.02)
     (fringe-mode nil)
     (setq-default left-margin-width 1)
     ;; (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))

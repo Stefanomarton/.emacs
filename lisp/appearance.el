@@ -28,8 +28,8 @@
   :config
   (setq hl-line-sticky-flag nil))
 
-;; Line spacing
-(setq line-spacing 0.12)
+;; Line spacing (buffer-local variable: setq-default to apply everywhere)
+(setq-default line-spacing 0.12)
 
 ;; I like icons
 (use-package nerd-icons
@@ -42,14 +42,7 @@
   :ensure nil
   :config
 
-  (defun setup-margin ()
-    (set-frame-parameter nil 'internal-border-width 15)
-    (set-frame-parameter nil 'external-border-width 5)
-    (setq-local line-spacing 0.12)
-    )
-  (add-hook 'text-mode-hook #'setup-margin)
-  (add-hook 'prog-mode-hook #'setup-margin)
-
+  ;; frame borders are in default-frame-alist (early-init.el), not reset on every buffer
   (setq window-divider-default-places nil))
 
 (use-package base16-theme
@@ -83,9 +76,7 @@
 
 (use-package emacs
   :ensure nil
-  :hook
-  (text-mode . variable-pitch-mode)
-  :config
+  :config   ; mixed-pitch-mode handles text buffers
   (set-face-attribute 'default nil
                       :family "JuliaMono"
                       :height 190
@@ -108,7 +99,7 @@
   :ensure t
   :hook
   (typst-ts-mode . breadcrumb-local-mode)
-  (Latex-Mode . breadcrumb-local-mode)
+  (LaTeX-mode . breadcrumb-local-mode)
   (prog-mode . breadcrumb-local-mode)
   (conf-unix-mode . breadcrumb-local-mode))
 

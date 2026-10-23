@@ -2,19 +2,15 @@
 
 ;; Editorconfig, auto set indenting
 (use-package editorconfig
-  :ensure t
-  :after find-file
+  :ensure nil
   :config
-  (editorconfig-mode 1)
-  )
+  (editorconfig-mode 1))
 
 ;; Autopair parenthesis
 (use-package electric
   :ensure nil
-  :hook
-  (prog-mode . electric-layout-mode)
-  (text-mode . electric-layout-mode)
   :config
+  (electric-layout-mode 1)
   (electric-pair-mode +1) ;; automatically insert closing parens
   (setq electric-pair-preserve-balance nil) ;; more annoying than useful
   (setq electric-pair-delete-adjacent-pairs nil) ;; more annoying than useful
@@ -22,10 +18,7 @@
 
 (use-package paren
   :ensure nil
-  :hook
-  (prog-mode . show-paren-mode)
-  (text-mode . show-paren-mode)
-  :config
+  :config   ; show-paren-mode is on by default
   (setq show-paren-delay 0.1)
   (setq show-paren-highlight-openparen t)
   (setq show-paren-when-point-inside-paren t)
@@ -54,10 +47,7 @@
 ;; Highlight colorstring with the right color
 (use-package rainbow-mode
   :ensure t
-  :commands rainbow-mode
-  :config
-  (add-hook 'prog-mode-hook #'rainbow-mode)
-  )
+  :hook (prog-mode . rainbow-mode))
 
 (use-package avy
   :ensure t

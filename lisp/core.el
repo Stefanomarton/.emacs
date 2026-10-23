@@ -31,12 +31,6 @@
   ;; Show me what I type, immediately.
   (setq echo-keystrokes 0.01)
 
-  ;; Disable useless messsages
-  (setq inhibit-message nil)
-
-  ;; Make easy ovveride settings
-  (setq site-run-file nil)
-
   ;; Not a good idea
   (setq max-lisp-eval-depth 10000)
 
@@ -45,9 +39,6 @@
 
   ;; ask if local variables are safe once.
   (setq enable-local-variables t)
-
-  ;; Better resize
-  (setq frame-resize-pixelwise t)
 
   ;; Save backup files to one directory instead of making a mess of the filesystem.
   (setq backup-directory-alist `(("." . "~/.cache/emacs")))
@@ -107,7 +98,7 @@
   (setq tab-always-indent t)
 
   ;; Modern conventions state that 80 characters is the standard width.
-  (setq fill-column 80)
+  (setq-default fill-column 80)
 
   ;; Enable useful visual queues.
   (column-number-mode t)
@@ -138,27 +129,18 @@
   ;; always follow symlinks when opening files
   (setq vc-follow-symlinks t)
 
-  ;; overwrite text when selected, like we expect.
-  (setq delete-selection-mode t)
-
-  ;;Useless
-  (setq ring-bell-function 'ignore)
-
   (setq server-client-instructions nil)
 
   (mapc
    (lambda (command)
      (put command 'disabled nil))
-   '(list-timers dire-find-alternate-file narrow-to-region narrow-to-page upcase-region downcase-region))
+   '(list-timers dired-find-alternate-file narrow-to-region narrow-to-page upcase-region downcase-region))
 
   ;; And disable these
   (mapc
    (lambda (command)
      (put command 'disabled t))
    '(eshell project-eshell overwrite-mode iconify-frame diary))
-
-  ;; I like standard sentence ending
-  (setq sentence-end-double-space nil)
 
   ;; Make me able to continue selection without keep the finger on the shift key
   (setopt shift-select-mode 'permanent)
@@ -187,18 +169,8 @@
 
 
 
-(use-package xclip
-    :ensure
-  :config
-  (setq xclip-program "wl-copy")
-  (setq xclip-select-enable-clipboard t)
-  (setq xclip-mode t)
-  (setq xclip-method (quote wl-copy)))
-
-
 ;; Save some key presses
 (use-package repeat
-    :hook (after-init . my/repeat-mode)
     :ensure nil
     :config
     (defun my/repeat-mode ()
@@ -216,11 +188,6 @@
       :repeat (:enter (undo))
       "u" #'undo-fu-only-undo
       "r" #'undo-fu-only-redo)
-
-    (defvar-keymap org-heading-repeat-map
-      :repeat (:enter (org-next-visible-heading org-previous-visible-heading))
-      "n" #'org-next-visible-heading
-      "p" #'org-previous-visible-heading)
 
     (defvar-keymap goto-last-change-repeat-map
       :repeat (:enter (goto-last-change goto-last-change-reverse))
@@ -241,7 +208,7 @@
 
         (advice-add 'repeat-post-hook :after
                     (defun my/which-key-repeat ()
-                      (when-let ((cmd (or this-command real-this-command))
+                      (when-let* ((cmd (or this-command real-this-command))
                                  (keymap (repeat--command-property 'repeat-map)))
                         (run-at-time
                          which-key-idle-delay nil
@@ -252,7 +219,7 @@
         (defun my/which-key-repeat-mode-dispatch ()
           (interactive)
           (setq this-command last-command)
-          (when-let (keymap (repeat--command-property 'repeat-map))
+          (when-let* ((keymap (repeat--command-property 'repeat-map)))
             (which-key--create-buffer-and-show
              nil (symbol-value keymap))))
 
@@ -311,8 +278,8 @@
         (if (get-buffer new-name)
             (message "A buffer named '%s' already exists!" new-name)
             (if (vc-registered filename)
-                (vc-rename-file name new-name)
-                (rename-file name new-name 1))
+                (vc-rename-file filename new-name)
+                (rename-file filename new-name 1))
             (rename-buffer new-name)
             (set-visited-file-name new-name)
             (set-buffer-modified-p nil)))))
@@ -326,7 +293,7 @@
   (let* ((name (buffer-name))
          (filename (buffer-file-name))
          (dir
-          (if (string-match dir "\\(?:/\\|\\\\)$")
+          (if (string-match "\\(?:/\\|\\\\)$" dir)
               (substring dir 0 -1) dir))
          (newname (concat dir "/" name)))
     (if (not filename)
@@ -379,17 +346,18 @@
              (preserve-size . (t . t)))))
 
     ;; use selection to search
-    (defadvice isearch-mode (around isearch-mode-default-string (forward &optional regexp op-fun recursive-edit word-p) activate)
+    (define-advice isearch-mode (:around (fn forward &rest args) search-region)
+      "Start the search with the active region."
       (if (and transient-mark-mode mark-active (not (eq (mark) (point))))
           (progn
             (isearch-update-ring (buffer-substring-no-properties (mark) (point)))
             (deactivate-mark)
-            ad-do-it
+            (apply fn forward args)
             (if (not forward)
                 (isearch-repeat-backward)
                 (goto-char (mark))
                 (isearch-repeat-forward)))
-          ad-do-it))
+          (apply fn forward args)))
     (setq isearch-allow-motion t)
     (defun my-occur-from-isearch ()
       (interactive)

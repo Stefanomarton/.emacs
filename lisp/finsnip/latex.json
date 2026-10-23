@@ -1,0 +1,184 @@
+{
+  "--- LaTeX/Markdown math (Auto, ex laas) ---": {},
+  "integral": {
+    "prefix": ",t",
+    "body": "\\int",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "Delta S": {
+    "prefix": "ds",
+    "body": "\\Delta S ",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "Delta H": {
+    "prefix": "dh",
+    "body": "\\Delta H ",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "Delta G": {
+    "prefix": "dg",
+    "body": "\\Delta G ",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "superscript": {
+    "prefix": ",,",
+    "body": "^{$1}$2",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power 1": {
+    "prefix": ",x",
+    "body": "^{1}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power 2": {
+    "prefix": ",c",
+    "body": "^{2}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power 3": {
+    "prefix": ",v",
+    "body": "^{3}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power 4": {
+    "prefix": ",s",
+    "body": "^{4}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power 5": {
+    "prefix": ",d",
+    "body": "^{5}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power 6": {
+    "prefix": ",f",
+    "body": "^{6}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power 7": {
+    "prefix": ",w",
+    "body": "^{7}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power 8": {
+    "prefix": ",e",
+    "body": "^{8}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power 9": {
+    "prefix": ",r",
+    "body": "^{9}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "negative superscript": {
+    "prefix": "..",
+    "body": "^{-$1}$2",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power -1": {
+    "prefix": ".x",
+    "body": "^{-1}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power -2": {
+    "prefix": ".c",
+    "body": "^{-2}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power -4": {
+    "prefix": ".s",
+    "body": "^{-4}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power -5": {
+    "prefix": ".d",
+    "body": "^{-5}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power -6": {
+    "prefix": ".f",
+    "body": "^{-6}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power -7": {
+    "prefix": ".w",
+    "body": "^{-7}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power -8": {
+    "prefix": ".e",
+    "body": "^{-8}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "power -9": {
+    "prefix": ".r",
+    "body": "^{-9}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "super and subscript": {
+    "prefix": ".,",
+    "body": "^{$1}_{$2}",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "subscript": {
+    "prefix": "kk",
+    "body": "_{$1}$2",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "charge +": {
+    "prefix": "++",
+    "body": "^+ ",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "charge -": {
+    "prefix": "--",
+    "body": "^- ",
+    "context": "my/finsnip-tex-math-p",
+    "auto": true
+  },
+  "--- LaTeX/Markdown text (Auto, ex aas) ---": {},
+  "inline math": {
+    "prefix": "jf",
+    "body": "\\($1\\) $2",
+    "scope": "LaTeX,md-ts",
+    "auto": true
+  },
+  "inline chemistry": {
+    "prefix": "jc",
+    "body": "\\(\\ce{ $1 }\\) $2",
+    "scope": "LaTeX",
+    "auto": true
+  },
+  "display math": {
+    "prefix": "kd",
+    "body": "\\[\n$1\n\\]\n$2",
+    "scope": "LaTeX,md-ts",
+    "auto": true
+  }
+}

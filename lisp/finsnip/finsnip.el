@@ -583,9 +583,11 @@ Populates `finsnip-active-fields`."
   (if finsnip-mode
       (progn
         (add-hook 'after-change-functions #'finsnip--after-change-handler nil t)
-        (add-hook 'post-command-hook #'finsnip--post-command-handler nil t))
+        (add-hook 'post-command-hook #'finsnip--post-command-handler nil t)
+        (add-hook 'completion-at-point-functions #'finsnip-capf nil t))
     (remove-hook 'after-change-functions #'finsnip--after-change-handler t)
-    (remove-hook 'post-command-hook #'finsnip--post-command-handler t)))
+    (remove-hook 'post-command-hook #'finsnip--post-command-handler t)
+    (remove-hook 'completion-at-point-functions #'finsnip-capf t)))
 
 (provide 'finsnip)
 ;;; finsnip.el ends here

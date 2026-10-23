@@ -567,6 +567,16 @@
         (should (equal (buffer-string) "function"))
         (finsnip-mode -1)))))
 
+(ert-deftest finsnip-test-mode-registers-capf ()
+  "finsnip-mode adds `finsnip-capf' to the buffer's own capf list and removes it."
+  (with-temp-buffer
+    (text-mode)
+    (finsnip-mode 1)
+    (should (memq #'finsnip-capf completion-at-point-functions))
+    (should (local-variable-p 'completion-at-point-functions))
+    (finsnip-mode -1)
+    (should-not (memq #'finsnip-capf completion-at-point-functions))))
+
 (ert-deftest finsnip-test-file-watching ()
   "Test that snippets are automatically reloaded when a JSON file changes."
   (let ((json-path (make-temp-file "finsnip-test-watch-" nil ".json"))

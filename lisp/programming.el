@@ -50,8 +50,7 @@
       (add-to-list 'major-mode-remap-alist mapping))
 
     :config
-    (setq treesit-font-lock-level 4)
-    (mp-setup-install-grammars))
+    (setq treesit-font-lock-level 4))   ; M-x mp-setup-install-grammars for missing grammars
 
 ;; Lua setup
 (use-package lua-mode
@@ -59,19 +58,14 @@
     :mode ("\\.lua?\\'" . lua-mode)
     )
 
-(use-package emacs-lisp-mode
-    :mode "\\.el\\'"
-    :ensure nil
-    :config
-    (use-package lisp-extra-font-lock
-        :ensure t
-        :config
-        (lisp-extra-font-lock-mode))
+;; Emacs Lisp: inline eval results and richer highlighting
+(use-package eros
+    :ensure t
+    :hook (emacs-lisp-mode . eros-mode))
 
-    (use-package eros
-        :ensure t
-        :config
-        (eros-mode)))
+(use-package lisp-extra-font-lock
+    :ensure t
+    :hook (emacs-lisp-mode . lisp-extra-font-lock-mode))
 
 (use-package qml-mode
     :mode "\\.qml\\'"
@@ -92,9 +86,13 @@
     :mode "\\.plt\\'"
     )
 
+(use-package yaml-ts-mode
+    :ensure nil
+    :mode "\\.ya?ml\\'")
+
 (use-package yaml-pro
     :ensure t
-    :mode "\\.yml\\'"
+    :hook (yaml-ts-mode . yaml-pro-ts-mode)
     :bind
     (:map yaml-pro-ts-mode-map
           ("C-M-n" . yaml-pro-ts-next-subtree)
@@ -107,8 +105,9 @@
           ("C-M-e" . yaml-pro-ts-last-sibling))
 
     :config
-    ;; Enable auto format for yaml-pro-mode-hook
-    (add-hook 'yaml-pro-mode-hook
+    ;; Format on save (yaml-pro-format is not autoloaded)
+    (require 'yaml-pro-format)
+    (add-hook 'yaml-pro-ts-mode-hook
               (lambda ()
                 (add-hook 'before-save-hook 'yaml-pro-format nil 'local)))
 
@@ -139,10 +138,6 @@
               (message "Mark activated"))
           (set-mark-command nil)))
     )
-
-(use-package toml-ts-mode
-    :mode "\\.toml'"
-    :ensure t)
 
 (use-package hyprlang-ts-mode
     :mode ("/hypr/.*\\.conf\\'" . hyprlang-ts-mode)

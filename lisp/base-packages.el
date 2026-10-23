@@ -1,16 +1,4 @@
 ;;; base-packages.el -*- lexical-binding: t; -*-
-;; ;; Recent file list
-;; (use-package recentf
-;;   :ensure nil
-;;   :config
-;;   (add-hook 'emacs-startup-hook 'recentf-mode)
-;;   (add-hook 'after-init-hook
-;;             (lambda ()
-;;               (setq inhibit-message t)
-;;               (run-with-idle-timer 0 nil (lambda () (setq inhibit-message nil)))))
-;;   (setq recentf-auto-cleanup 'never)
-;;   (setq recentf-max-saved-items 25))
-
 ;; Embark
 (use-package embark
   :bind
@@ -78,12 +66,11 @@ targets."
               ("j" . consult-find)))
 
 (use-package apheleia
-  :hook  ((prog-mode text-mode) . apheleia-mode)
+  :hook (after-init . apheleia-global-mode)
   :ensure t
   :config
   (setf (alist-get 'typstyle apheleia-formatters)
-        '("typstyle" "--wrap-text" "-l" "75"))
-  (apheleia-global-mode))
+        '("typstyle" "--wrap-text" "-l" "75")))
 
 ;;Scratchbuffer
 (use-package scratch
@@ -97,7 +84,7 @@ targets."
 
 (use-package undo-fu
   :ensure t
-  :commands (undo))
+  :commands (undo-fu-only-undo undo-fu-only-redo))
 
 ;; ;; Persistent undo
 (use-package undo-fu-session

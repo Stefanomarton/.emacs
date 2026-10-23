@@ -1,10 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 (with-eval-after-load 'typst-ts-mode
 
-  (require 'aas)
-
-  (add-hook 'typst-ts-mode-hook #'aas-activate-for-major-mode)
-
   (defun typst-inside-math-p ()
     "Return t if point is inside a math-related Tree-sitter node."
     (let ((node (treesit-node-at (point))))

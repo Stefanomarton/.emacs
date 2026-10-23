@@ -8,21 +8,7 @@
    (:eval
     (if (buffer-modified-p)
         (concat (propertize "~" 'face 'font-lock-keyword-face) " modified")
-      (concat (propertize "" 'face 'font-lock-keyword-face) ""))) 
-
-   ;; right aligned stuff
-   (:eval
-    (let* ((status-offset 12))
-      (concat
-       (concat 
-	    (propertize " " 'display `(space :align-to (- right ,status-offset)))
-        )
-       (if (buffer-modified-p) 
-           (concat (propertize "" 'face 'font-lock-keyword-face) "[modified]")
-         (concat (propertize "" 'face 'font-lock-keyword-face) ""))
-       ;; (propertize (format-time-string " %H:%M") 'face 'font-lock-keyword-face)
-       
-       )))))
+      (concat (propertize "" 'face 'font-lock-keyword-face) "")))))
 
 ;; read-only / changed
 ;; (propertize " " 'display `(space :align-to (- right ,status-offset)))

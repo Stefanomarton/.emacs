@@ -7,7 +7,7 @@
 
   :bind
   ("<escape>do" . my/denote-open-or-create)
-  ("<escape>dr" . denote-region)
+  ("<escape>dx" . denote-region)   ; dr is denote-rename-file
   ("<escape>dg" . consult-denote-grep)
   ("<escape>dt" . denote-type)
   ("<escape>dl" . denote-link)
@@ -32,7 +32,7 @@
         (find-file target)
       (denote--command-with-features #'denote-subdirectory :use-last-input-as-def-title nil nil nil)))
 
-  (setq denote-excluded-directories-regexp "\\(music\\|photos\\|.git\\|qmk_firmware\\|.env\\|.mypy_cache\\|.ltximg|.direnv|.archived\\)")
+  (setq denote-excluded-directories-regexp "\\(music\\|photos\\|.git\\|qmk_firmware\\|.env\\|.mypy_cache\\|.ltximg\\|.direnv\\|.archived\\)")
   (setq denote-backlinks-show-context t)
 
   (defvar my-denote-typst-front-matter
@@ -136,7 +136,7 @@
           ("<escape>dpe" . citar-denote-open-reference-entry))
     :config
     (setq citar-open-always-create-notes t)
-    (setq citar-denote-subdir "/uni/papers")
+    (setq citar-denote-subdir "uni/papers")   ; relative to denote-directory
     (citar-denote-mode)))
 
 (provide 'denote-config)

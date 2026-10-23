@@ -88,11 +88,8 @@
 
         (";" . comment-dwim)
 
-        ("<tab>" . cdlatex-tab)
-
         ("a" . embrace-add)
-        ("c" . embrace-change)
-        ("d" . embrace-change)
+        ("d" . embrace-delete)
 
         ("y" . kill-ring-save)
         ("J" . fix-pasted-text)

@@ -98,6 +98,7 @@
 
 (use-package esup
   :ensure t
+  :commands esup
   :config
   (setq esup-depth 0))
 

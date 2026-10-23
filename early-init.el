@@ -4,7 +4,6 @@
       frame-inhibit-implied-resize 'force
       frame-title-format '("%b")
       ring-bell-function 'ignore
-      use-dialog-box t ; only for mouse events, which I seldom use
       use-file-dialog nil
       use-short-answers t
       inhibit-splash-screen t
@@ -41,7 +40,9 @@
                   (horizontal-scroll-bars . nil)
                   (vertical-scroll-bars . nil)
                   (menu-bar-lines . 0) ; alternative to disabling `menu-bar-mode'
-                  (tool-bar-lines . 0)))) ; alternative to disabling `tool-bar-mode'
+                  (tool-bar-lines . 0) ; alternative to disabling `tool-bar-mode'
+                  (internal-border-width . 15)
+                  (external-border-width . 5))))
 
 (setq inhibit-compacting-font-caches t)
 

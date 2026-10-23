@@ -45,7 +45,6 @@
 (require 'completion)
 (require 'appearance)
 (require 'modeline)
-(require 'headerline)
 (require 'base-packages)
 (require 'surround)
 (require 'editor-config)
@@ -61,10 +60,37 @@
 (require 'denote-config)
 (require 'typst-config)
 
-;; Snippet engine (lisp/finsnip/), snippets in lisp/finsnip/typst.json
+;; Snippet engine (lisp/finsnip/): typst.json, latex.json (LaTeX/Markdown math, ex laas)
 (use-package finsnip
   :ensure nil
-  :hook (text-mode . finsnip-mode)
+  :hook ((text-mode md-ts-mode) . finsnip-mode)   ; md-ts-mode is not a text-mode
   :config
-  (finsnip-load-json-file "~/.config/emacs/lisp/finsnip/typst.json")
-  (add-to-list 'completion-at-point-functions #'finsnip-capf))
+  (defun my/finsnip-tex-math-p ()
+    "Non-nil inside LaTeX math, in LaTeX and Markdown buffers."
+    (and (finsnip-context-major-mode-p '(LaTeX-mode md-ts-mode))
+         (require 'texmathp nil t)
+         (texmathp)))
+
+  (defun my/finsnip-tex-object-on-left-p ()
+    "In LaTeX math, with something right before the 2-char trigger."
+    (and (my/finsnip-tex-math-p)
+         (let ((c (char-before (- (point) 2))))
+           (and c (not (memq (char-syntax c) '(?\s ?\()))))))
+
+  (defun my/finsnip-tex-wrap (command)
+    "Snippet body: wrap the object before the 2-char trigger in \\COMMAND{}."
+    (save-excursion
+      (let ((end (- (point) 2)))
+        (goto-char end)
+        (backward-sexp)
+        (when (eq (char-before) ?\\) (backward-char))   ; keep \alpha whole
+        (let ((obj (buffer-substring-no-properties (point) end)))
+          (delete-region (point) end)
+          (format "\\%s{%s}" command obj)))))
+
+  ;; apply-partially: a closure that works however :config is evaluated
+  (dolist (w '((".q" . "sqrt") (".v" . "vec") (".t" . "text") (".b" . "mathbf")))
+    (finsnip-register-snippet (car w) (apply-partially #'my/finsnip-tex-wrap (cdr w))
+                              #'my/finsnip-tex-object-on-left-p))
+
+  (finsnip-load-snippets-dir "~/.config/emacs/lisp/finsnip/"))

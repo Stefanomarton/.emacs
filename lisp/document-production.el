@@ -1,15 +1,7 @@
 ;;; document-production.el --- document production configuration -*- lexical-binding: t; -*-
 (use-package yasnippet
   :ensure t
-  :commands (yas-minor-mode)
-  :hook
-  (text-mode . yas-minor-mode)
-  (prog-mode . yas-minor-mode)
-  (LaTeX-mode . yas-minor-mode)
-  (markdown-mode . yas-minor-mode)
-  (org-mode . yas-minor-mode)
-  (yas-minor-mode . yas-reload-all)
-  (snippet-mode . disable-final-newline)
+  :defer 1   ; yas-global-mode below covers every buffer
 
   :preface
   (defun make-silent (func &rest args)
@@ -31,10 +23,14 @@
   (defun disable-final-newline ()
     (interactive)
     (set (make-local-variable 'require-final-newline) nil))
-  (yas-global-mode 1)
+  (add-hook 'snippet-mode-hook #'disable-final-newline)
+
   (setq yas-indent-line 'fixed)
   (setq yas-triggers-in-field t)
-  (setq yas-snippet-dirs '("~/.config/emacs/snippets")))
+  (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
+  ;; load the snippets once (it used to reload them all on every buffer)
+  (yas-reload-all)
+  (yas-global-mode 1))
 
 (use-package warnings
   :ensure nil
@@ -52,7 +48,7 @@
         ("<escape> y h" . aya-clear-history)
         ("<escape> y n" . aya-next-in-history)
         ("<escape> y p" . aya-previous-in-history)
-        ("<escape> y p" . aya-persist-snippet)
+        ("<escape> y s" . aya-persist-snippet)
         ("<escape> y o" . aya-open-line))
   :config
   (defun my-aya-create (beg end)
@@ -70,93 +66,9 @@
     (recenter-top-bottom)
     ))
 
-(use-package laas
-  :defer t
-  :ensure t
-  :config
-  (aas-set-snippets 'laas-mode
-                    ;; set condition!
-                    :cond #'texmathp ; expand only while in math
-
-                    ",t" (lambda () (interactive)
-                           (yas-expand-snippet "\\int"))
-
-                    ".." (lambda () (interactive)
-                           (yas-expand-snippet "_{$1}$0"))
-                    "ds" (lambda () (interactive)
-                           (yas-expand-snippet "\\Delta S $0"))
-                    "dh" (lambda () (interactive)
-                           (yas-expand-snippet "\\Delta H $0"))
-                    "dg" (lambda () (interactive)
-                           (yas-expand-snippet "\\Delta G $0"))
-
-                    ;; positive apices
-                    ",," (lambda () (interactive)
-                           (yas-expand-snippet "^{$1}$0"))
-                    ",x" (lambda () (interactive)
-                           (yas-expand-snippet "^{1}$0"))
-                    ",c" (lambda () (interactive)
-                           (yas-expand-snippet "^{2}$0"))
-                    ",v" (lambda () (interactive)
-                           (yas-expand-snippet "^{3}$0"))
-                    ",s" (lambda () (interactive)
-                           (yas-expand-snippet "^{4}$0"))
-                    ",d" (lambda () (interactive)
-                           (yas-expand-snippet "^{5}}$0"))
-                    ",f" (lambda () (interactive)
-                           (yas-expand-snippet "^{6}$0"))
-                    ",w" (lambda () (interactive)
-                           (yas-expand-snippet "^{7}$0"))
-                    ",e" (lambda () (interactive)
-                           (yas-expand-snippet "^{8}$0"))
-                    ",r" (lambda () (interactive)
-                           (yas-expand-snippet "^{9}$0"))
-
-                    ;; negative apices
-                    ".." (lambda () (interactive)
-                           (yas-expand-snippet "^{-$1}$0"))
-                    ".x" (lambda () (interactive)
-                           (yas-expand-snippet "^{-1}$0"))
-                    ".c" (lambda () (interactive)
-                           (yas-expand-snippet "^{-2}$0"))
-                    ".v" (lambda () (interactive)
-                           (yas-expand-snippet "^{-3}$0"))
-                    ".s" (lambda () (interactive)
-                           (yas-expand-snippet "^{-4}$0"))
-                    ".d" (lambda () (interactive)
-                           (yas-expand-snippet "^{-5}$0"))
-                    ".f" (lambda () (interactive)
-                           (yas-expand-snippet "^{-6}$0"))
-                    ".w" (lambda () (interactive)
-                           (yas-expand-snippet "^{-7}$0"))
-                    ".e" (lambda () (interactive)
-                           (yas-expand-snippet "^{-8}$0"))
-                    ".r" (lambda () (interactive)
-                           (yas-expand-snippet "^{-9}$0"))
-
-                    ".," (lambda () (interactive)
-                           (yas-expand-snippet "^{$1}_{$0}"))
-
-                    "kk" (lambda () (interactive)
-                           (yas-expand-snippet "_{$1}$0"))
-
-                    "++" (lambda () (interactive)
-                           (yas-expand-snippet "^+ $0"))
-
-                    "--" (lambda () (interactive)
-                           (yas-expand-snippet "^- $0"))
-
-                    ;; add accent snippets
-                    :cond #'laas-object-on-left-condition
-                    ".q" (lambda () (interactive) (laas-wrap-previous-object "sqrt"))
-                    ".v" (lambda () (interactive) (laas-wrap-previous-object "vec"))
-                    ".t" (lambda () (interactive) (laas-wrap-previous-object "text"))
-                    ".b" (lambda () (interactive) (laas-wrap-previous-object "mathbf")))
-  )
-
 (use-package jinx
   :defer t
-  :ensure t
+  :ensure nil   ; from Nix (editors.nix), with its native module
   :init
   (setq jinx-languages "it en_US"))
 

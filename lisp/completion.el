@@ -12,8 +12,6 @@
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-  ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t)
 
   ;; Indicated in the documentation
   (setq fast-but-imprecise-scrolling t
@@ -111,13 +109,6 @@
   :config
   (setq cape-dict-file '("/usr/share/dict/italian" "/usr/share/dict/british-english")))
 
-;; (use-package yasnippet-capf
-;;   :ensure t
-;;   :after cape
-;;   :vc (:url "https://github.com/elken/yasnippet-capf" :branch "master")
-;;   :config
-;;   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
-
 (use-package corfu
   :demand t
   :ensure t
@@ -125,7 +116,7 @@
   (setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (setq corfu-auto t)                 ;; Enable auto completion
   (setq corfu-auto-prefix 3)
-  (setq corfu-auto-delay 0)
+  (setq corfu-auto-delay 0.15)        ;; 0 sent an LSP request on every key
   (setq corfu-bar-width 0)
   (setq corfu-right-margin-width 0)
   (setq corfu-left-margin-width 0)
@@ -136,27 +127,6 @@
   (setq corfu-quit-no-match t)      ;; Never quit, even if there is no match
   (setq corfu-preview-current nil)    ;; Disable current candidate preview
   (setq corfu-preselect 'first)      ;; Preselect the prompt
-
-  ;; Corfu for org mode setup
-  (add-hook 'org-mode-hook
-            (lambda ()
-              ;; (setq-local corfu-auto-prefix 1)
-              (setq-local completion-at-point-functions
-                          '(
-                            cape-file
-                            yasnippet-capf
-                            ;; cape-elisp-block
-                            ;; cape-dict
-                            ;; citar-capf
-                            ;; cape-dabbrev
-                            ))
-              (setq-local completion-at-point-functions
-                          (list
-                           ;; (cape-capf-prefix-length #'cape-dict 3)
-                           (cape-capf-prefix-length #'cape-file 1)
-                           (cape-capf-prefix-length #'yasnippet-capf 2)
-                           (cape-capf-prefix-length #'cape-dabbrev 5)
-                           ))))
 
   (defun my/eglot-capf ()
     (setq-local completion-at-point-functions
