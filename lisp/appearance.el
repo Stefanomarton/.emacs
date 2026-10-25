@@ -51,13 +51,30 @@
   (base16-theme-distinct-fringe-background nil)
   (base16-theme-256-color-source 'colors)
   :config
-  (load-theme 'base16-black-metal-nile t)
+  ;; tweaks on top of any theme, set again each time one is enabled
+  (defun my/theme-faces (&rest _)
+    (set-face-attribute 'font-lock-comment-face nil :slant 'oblique)
+    (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'oblique)
+    (set-face-attribute 'mode-line-active nil :height 1.2)
+    (set-face-attribute 'header-line nil :height 1.2))
+  (add-hook 'enable-theme-functions #'my/theme-faces)
 
-  (set-face-attribute 'font-lock-comment-face nil :slant 'oblique)
-  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'oblique)
-  (set-face-attribute 'mode-line-active nil :height 1.2)
-  (set-face-attribute 'header-line nil :height 1.2)
-  )
+  ;; the desktop's theme (~/.local/bin/theme writes desk-theme.el there and then `name'):
+  ;; followed live, black-metal-nile without it
+  (defvar my/desk-theme-dir (expand-file-name "~/.local/state/theme/"))
+  (add-to-list 'custom-theme-load-path my/desk-theme-dir)
+  (defun my/desk-theme-load ()
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme (if (file-exists-p (expand-file-name "desk-theme.el" my/desk-theme-dir))
+                    'desk 'base16-black-metal-nile)
+                t))
+  (my/desk-theme-load)
+  (when (file-directory-p my/desk-theme-dir)
+    (file-notify-add-watch
+     my/desk-theme-dir '(change)
+     (lambda (e)   ; (descriptor action file [file1]): `name' written or renamed into place
+       (when (member "name" (mapcar #'file-name-nondirectory (seq-filter #'stringp (cddr e))))
+         (my/desk-theme-load))))))
 
 ;; Cool aspect
 (use-package mixed-pitch
