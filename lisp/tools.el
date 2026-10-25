@@ -196,6 +196,20 @@ Before answering, check:
       ("\\([_^]\\){\\([^{}]*\\)}" . "\\1(\\2)")                          ; x^{n+1} -> x^(n+1)
       ("\\\\\\([[:alpha:]]\\)" . "\\1"))))                               ; \log -> log
 
+;; eat: terminale in puro elisp, niente modulo nativo da compilare come vterm
+(use-package eat
+  :ensure t
+  :commands eat)
+
+(use-package claude-code-ide
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :bind ("C-c C-'" . claude-code-ide-menu)
+  :custom
+  (claude-code-ide-terminal-backend 'eat)
+  (claude-code-ide-window-width 60)
+  :config
+  (claude-code-ide-emacs-tools-setup))
+
 (provide 'tools)
 
 ;;; tools.el ends here
