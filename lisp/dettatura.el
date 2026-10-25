@@ -2,7 +2,8 @@
 
 ;; Aperto da ~/.config/hypr/scripts/dettatura-emacs.sh (Super+Alt+E): hyprwhspr-rs
 ;; incolla la trascrizione qui, la si corregge (o la si fa riformulare a Gemma
-;; sull'homelab), poi C-c C-c la incolla nella finestra di partenza.
+;; sull'homelab), poi C-c C-c la incolla nella finestra di partenza. Ctrl+Enter
+;; negli appunti (Super+V) apre qui una voce della cronologia, da sistemare.
 
 (defvar-local dettatura--window nil "Indirizzo Hyprland della finestra di partenza.")
 (defvar-local dettatura--class nil "Classe della finestra di partenza (terminale o no).")
@@ -16,17 +17,23 @@
   "Popup di dettatura: C-c C-c incolla, C-c C-k annulla, C-c r riformula."
   :lighter " Dettatura")
 
-(defun dettatura-apri (window class)
-  "Prepara il buffer del popup per la finestra WINDOW di classe CLASS."
+(defun dettatura-apri (window class &optional file)
+  "Prepara il buffer del popup per la finestra WINDOW di classe CLASS.
+Con FILE (una voce degli appunti) parte dal suo testo e lo cancella."
   (switch-to-buffer (get-buffer-create "*dettatura*"))
   (erase-buffer)
+  (when file
+    (let ((coding-system-for-read 'utf-8))
+      (insert-file-contents file))
+    (delete-file file))
   (text-mode)
   (visual-line-mode 1)
   (dettatura-mode 1)
   (setq dettatura--window window
         dettatura--class class)
   (setq header-line-format
-        " Super+Alt+D ferma · C-c C-c incolla · C-c r riformula · C-c C-k annulla"))
+        (concat (unless file " Super+Alt+D ferma ·")
+                " C-c C-c incolla · C-c r riformula · C-c C-k annulla")))
 
 (defun dettatura--chiudi ()
   (kill-buffer (current-buffer))
