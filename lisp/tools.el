@@ -22,6 +22,10 @@
   :ensure t
   :commands sudo-edit)
 
+(use-package focus
+  :ensure t
+  :commands (focus-mode focus-read-only-mode))
+
 (use-package term-toggle
   ;; Solo term-toggle.el: helm-term-toggle.el tira dentro helm (che rompe package-vc) e
   ;; term-toggle-animate.el richiede term-toggle stesso (dipendenza circolare)
