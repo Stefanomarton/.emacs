@@ -60,8 +60,11 @@
                                    (list "--root" active-root))
                        
                        ;; Compile Options: String format for shell process
-                       (setq-local typst-ts-compile-options 
-                                   (format "--root=%s --pdf-standard=a-2b" (shell-quote-argument active-root))))))
+                       (setq-local typst-ts-compile-options
+                                   (format "--root=%s --pdf-standard=a-2b" (shell-quote-argument active-root)))
+
+                       ;; Same root for the live preview (typst-preview)
+                       (setq-local typst-preview-default-dir active-root))))
 
   :config
   ;; ;; (setq typst-ts-output-directory "/tmp/pdf")
@@ -80,6 +83,19 @@
   (require 'typst-snippets)
   (require 'typst-surround)
   )
+
+;; Live preview via tinymist with source <-> preview sync (SyncTeX-like).
+;; Click in the preview jumps to the source; C-c j jumps the preview to point.
+(use-package typst-preview
+  :ensure t
+  :after typst-ts-mode
+  :custom
+  (typst-preview-executable "tinymist")
+  (typst-preview-ask-if-pin-main nil)   ; don't write file-local variables
+  (typst-preview-invert-colors "never")
+  :bind (:map typst-ts-mode-map
+              ("C-c v" . typst-preview-mode)
+              ("C-c j" . typst-preview-send-position)))
 
 (provide 'typst-config)
 
