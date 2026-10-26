@@ -35,21 +35,25 @@
 
   ;; Dynamically set roots for BOTH watch and compile when launching typst-ts-mode.
   ;; Forces a synchronous shell check for direnv before falling back to denote.
+  ;; On tm-laptop the root is always the home directory (no direnv check).
   (typst-ts-mode . (lambda ()
-                     (let* ((direnv-root
-                             (with-temp-buffer
+                     (let* ((tm-laptop (string= (system-name) "tm-laptop"))
+                            (direnv-root
+                             (unless tm-laptop
+                              (with-temp-buffer
                                ;; 1. Run direnv allow
                                ;; 2. Wait for it, then execute printenv
                                ;; 3. Return 0 (success) only if the variable exists
                                (when (eq 0 (call-process-shell-command 
                                             "direnv allow . && direnv exec . printenv TYPST_PROJECT_ROOT" 
                                             nil t nil))
-                                 (string-trim (buffer-string)))))
-                            
+                                 (string-trim (buffer-string))))))
+
                             ;; 4. Check if we got a valid path, otherwise fallback
-                            (active-root (if (and direnv-root (not (string-empty-p direnv-root)))
-                                             direnv-root
-                                           (expand-file-name denote-directory))))
+                            (active-root (cond (tm-laptop (expand-file-name "~"))
+                                               ((and direnv-root (not (string-empty-p direnv-root)))
+                                                direnv-root)
+                                               (t (expand-file-name denote-directory)))))
                        
                        ;; Watch Options: List format for start-process (no shell)
                        (setq-local typst-ts-watch-options 
